@@ -1,8 +1,13 @@
-﻿namespace home_energy_api.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace home_energy_api.Models.Db
 {
-    public class HomeUser
+    public class HouseUser
     {
-        public int IdHome { get; set; }
+        [Key]
+        public int IdHouseUser { get; set; }
+        [ForeignKey("User")]
         public int IdUser { get; set; }
         public string HouseName { get; set; }
         public string? TypeAddress { get; set; }

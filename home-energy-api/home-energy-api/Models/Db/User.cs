@@ -1,7 +1,10 @@
-﻿namespace home_energy_api.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace home_energy_api.Models.Db
 {
     public class User
     {
+        [Key]
         public int IdUser { get; set; }
         public string UserName { get; set; }
         public string UserEmail { get; set; }
