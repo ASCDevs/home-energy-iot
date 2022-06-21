@@ -235,6 +235,8 @@ _pkginfo.txt
 ClientBin/
 ~$*
 *~
+*.db-shm
+*.db-wal
 *.db
 *.dbmdl
 *.dbproj.schemaview
