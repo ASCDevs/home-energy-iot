@@ -37,6 +37,7 @@ namespace home_energy_api.Controllers
                     DtRegistration = x.DtRegistration.ToString("dd/MM/yyyy"),
                     UserEmail = x.UserEmail
                 }).ToList();
+                if (users.Count() == 0) throw new Exception("Nenhum usuário encontrado");
 
                 return Ok(users);
             }
@@ -49,15 +50,14 @@ namespace home_energy_api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> RegisterNewUser([FromBody] RegisterUserForm registerForm)
+        public async Task<IActionResult> AddOrUpdateUser([FromBody] RegisterUserForm registerForm)
         {
             try
             {
-                _logger.LogInformation("Got user list.");
-
                 //Add User
                 if (registerForm.IdUser == 0)
                 {
+                    _logger.LogInformation("Adding a new User.");
                     User userNew = new User
                     {
                         IdUser = registerForm.IdUser,
@@ -72,11 +72,13 @@ namespace home_energy_api.Controllers
                     if (_context.users.Add(userNew) == null) throw new Exception("Não foi possível cadastrar novo usuário");
                     _context.SaveChanges();
 
+                    _logger.LogInformation("New user has been successfully added.");
                     return Ok(new { message = "Usuário cadastrado com sucesso!" });
                 }
                 //Update User
                 else
                 {
+                    _logger.LogInformation("Updating an User.");
                     User userUpdate = new User
                     {
                         IdUser = registerForm.IdUser,
@@ -87,9 +89,11 @@ namespace home_energy_api.Controllers
                         DtInactivation = null
                     };
 
-                    if(_context.users.Update(userUpdate) == null) throw new Exception("Erro ao atualizar o usuário.");
+                    
+                    if (_context.users.Update(userUpdate) == null) throw new Exception("Erro ao atualizar o usuário.");
                     _context.SaveChanges();
 
+                    _logger.LogInformation("User has been successfully updated.");
                     return Ok(new { message = "Usuário atualizado com sucesso!" });
                 }
 
@@ -103,27 +107,39 @@ namespace home_energy_api.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public string GetUserById(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            return "value";
+            try
+            {
+                User? userDb = _context.users.Find(id);
+                if (userDb == null) throw new Exception("Usuário não encontrado.");
+
+                UserView userView = new UserView
+                {
+                    IdUser = userDb.IdUser,
+                    UserName = userDb.UserName,
+                    DtRegistration = userDb.DtRegistration.ToString("dd/MM/yyyy"),
+                    UserEmail = userDb.UserEmail
+                };
+
+                return Ok(userView);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("Auth")]
+        public async Task<IActionResult> AuthUser()
         {
+            //Autenticação com baerer
+            return Ok("Autenticação de usuário em construção.");
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //Fazer rota para recuperação de senha
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+       
     }
 }
