@@ -13,7 +13,5 @@ namespace home_energy_api.Models.Db
         public string? DescDevice { get; set; }
         public DateTime DtRegistration { get; set; }
         public DateTime DtInactivation { get; set; }
-        
-
     }
 }
