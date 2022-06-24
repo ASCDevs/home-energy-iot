@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace home_energy_api.Models.Db
+namespace home_energy_iot_api.Models.Db
 {
     public class User
     {

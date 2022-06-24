@@ -1,4 +1,4 @@
-﻿namespace home_energy_api.Models
+﻿namespace home_energy_iot_api.Models
 {
     public class UserView
     {

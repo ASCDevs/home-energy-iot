@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "home_energy_api": {
+    "home_energy_iot_api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

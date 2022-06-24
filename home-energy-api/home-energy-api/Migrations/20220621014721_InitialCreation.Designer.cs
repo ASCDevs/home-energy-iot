@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using home_energy_api.Data;
+using home_energy_iot_api.Data;
 
 #nullable disable
 
-namespace home_energy_api.Migrations
+namespace home_energy_iot_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20220621014721_InitialCreation")]
@@ -19,7 +19,7 @@ namespace home_energy_api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.6");
 
-            modelBuilder.Entity("home_energy_api.Models.Db.Device", b =>
+            modelBuilder.Entity("home_energy_iot_api.Models.Db.Device", b =>
                 {
                     b.Property<int>("IdDevice")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace home_energy_api.Migrations
                     b.ToTable("devices");
                 });
 
-            modelBuilder.Entity("home_energy_api.Models.Db.HouseBill", b =>
+            modelBuilder.Entity("home_energy_iot_api.Models.Db.HouseBill", b =>
                 {
                     b.Property<int>("IdHouseBill")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace home_energy_api.Migrations
                     b.ToTable("houseBills");
                 });
 
-            modelBuilder.Entity("home_energy_api.Models.Db.HouseUser", b =>
+            modelBuilder.Entity("home_energy_iot_api.Models.Db.HouseUser", b =>
                 {
                     b.Property<int>("IdHouseUser")
                         .ValueGeneratedOnAdd()
@@ -107,7 +107,7 @@ namespace home_energy_api.Migrations
                     b.ToTable("houses");
                 });
 
-            modelBuilder.Entity("home_energy_api.Models.Db.ReportDevice", b =>
+            modelBuilder.Entity("home_energy_iot_api.Models.Db.ReportDevice", b =>
                 {
                     b.Property<int>("IdReportDevice")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace home_energy_api.Migrations
                     b.ToTable("reportDevices");
                 });
 
-            modelBuilder.Entity("home_energy_api.Models.Db.User", b =>
+            modelBuilder.Entity("home_energy_iot_api.Models.Db.User", b =>
                 {
                     b.Property<int>("IdUser")
                         .ValueGeneratedOnAdd()

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace home_energy_api.Models.Db
+namespace home_energy_iot_api.Models.Db
 {
     public class ReportDevice
     {

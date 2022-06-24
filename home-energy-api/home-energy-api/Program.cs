@@ -1,4 +1,4 @@
-using home_energy_api.Data;
+using home_energy_iot_api.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

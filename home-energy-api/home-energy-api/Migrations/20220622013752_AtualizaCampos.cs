@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace home_energy_api.Migrations
+namespace home_energy_iot_api.Migrations
 {
     public partial class AtualizaCampos : Migration
     {

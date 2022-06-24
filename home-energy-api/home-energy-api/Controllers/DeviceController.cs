@@ -1,12 +1,12 @@
-﻿using home_energy_api.Data;
-using home_energy_api.Models;
-using home_energy_api.Models.Db;
+﻿using home_energy_iot_api.Data;
+using home_energy_iot_api.Models;
+using home_energy_iot_api.Models.Db;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace home_energy_api.Controllers
+namespace home_energy_iot_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,7 +1,7 @@
-﻿using home_energy_api.Models.Db;
+﻿using home_energy_iot_api.Models.Db;
 using Microsoft.EntityFrameworkCore;
 
-namespace home_energy_api.Data
+namespace home_energy_iot_api.Data
 {
     public class AppDbContext : DbContext
     {
