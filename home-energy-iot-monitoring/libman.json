@@ -6,6 +6,11 @@
       "provider": "unpkg",
       "library": "jquery@3.6.0",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@6.0.6",
+      "destination": "wwwroot/lib/microsoft/signalr/"
     }
   ]
 }
