@@ -22,21 +22,16 @@
         </div>
     </div>
     <h2 class="p-2 font-bold">Dispositivos cadastrados: </h2>
-    <div class="grid xl:grid-cols-4 md:grid-cols-2 gap-4 p-2">
-        <div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>
-        <div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>
-        <div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>
-        <div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>
-        <div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>
+    <div id="area-devices" class="grid xl:grid-cols-4 md:grid-cols-2 gap-4 p-2">
+        @*<div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>*@
     </div>
-    <h2 class="p-2 font-bold">Log das ações: </h2>
-    <ul id="list-log" class="p-4">
-
-    </ul>
+    
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/PageScript/GlobalFunctions.js"></script>
+    <script src="~/PageScript/DeviceItem.js"></script>
     <script src="~/PageScript/Devices.js"></script>
     <script>
         var devices;
