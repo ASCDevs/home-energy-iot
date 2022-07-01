@@ -18,9 +18,6 @@
             if (action == "add") {
                 ThisClass.devicesConnected.push(new DeviceItem(ThisClass,true))
             }
-
-           
-
         }
 
         this.NotifyConnection = function (device, message) {
@@ -31,6 +28,10 @@
                 console.log(dev.connectionId)
                 $("#area-devices").append('<div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D">' + dev.connectionId + '</div>')
             }
+        }
+
+        this.removeDeviceFromList = function (connId) {
+            ThisClass.devicesConnected = ThisClass.devicesConnected.filter(x => x.connectionId != connId)
         }
     }
 

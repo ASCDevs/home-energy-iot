@@ -1,5 +1,6 @@
 ﻿class DeviceItem {
     constructor(DevicesObj,flExist) {
+        this.setFunctions();
         this.makeConnection();
         this.Devices = DevicesObj
         
@@ -27,4 +28,14 @@
             })
         })
     }
+
+    setFunctions() {
+        var ThisClass = this;
+
+        this.closeConnection = function () {
+            ThisClass.conexao.stop();
+            ThisClass.Devices.removeDeviceFromList(ThisClass.IdConnection)
+        }
+    }
+
 }
