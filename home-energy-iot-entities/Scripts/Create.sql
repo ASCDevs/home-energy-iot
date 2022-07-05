@@ -18,7 +18,7 @@ CREATE TABLE [User](
 	[RegisterDate] DATETIME NOT NULL
 );
 
-CREATE TABLE [UserHouse](
+CREATE TABLE [House](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
 	[Name] VARCHAR(255) NOT NULL,
 	[TypeAddress] VARCHAR(255) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE [Device](
 
 	[IdHouse] INT,
 
-	FOREIGN KEY ([IdHouse]) REFERENCES [UserHouse]([Id])
+	FOREIGN KEY ([IdHouse]) REFERENCES [House]([Id])
 );
 
 CREATE TABLE [HouseBill](
@@ -54,7 +54,7 @@ CREATE TABLE [HouseBill](
 
 	[IdHouse] INT,
 
-	FOREIGN KEY ([IdHouse]) REFERENCES [UserHouse]([Id])
+	FOREIGN KEY ([IdHouse]) REFERENCES [House]([Id])
 );
 
 CREATE TABLE [DeviceReport](

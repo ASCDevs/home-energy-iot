@@ -17,7 +17,7 @@ namespace home_energy_iot_entities
         public DbSet<DeviceReport> DevicesReports { get; set; }
         public DbSet<HouseBill> HousesBills { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserHouse> UsersHouses { get; set; }
+        public DbSet<House> UsersHouses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,9 +1,8 @@
-﻿using home_energy_iot_api.Data;
-using home_energy_iot_api.Models;
-using home_energy_iot_api.Models.Db;
+﻿using home_energy_iot_api.Models;
+using home_energy_iot_entities;
+using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +13,9 @@ namespace home_energy_iot_api.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger _logger;
-        private AppDbContext _context;
+        private DataBaseContext _context;
 
-        public UserController(ILogger<UserController> logger, AppDbContext dbContext)
+        public UserController(ILogger<UserController> logger, DataBaseContext dbContext)
         {
             _logger = logger;
             _context = dbContext;
@@ -30,12 +29,12 @@ namespace home_energy_iot_api.Controllers
             {
                 _logger.LogInformation("Got user list.");
 
-                List<UserView> users = _context.users.AsNoTracking().Select(x => new UserView
+                List<UserView> users = _context.Users.AsNoTracking().Select(x => new UserView
                 {
-                    IdUser = x.IdUser,
-                    UserName = x.UserName,
-                    DtRegistration = x.DtRegistration.ToString("dd/MM/yyyy"),
-                    UserEmail = x.UserEmail
+                    IdUser = x.Id,
+                    UserName = x.Name,
+                    DtRegistration = x.RegisterDate.ToString("dd/MM/yyyy"),
+                    UserEmail = x.Email
                 }).ToList();
                 if (users.Count() == 0) throw new Exception("Nenhum usuário encontrado");
 
@@ -60,43 +59,42 @@ namespace home_energy_iot_api.Controllers
                     _logger.LogInformation("Adding a new User.");
                     User userNew = new User
                     {
-                        IdUser = registerForm.IdUser,
-                        DtRegistration = DateTime.Now,
-                        UserName = registerForm.UserName,
-                        UserEmail = registerForm.UserEmail,
-                        UserCPF = registerForm.UserCPF,
+                        Id = registerForm.IdUser,
+                        RegisterDate = DateTime.Now,
+                        Username = "123",
+                        Name = registerForm.UserName,
+                        Email = registerForm.UserEmail,
+                        CPF = registerForm.UserCPF,
                         Password = registerForm.Password,
-                        DtInactivation = null
+                        SaltPassword = "123"
                     };
 
-                    if (_context.users.Add(userNew) == null) throw new Exception("Não foi possível cadastrar novo usuário");
+                    if (_context.Users.Add(userNew) == null) throw new Exception("Não foi possível cadastrar novo usuário");
                     _context.SaveChanges();
 
                     _logger.LogInformation("New user has been successfully added.");
                     return Ok(new { message = "Usuário cadastrado com sucesso!" });
                 }
+
                 //Update User
-                else
+
+                _logger.LogInformation("Updating an User.");
+                User userUpdate = new User
                 {
-                    _logger.LogInformation("Updating an User.");
-                    User userUpdate = new User
-                    {
-                        IdUser = registerForm.IdUser,
-                        Password = registerForm.Password,
-                        UserCPF = registerForm.UserCPF,
-                        UserEmail = registerForm.UserEmail,
-                        UserName = registerForm.UserName,
-                        DtInactivation = null
-                    };
+                    Id = registerForm.IdUser,
+                    Username = "123",
+                    Password = registerForm.Password,
+                    CPF = registerForm.UserCPF,
+                    Email = registerForm.UserEmail,
+                    Name = registerForm.UserName,
+                    SaltPassword = "123"
+                };
 
-                    
-                    if (_context.users.Update(userUpdate) == null) throw new Exception("Erro ao atualizar o usuário.");
-                    _context.SaveChanges();
+                if (_context.Users.Update(userUpdate) == null) throw new Exception("Erro ao atualizar o usuário.");
+                _context.SaveChanges();
 
-                    _logger.LogInformation("User has been successfully updated.");
-                    return Ok(new { message = "Usuário atualizado com sucesso!" });
-                }
-
+                _logger.LogInformation("User has been successfully updated.");
+                return Ok(new { message = "Usuário atualizado com sucesso!" });
             }
             catch (Exception ex)
             {
@@ -111,15 +109,15 @@ namespace home_energy_iot_api.Controllers
         {
             try
             {
-                User? userDb = _context.users.Find(id);
+                User? userDb = _context.Users.Find(id);
                 if (userDb == null) throw new Exception("Usuário não encontrado.");
 
                 UserView userView = new UserView
                 {
-                    IdUser = userDb.IdUser,
-                    UserName = userDb.UserName,
-                    DtRegistration = userDb.DtRegistration.ToString("dd/MM/yyyy"),
-                    UserEmail = userDb.UserEmail
+                    IdUser = userDb.Id,
+                    UserName = userDb.Username,
+                    DtRegistration = userDb.RegisterDate.ToString("dd/MM/yyyy"),
+                    UserEmail = userDb.Email
                 };
 
                 return Ok(userView);
@@ -139,7 +137,5 @@ namespace home_energy_iot_api.Controllers
         }
 
         //Fazer rota para recuperação de senha
-
-       
     }
 }

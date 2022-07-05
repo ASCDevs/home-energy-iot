@@ -1,6 +1,6 @@
-﻿using home_energy_iot_api.Data;
-using home_energy_iot_api.Models;
-using home_energy_iot_api.Models.Db;
+﻿using home_energy_iot_api.Models;
+using home_energy_iot_entities;
+using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +13,9 @@ namespace home_energy_iot_api.Controllers
     public class DeviceController : ControllerBase
     {
         private readonly ILogger<DeviceController> _logger;
-        private AppDbContext _context;
+        private DataBaseContext _context;
 
-        public DeviceController(ILogger<DeviceController> logger, AppDbContext dbContext)
+        public DeviceController(ILogger<DeviceController> logger, DataBaseContext dbContext)
         {
             _logger = logger;
             _context = dbContext;
@@ -35,36 +35,36 @@ namespace home_energy_iot_api.Controllers
 
                     Device deviceNew = new Device 
                     { 
-                        IdDevice = deviceForm.IdDevice,
-                        NameDevice = deviceForm.NameDevice,
-                        DescDevice = deviceForm.DescDevice,
-                        DtRegistration = DateTime.Now,
-                        IdHouseUser = deviceForm.IdHouseUer
+                        Id = deviceForm.IdDevice,
+                        Name = deviceForm.NameDevice,
+                        Description = deviceForm.DescDevice,
+                        RegisterDate = DateTime.Now,
+                        IdHouse = deviceForm.IdHouseUer
                     };
 
-                    if (_context.devices.Add(deviceNew) == null) throw new Exception("Não foi possível adicionar o novo dispositivo");
+                    if (_context.Devices.Add(deviceNew) == null) throw new Exception("Não foi possível adicionar o novo dispositivo");
                     _context.SaveChanges();
 
                     _logger.LogInformation("New device has been successfully added.");
                     return Ok(new { message = "Dispositivo adicionado com sucesso" });
                 }
-                else
+
+                _logger.LogInformation("Updating a device.");
+
+                Device deviceUpdate = new Device
                 {
-                    _logger.LogInformation("Updating a device.");
-                    Device deviceUpdate = new Device
-                    {
-                        IdDevice = deviceForm.IdDevice,
-                        NameDevice = deviceForm.NameDevice,
-                        DescDevice = deviceForm.DescDevice,
-                        IdHouseUser = deviceForm.IdHouseUer
-                    };
+                        Id = deviceForm.IdDevice,
+                        Name = deviceForm.NameDevice,
+                        Description = deviceForm.DescDevice,
+                        IdHouse = deviceForm.IdHouseUer
+                };
 
-                    if(_context.devices.Update(deviceUpdate) == null) throw new Exception("Erro ao atualizar o dispositivo");
-                    _context.SaveChanges();
+                if(_context.Devices.Update(deviceUpdate) == null) throw new Exception("Erro ao atualizar o dispositivo");
+                _context.SaveChanges();
 
-                    _logger.LogInformation("Device has been successfully updated.");
-                    return Ok(new { message = "Dispositivo foi atualizado com sucesso!"});
-                }
+                _logger.LogInformation("Device has been successfully updated.");
+                return Ok(new { message = "Dispositivo foi atualizado com sucesso!"});
+                
             }
             catch (Exception ex)
             {
@@ -81,13 +81,13 @@ namespace home_energy_iot_api.Controllers
             {
                 _logger.LogInformation("Querying devices");
 
-                List<DeviceView> devices = _context.devices.AsNoTracking().Select(x => new DeviceView 
+                List<DeviceView> devices = _context.Devices.AsNoTracking().Select(x => new DeviceView 
                 { 
-                    IdDevice = x.IdDevice,
-                    NameDevice = x.NameDevice,
-                    DescDevice = x.DescDevice,
-                    DtRegistration = x.DtRegistration.ToString("dd/MM/yyyy"),
-                    IdHouseUser = x.IdHouseUser
+                    IdDevice = x.Id,
+                    NameDevice = x.Name,
+                    DescDevice = x.Description,
+                    DtRegistration = x.RegisterDate.ToString("dd/MM/yyyy"),
+                    IdHouseUser = x.IdHouse
                 }).ToList();
                 if (devices.Count() == 0) throw new Exception("Nenhum dispositivo encontrado");
 
@@ -107,16 +107,16 @@ namespace home_energy_iot_api.Controllers
             {
                 _logger.LogInformation("Querying device by id.");
 
-                Device? deviceDb = _context.devices.Find(id);
+                Device? deviceDb = _context.Devices.Find(id);
                 if (deviceDb == null) throw new Exception("Dispositivo não encontrado.");
 
                 DeviceView deviceView = new DeviceView
                 {
-                    IdDevice = deviceDb.IdDevice,
-                    NameDevice = deviceDb.NameDevice,
-                    DescDevice = deviceDb.DescDevice,
-                    DtRegistration = deviceDb.DtRegistration.ToString("dd/MM/yyyy"),
-                    IdHouseUser = deviceDb.IdHouseUser
+                    IdDevice = deviceDb.Id,
+                    NameDevice = deviceDb.Name,
+                    DescDevice = deviceDb.Description,
+                    DtRegistration = deviceDb.RegisterDate.ToString("dd/MM/yyyy"),
+                    IdHouseUser = deviceDb.IdHouse
                 };
 
                 return Ok(deviceView);

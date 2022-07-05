@@ -16,4 +16,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\home-energy-iot-entities\home-energy-iot-entities.csproj" />
+  </ItemGroup>
+
 </Project>

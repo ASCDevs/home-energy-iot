@@ -2,8 +2,8 @@
 
 namespace home_energy_iot_entities.Entities
 {
-    [Table("UserHouse")]
-    public class UserHouse
+    [Table("House")]
+    public class House
     {
         public int Id { get; set; }
         public int IdUser { get; set; }
