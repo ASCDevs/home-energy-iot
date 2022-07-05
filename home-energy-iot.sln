@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-api", "home-energy-iot-api\home-energy-iot-api.csproj", "{5BBF752A-4745-4291-8314-660E0BF2C9E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-repository", "home-energy-iot-repository\home-energy-iot-repository.csproj", "{6D0B1C32-0B91-45AE-A29C-5B1C125AD5DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-monitoring", "home-energy-iot-monitoring\home-energy-iot-monitoring.csproj", "{97F5A4FA-709A-418D-B994-0351047382A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "home-energy-iot-monitoring", "home-energy-iot-monitoring\home-energy-iot-monitoring.csproj", "{97F5A4FA-709A-418D-B994-0351047382A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-entities", "home-energy-iot-entities\home-energy-iot-entities.csproj", "{3FCDE0E6-DD43-42FB-9DEC-68F96E0A0228}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{5BBF752A-4745-4291-8314-660E0BF2C9E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BBF752A-4745-4291-8314-660E0BF2C9E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BBF752A-4745-4291-8314-660E0BF2C9E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D0B1C32-0B91-45AE-A29C-5B1C125AD5DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D0B1C32-0B91-45AE-A29C-5B1C125AD5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D0B1C32-0B91-45AE-A29C-5B1C125AD5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D0B1C32-0B91-45AE-A29C-5B1C125AD5DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97F5A4FA-709A-418D-B994-0351047382A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97F5A4FA-709A-418D-B994-0351047382A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97F5A4FA-709A-418D-B994-0351047382A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97F5A4FA-709A-418D-B994-0351047382A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FCDE0E6-DD43-42FB-9DEC-68F96E0A0228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCDE0E6-DD43-42FB-9DEC-68F96E0A0228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCDE0E6-DD43-42FB-9DEC-68F96E0A0228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCDE0E6-DD43-42FB-9DEC-68F96E0A0228}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
