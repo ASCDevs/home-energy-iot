@@ -23,7 +23,7 @@ CREATE TABLE [UserHouse](
 	[Name] VARCHAR(255) NOT NULL,
 	[TypeAddress] VARCHAR(255) NOT NULL,
 	[NameAddress] VARCHAR(255) NOT NULL,
-	[NumberAddress] VARCHAR(255) NOT NULL,
+	[NumberAddress] INT NOT NULL,
 	[RegisterDate] DATETIME NOT NULL,
 	[PeriodDaysReport] INT NOT NULL,
 
