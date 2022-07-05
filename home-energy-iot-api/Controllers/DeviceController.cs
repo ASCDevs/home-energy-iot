@@ -50,7 +50,7 @@ namespace home_energy_iot_api.Controllers
                 }
                 else
                 {
-                    _logger.LogInformation("Updatin a device.");
+                    _logger.LogInformation("Updating a device.");
                     Device deviceUpdate = new Device
                     {
                         IdDevice = deviceForm.IdDevice,
