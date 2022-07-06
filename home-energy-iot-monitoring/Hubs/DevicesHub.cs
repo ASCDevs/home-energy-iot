@@ -7,7 +7,6 @@ namespace home_energy_iot_monitoring.Hubs
       
         public override async Task OnConnectedAsync()
         {
-            
             Console.WriteLine(">> Dispositivo " + Context.ConnectionId + " conectou.");
             DevicesHandler._connectedDevices.Add(Context.ConnectionId);
             await this.NotifyConnection(Context.ConnectionId, "Conectou (" + DevicesHandler._connectedDevices.Count + " conectados)");
@@ -27,13 +26,13 @@ namespace home_energy_iot_monitoring.Hubs
         public async Task NotifyConnection(string device, string message)
         {
             Console.WriteLine(">> " + device + " avisou conexão");
-            await Clients.All.SendAsync("newDeviceConnected",device,message);
+            await Clients.All.SendAsync("connectionsLog", device,message);
         }
 
-        public async Task UpdateClientLists(string connectionId, string deviceId, string deviceName, string action)
+        public async Task UpdateClientLists()
         {
             Console.WriteLine(">> Atualização as listas dos clientes");
-            await Clients.All.SendAsync("updateList",connectionId, deviceId, deviceName, action);
+            await Clients.All.SendAsync("updateList",DevicesHandler._connectedDevices);
 
         }
     }

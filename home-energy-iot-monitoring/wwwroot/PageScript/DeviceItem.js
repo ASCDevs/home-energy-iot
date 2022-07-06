@@ -1,28 +1,26 @@
 ﻿class DeviceItem {
-    constructor(DevicesObj,flExist) {
+    constructor() {
         this.setFunctions();
-        this.makeConnection();
-        this.Devices = DevicesObj
-        
+        this.makeConnection();        
     }
 
     makeConnection() {
         var ThisClass = this;
         $(function () {
-            
             var connection = new signalR.HubConnectionBuilder().withUrl("/devicehub").build();
             $("#add-device").attr("disabled", true);
-            connection.on("newDeviceConnected", function (device, message) {
-                NotifyConnection(device,message);
+            connection.on("connectionsLog", function (device, message) {
+                console.log(`>>> ${device}, ${message}`);
             })
-            connection.on("updateList", function (connectionId, deviceId, deviceName, action) {
-                ThisClass.Devices.UpdateList(connectionId, deviceId, deviceName, action)
+            connection.on("updateList", function (listDevices) {
+                console.log(listDevices)
             })
 
             connection.start().then(function () {
                 ThisClass.conexao = connection;
                 ThisClass.IdConnection = connection.connectionId;
                 $("#add-device").attr("disabled", false)
+                $("#area-devices").append(ThisClass.makeCardDevice());
             }).catch(function (err) {
                 return console.log(err.toString());
             })
@@ -34,7 +32,15 @@
 
         this.closeConnection = function () {
             ThisClass.conexao.stop();
-            ThisClass.Devices.removeDeviceFromList(ThisClass.IdConnection)
+        }
+
+        this.makeCardDevice = function () {
+            let txtHtml = '<div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D">';
+            txtHtml += '';
+            txtHtml += `<p class="text-white">Conexão ID: ${ThisClass.IdConnection}</p>`;
+            txtHtml += '</div>'
+
+            return txtHtml;
         }
     }
 
