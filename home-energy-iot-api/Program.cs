@@ -17,6 +17,8 @@ builder.Services.AddDbContext<DataBaseContext>();
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IHasher, Hasher>();
 
+builder.Logging.AddLog4Net();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
