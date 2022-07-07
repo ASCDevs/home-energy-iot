@@ -7,6 +7,8 @@ GO
 USE HomeEnergyIOT;
 GO
 
+--------------------Create Tables--------------------
+
 CREATE TABLE [User](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
 	[Name] VARCHAR(255) NOT NULL,
@@ -67,3 +69,9 @@ CREATE TABLE [DeviceReport](
 
 	FOREIGN KEY ([IdDevice]) REFERENCES [Device]([Id])
 );
+
+
+--------------------Default Inserts--------------------
+
+-- Senha do usuário admin: admin
+INSERT INTO [User] VALUES ('admin', 'admin', 'YWFTaY0XBRNdOIHfgz/yWsu5vnyZgSQqgAUeH7lSoHw=', 'm94DPZqHhs3/U8ccJ/oiosgDm/U=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
