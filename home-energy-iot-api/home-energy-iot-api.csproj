@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\home-energy-iot-core\home-energy-iot-core.csproj" />
     <ProjectReference Include="..\home-energy-iot-entities\home-energy-iot-entities.csproj" />
   </ItemGroup>
 

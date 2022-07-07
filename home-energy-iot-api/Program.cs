@@ -1,5 +1,8 @@
+using home_energy_iot_core;
+using home_energy_iot_core.Helpers;
+using home_energy_iot_core.Helpers.Interfaces;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataBaseContext>();
 
+builder.Services.AddTransient<IUserManager, UserManager>();
+builder.Services.AddTransient<IHasher, Hasher>();
 
 var app = builder.Build();
 

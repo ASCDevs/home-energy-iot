@@ -1,4 +1,5 @@
 ﻿using home_energy_iot_api.Models;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,14 @@ namespace home_energy_iot_api.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger _logger;
+        private readonly IUserManager _userManager;
+
         private DataBaseContext _context;
 
-        public UserController(ILogger<UserController> logger, DataBaseContext dbContext)
+        public UserController(ILogger<UserController> logger, IUserManager userManager, DataBaseContext dbContext)
         {
             _logger = logger;
+            _userManager = userManager;
             _context = dbContext;
         }
 
@@ -134,6 +138,22 @@ namespace home_energy_iot_api.Controllers
         {
             //Autenticação com baerer
             return Ok("Autenticação de usuário em construção.");
+        }
+
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> AddUser([FromBody] User user)
+        {
+            try
+            {
+                await _userManager.CreateUser(user);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //Fazer rota para recuperação de senha
