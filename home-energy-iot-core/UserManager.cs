@@ -54,7 +54,7 @@ namespace home_energy_iot_core
                 if (user is null)
                     throw new ArgumentNullException(nameof(user), "Usuário nulo.");
 
-                _logger.LogInformation("Salvando o usuário na base de dados.");
+                _logger.LogInformation("Atualizando o usuário na base de dados.");
 
                 _context.Users.Update(user);
 
