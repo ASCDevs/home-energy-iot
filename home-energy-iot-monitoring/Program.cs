@@ -31,27 +31,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseWebSockets();
-app.Map("/consocket", async context =>
-{
-    if (!context.WebSockets.IsWebSocketRequest)
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-    else
-    {
-        Console.WriteLine("Cliente websokcet conectou: "+context.TraceIdentifier);
-        using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-        while (true)
-        {
-            await webSocket.SendAsync(
-                Encoding.ASCII.GetBytes($"Info -> {DateTime.Now}"),
-                WebSocketMessageType.Text,
-                true, CancellationToken.None);
-            await Task.Delay(1000);
-        }
-    }
-});
+//app.Map("/consocket", async context =>
+//{
+//    !! Alternativa de implementação direta
+//});
 
-
-//app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

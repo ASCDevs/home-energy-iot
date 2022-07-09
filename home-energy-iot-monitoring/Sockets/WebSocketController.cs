@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.WebSockets;
+using System.Text;
 
 namespace home_energy_iot_monitoring.Sockets
 {
     public class WebSocketController : ControllerBase
     {
-        [HttpGet("/ws")]
+        [HttpGet("/consocket")]
         public async Task Get()
         {
-            if (HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                //await Echo(webSocket);
-            }
+            if (!HttpContext.WebSockets.IsWebSocketRequest)
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             else
             {
-                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                Console.WriteLine("Cliente websokcet conectou: " + HttpContext.TraceIdentifier);
+                //using var webSocket = 
+                SocketsHandler._connectedClients.Add(new SocketClient(await HttpContext.WebSockets.AcceptWebSocketAsync()));
             }
         }
     }
