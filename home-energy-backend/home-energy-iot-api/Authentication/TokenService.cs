@@ -23,7 +23,7 @@ namespace home_energy_api.Authentication
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user.Username.ToString())
+                    new(ClaimTypes.Name, user.Username)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(jwtKeyBytes), SecurityAlgorithms.HmacSha256Signature)
