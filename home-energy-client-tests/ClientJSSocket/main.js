@@ -1,10 +1,11 @@
+var nomeConexao = prompt("Dê um nome para a conexão. ");
 var socket = new WebSocket("wss://localhost:7056/consocket");
 var logArea = document.getElementById("log-server");
 
 socket.onopen = function(e){
     let log = "<p>[open] Connection established</p>"    ;
     logArea.insertAdjacentHTML('afterend',log);
-    socket.send("Meu nome é alexandre")
+    socket.send("Meu nome é "+nomeConexao)
 };
 
 socket.onmessage = function (event){
