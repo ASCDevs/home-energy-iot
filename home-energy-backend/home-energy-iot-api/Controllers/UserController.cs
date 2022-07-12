@@ -26,14 +26,6 @@ namespace home_energy_iot_api.Controllers
         }
 
         [HttpPost]
-        [Route("Auth")]
-        public async Task<IActionResult> AuthUser()
-        {
-            //Autenticação com baerer
-            return Ok("Autenticação de usuário em construção.");
-        }
-
-        [HttpPost]
         [Route("Add")]
         public async Task<IActionResult> AddUser([FromBody] User user)
         {
