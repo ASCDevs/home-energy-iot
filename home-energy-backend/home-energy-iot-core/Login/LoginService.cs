@@ -26,7 +26,7 @@ namespace home_energy_iot_core.Login
             if(string.IsNullOrWhiteSpace(username))
                 throw new ArgumentNullException(nameof(username), "Username inválido.");
 
-            return _context.Users.First(u => u.Name == username);
+            return _context.Users.FirstOrDefault(u => u.Name == username);
         }
 
         public bool ValidPassword(string providedPassword, User user)

@@ -4,6 +4,7 @@ using home_energy_iot_core;
 using home_energy_iot_core.Helpers;
 using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
+using home_energy_iot_core.Login;
 using home_energy_iot_entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -14,9 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataBaseContext>();
 
+//entities managers
 builder.Services.AddTransient<IUserManager, UserManager>();
+
+//helpers
 builder.Services.AddTransient<IHasher, Hasher>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Logging.AddLog4Net();
 
