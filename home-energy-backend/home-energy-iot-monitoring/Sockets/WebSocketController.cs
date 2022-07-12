@@ -7,7 +7,7 @@ namespace home_energy_iot_monitoring.Sockets
 {
     public class WebSocketController : ControllerBase
     {
-        [HttpGet("/consocket")]
+        [HttpGet("/alternativesocket")]
         public async Task Get()
         {
             if (!HttpContext.WebSockets.IsWebSocketRequest)

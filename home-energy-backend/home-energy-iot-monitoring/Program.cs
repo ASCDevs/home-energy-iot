@@ -1,4 +1,5 @@
 using home_energy_iot_monitoring.Hubs;
+using home_energy_iot_monitoring.Sockets;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.Net;
 using System.Net.WebSockets;
@@ -11,6 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IWebSocketHolder, WebSocketHolder>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 ); 
@@ -31,10 +33,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseWebSockets();
-//app.Map("/consocket", async context =>
-//{
-//    !! Alternativa de implementação direta
-//});
+app.MapWebSocketHolder("/consocket");
 
 app.MapControllerRoute(
     name: "default",
