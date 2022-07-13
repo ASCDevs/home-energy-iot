@@ -3,5 +3,6 @@
     public interface IWebSocketHolder
     {
         Task AddAsync(HttpContext context);
+        Task SendActionToClient(string idConnection, string Action);
     }
 }

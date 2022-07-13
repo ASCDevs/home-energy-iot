@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using home_energy_iot_monitoring.Sockets;
+using Microsoft.AspNetCore.SignalR;
 
 namespace home_energy_iot_monitoring.Hubs
 {
     public class DevicesHub : Hub
     {
-      
+        private readonly IWebSocketHolder _webSocket;
+
+        public DevicesHub(IWebSocketHolder webSocket)
+        {
+            _webSocket = webSocket;
+        }
+
         public override async Task OnConnectedAsync()
         {
             Console.WriteLine(">> Dispositivo " + Context.ConnectionId + " conectou.");
@@ -34,6 +41,11 @@ namespace home_energy_iot_monitoring.Hubs
             Console.WriteLine(">> Atualização as listas dos clientes");
             await Clients.All.SendAsync("updateList",DevicesHandler._connectedDevices);
 
+        }
+
+        public async Task MandarMensagem(string idConnect, string mensagem)
+        {
+            _webSocket.SendActionToClient(idConnect, mensagem);
         }
     }
 }

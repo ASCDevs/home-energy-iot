@@ -3,9 +3,11 @@ var socket = new WebSocket("wss://localhost:7056/consocket");
 var logArea = document.getElementById("log-server");
 
 socket.onopen = function(e){
+    
     let log = "<p>[open] Connection established</p>"    ;
     logArea.insertAdjacentHTML('afterend',log);
-    socket.send("Meu nome é "+nomeConexao)
+    socket.send(nomeConexao+" entrou");
+    socket.send("server>idfinal>"+nomeConexao);
 };
 
 socket.onmessage = function (event){

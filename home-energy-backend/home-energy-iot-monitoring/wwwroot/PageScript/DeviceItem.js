@@ -42,6 +42,14 @@
 
             return txtHtml;
         }
+
+        this.sendAction = function (idCon, Action) {
+            try {
+                ThisClass.conexao.invoke("MandarMensagem", idCon, Action);
+            } catch (err) {
+                console.error(err);
+            }
+        }
     }
 
 }

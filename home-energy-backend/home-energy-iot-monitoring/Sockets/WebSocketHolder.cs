@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.WebSockets;
+using System.Text;
 
 namespace home_energy_iot_monitoring.Sockets
 {
@@ -42,17 +43,54 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     var client = clients.First(x => x.Value == webSocket);
-                    if(clients.TryRemove(clients.First(w => w.Value == webSocket))) Console.WriteLine("[disconnected] id-connection: " + client.Key); ;
+                    if(clients.TryRemove(clients.First(w => w.Value == webSocket))) Console.WriteLine("[disconnected] id-connection: " + client.Key);
                     webSocket.Dispose();
                     break;
                 }
+                
+                string? msgReceive = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));
+                //if(msgReceive.Contains(">")) await HandleAction(msgReceive);
+                string idWs = clients.First(x => x.Value == webSocket).Key;
+                if (msgReceive.Contains("server>")) Console.WriteLine("[From " + idWs + "]" + msgReceive);
 
                 //Enviar para todos os clients
-                foreach(var c in clients)
+                foreach (var c in clients)
                 {
-                    await c.Value.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                    if (!msgReceive.Contains("server>"))
+                    {
+                        await c.Value.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                    }
                 }
             }
+        }
+
+        public int CountClients()
+        {
+            return clients.Count(); 
+        }
+
+        public async Task SendActionToClient(string idConnection, string Action)
+        {
+            var client = clients.First(x => x.Key == idConnection);
+            byte[] bytes = Encoding.ASCII.GetBytes(Action);
+            
+            await client.Value.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text , true, CancellationToken.None) ;
+        }
+
+        private async Task HandleAction(string txtCommand, WebSocket ws)
+        {
+            //{para-quem}>{acao}>{valor}
+            //ex: server>updateid>1239
+            //{para-quem}>{acao}>{idclient,acao}
+            //ex: client>sendaction>122,desligarsensor
+
+            string para_quem = txtCommand.Split(">")[0];
+            string acao = txtCommand.Split(">")[1];
+            string valor = txtCommand.Split(">")[2];
+
+            
+            
+
         }
     }
 }
