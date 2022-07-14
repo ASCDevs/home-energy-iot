@@ -132,6 +132,8 @@ namespace home_energy_iot_core
         {
             if (house is null)
                 throw new ArgumentNullException(nameof(house), "Casa nula.");
+
+            //Incluir outras validações caso seja necessário.
         }
     }
 }

@@ -24,8 +24,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (user is null)
-                    throw new ArgumentNullException(nameof(user), "Usuário nulo.");
+                ValidateUser(user);
 
                 _logger.LogInformation("Iniciando a geração do Salt da senha.");
 
@@ -50,8 +49,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (user is null)
-                    throw new ArgumentNullException(nameof(user), "Usuário nulo.");
+                ValidateUser(user);
 
                 _logger.LogInformation("Atualizando o usuário na base de dados.");
 
@@ -120,6 +118,14 @@ namespace home_energy_iot_core
                 _logger.LogInformation(ex, "Erro ao consultar os usuários.");
                 throw;
             }
+        }
+
+        private void ValidateUser(User user)
+        {
+            if(user is null)
+                throw new ArgumentNullException(nameof(user), "Usuário nulo.");
+
+            //Incluir outras validações caso seja necessário.
         }
     }
 }
