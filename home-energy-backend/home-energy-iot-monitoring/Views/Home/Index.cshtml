@@ -27,19 +27,36 @@
     </div>
     
 
+    <div class="p-2 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1  gap-4">
+        <div class="p-2 rounded-lg bg-indigo-300">
+            <p>Status do painel: <span id="status-onoff"></span></p>
+            <p>Painéis conectados: <span id="qtd-painel-online"></span></p>
+            <p>Devices Clients Online: <span id="qtd-clients-on"></span></p>
+            <div id="area-log" class="p-2 mt-5 rounded-lg bg-indigo-100">
+                
+            </div>
+        </div>
+        <div class="p-2 xl:col-span-2 rounded-lg bg-indigo-200">
+            Listagem de dispositvos
+        </div>
+    </div>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/PageScript/GlobalFunctions.js"></script>
+    <script src="~/PageScript/PanelMonitoring.js"></script>
     <script src="~/PageScript/DeviceItem.js"></script>
     <script src="~/PageScript/Devices.js"></script>
     <script>
         var devices;
+        var painel;
         var connectionList = [];
         
         $(document).ready(() => {
-
-            devices = new Devices();
+            
+            painel = new PanelMonitoring();
+            //devices = new Devices();
         })
     </script>
 
