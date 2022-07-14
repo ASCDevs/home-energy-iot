@@ -1,5 +1,4 @@
-﻿using System;
-using home_energy_iot_core.Helpers.Interfaces;
+﻿using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
@@ -95,7 +94,7 @@ namespace home_energy_iot_core
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, "Erro ao consultar o usuário.");
+                _logger.LogInformation(ex, $"Erro ao consultar o usuário com Id [{id}].");
                 throw;
             }
         }
@@ -111,7 +110,7 @@ namespace home_energy_iot_core
                 if(result.Count > 0)
                     return Task.FromResult<IEnumerable<User>>(result);
 
-                var errorMessage = "Usuários não encontrados.";
+                var errorMessage = "Nenhum usuário encontrado.";
 
                 _logger.LogInformation(errorMessage);
                 throw new Exception(errorMessage);
