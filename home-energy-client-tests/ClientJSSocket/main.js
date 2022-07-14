@@ -6,7 +6,7 @@ socket.onopen = function(e){
     
     let log = "<p>[open] Connection established</p>"    ;
     logArea.insertAdjacentHTML('afterend',log);
-    socket.send(nomeConexao+" entrou");
+    socket.send(nomeConexao+" entroucon");
     socket.send("server>idfinal>"+nomeConexao);
 };
 

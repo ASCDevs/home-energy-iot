@@ -45,7 +45,7 @@ namespace home_energy_iot_monitoring.Hubs
 
         public async Task MandarMensagem(string idConnect, string mensagem)
         {
-            _webSocket.SendActionToClient(idConnect, mensagem);
+            await _webSocket.SendActionToClient(idConnect, mensagem);
         }
     }
 }

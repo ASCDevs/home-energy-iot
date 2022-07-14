@@ -4,5 +4,7 @@
     {
         Task AddAsync(HttpContext context);
         Task SendActionToClient(string idConnection, string Action);
+
+        int CountClients();
     }
 }
