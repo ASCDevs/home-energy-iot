@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace home_energy_iot_entities.Entities
 {
     [Table("HouseBill")]
     public class HouseBill
     {
+        [Key]
         public int Id { get; set; }
         public int IdHouse { get; set; }
         public decimal MonthBill { get; set; }
