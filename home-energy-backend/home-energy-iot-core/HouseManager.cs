@@ -113,7 +113,7 @@ namespace home_energy_iot_core
 
                 var houses = _context.Houses.ToList();
 
-                if (houses != null)
+                if (houses.Count > 0)
                     return houses;
 
                 var message = "Nenhuma casa encontrada.";
