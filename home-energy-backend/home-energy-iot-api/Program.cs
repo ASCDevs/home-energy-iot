@@ -18,6 +18,7 @@ builder.Services.AddDbContext<DataBaseContext>();
 //entities managers
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IHouseManager, HouseManager>();
+builder.Services.AddTransient<IDeviceManager, DeviceManager>();
 
 //helpers
 builder.Services.AddTransient<IHasher, Hasher>();

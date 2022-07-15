@@ -1,4 +1,5 @@
 ﻿using home_energy_iot_api.Models;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,130 +13,93 @@ namespace home_energy_iot_api.Controllers
     [ApiController]
     public class DeviceController : ControllerBase
     {
-        private readonly ILogger<DeviceController> _logger;
-        private DataBaseContext _context;
+        private IDeviceManager _deviceManager;
+        private ILogger<DeviceController> _logger;
 
-        public DeviceController(ILogger<DeviceController> logger, DataBaseContext dbContext)
+        public DeviceController(ILogger<DeviceController> logger, IDeviceManager deviceManager)
         {
             _logger = logger;
-            _context = dbContext;
+            _deviceManager = deviceManager;
         }
 
         [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> AddOrUpdateDevice([FromBody] RegisterDeviceForm deviceForm)
+        [Route("Add")]
+        public async Task<IActionResult> AddDevice([FromBody] Device device)
         {
-            //Adicionar autenticação de rota, para usuários autorizados
             try
             {
-                //Add User
-                if(deviceForm.IdDevice == 0)
-                {
-                    _logger.LogInformation("Adding a new Device");
+                await _deviceManager.CreateDevice(device);
 
-                    Device deviceNew = new Device 
-                    { 
-                        Id = deviceForm.IdDevice,
-                        Name = deviceForm.NameDevice,
-                        Description = deviceForm.DescDevice,
-                        RegisterDate = DateTime.Now,
-                        IdHouse = deviceForm.IdHouseUer
-                    };
-
-                    if (_context.Devices.Add(deviceNew) == null) throw new Exception("Não foi possível adicionar o novo dispositivo");
-                    _context.SaveChanges();
-
-                    _logger.LogInformation("New device has been successfully added.");
-                    return Ok(new { message = "Dispositivo adicionado com sucesso" });
-                }
-
-                _logger.LogInformation("Updating a device.");
-
-                Device deviceUpdate = new Device
-                {
-                        Id = deviceForm.IdDevice,
-                        Name = deviceForm.NameDevice,
-                        Description = deviceForm.DescDevice,
-                        IdHouse = deviceForm.IdHouseUer
-                };
-
-                if(_context.Devices.Update(deviceUpdate) == null) throw new Exception("Erro ao atualizar o dispositivo");
-                _context.SaveChanges();
-
-                _logger.LogInformation("Device has been successfully updated.");
-                return Ok(new { message = "Dispositivo foi atualizado com sucesso!"});
-                
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message});
+                return BadRequest(ex.Message);
             }
         }
 
-        // GET: api/<DeviceController>
-        [HttpGet]
-        [Route("AllDevices")]
-        public async Task<IActionResult> GetDevices()
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> UpdateDevice([FromBody] Device device)
         {
             try
             {
-                _logger.LogInformation("Querying devices");
+                await _deviceManager.UpdateDevice(device);
 
-                List<DeviceView> devices = _context.Devices.AsNoTracking().Select(x => new DeviceView 
-                { 
-                    IdDevice = x.Id,
-                    NameDevice = x.Name,
-                    DescDevice = x.Description,
-                    DtRegistration = x.RegisterDate.ToString("dd/MM/yyyy"),
-                    IdHouseUser = x.IdHouse
-                }).ToList();
-                if (devices.Count() == 0) throw new Exception("Nenhum dispositivo encontrado");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IActionResult> DeleteDevice([FromBody] Device device)
+        {
+            try
+            {
+                await _deviceManager.DeleteDevice(device);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Get/{id}")]
+        public async Task<IActionResult> GetDevice(int id)
+        {
+            try
+            {
+                var device = await _deviceManager.GetDevice(id);
+
+                return Ok(device);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IActionResult> GetDevice()
+        {
+            try
+            {
+                var devices = await _deviceManager.GetDevices();
 
                 return Ok(devices);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message});
+                return BadRequest(ex.Message);
             }
         }
-
-        // GET api/<DeviceController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDeviceById(int id)
-        {
-            try
-            {
-                _logger.LogInformation("Querying device by id.");
-
-                Device? deviceDb = _context.Devices.Find(id);
-                if (deviceDb == null) throw new Exception("Dispositivo não encontrado.");
-
-                DeviceView deviceView = new DeviceView
-                {
-                    IdDevice = deviceDb.Id,
-                    NameDevice = deviceDb.Name,
-                    DescDevice = deviceDb.Description,
-                    DtRegistration = deviceDb.RegisterDate.ToString("dd/MM/yyyy"),
-                    IdHouseUser = deviceDb.IdHouse
-                };
-
-                return Ok(deviceView);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation("Error on get devive by id. > " + ex.Message);
-                return BadRequest(new { message = ex.Message});
-            }
-        }
-
-        [HttpPost]
-        [Route("Auth")]
-        public async Task<IActionResult> AuthDevice()
-        {
-            return Ok("Autenticação de dispositivo em construção");
-        }
-
-
     }
 }

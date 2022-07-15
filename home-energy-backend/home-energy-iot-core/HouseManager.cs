@@ -105,7 +105,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<IEnumerable<House>> GetHouses()
+        public Task<IEnumerable<House>> GetHouses()
         {
             try
             {
@@ -114,7 +114,7 @@ namespace home_energy_iot_core
                 var houses = _context.Houses.ToList();
 
                 if (houses.Count > 0)
-                    return houses;
+                    return Task.FromResult<IEnumerable<House>>(houses);
 
                 var message = "Nenhuma casa encontrada.";
 
