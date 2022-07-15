@@ -23,16 +23,16 @@ namespace home_energy_iot_core
             {
                 ValidateHouse(house);
 
-                _logger.LogInformation("Salvando a casa na base de dados");
+                _logger.LogInformation($"Criando Casa: [{house.Name}].");
 
                 await _context.Houses.AddAsync(house);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Casa criada com sucesso.");
+                _logger.LogInformation($"Casa Id [{house.Id}] criada com sucesso.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao criar a casa.");
+                _logger.LogError(ex, "Erro ao criar a Casa.");
                 throw;
             }
         }
@@ -43,17 +43,17 @@ namespace home_energy_iot_core
             {
                 ValidateHouse(house);
 
-                _logger.LogInformation("Atualizando a casa na base de dados");
+                _logger.LogInformation($"Atualizando Casa Id [{house.Id}].");
 
                 _context.Houses.Update(house);
 
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Casa atualizada na base de dados");
+                _logger.LogInformation($"Casa Id [{house.Id}] atualizada com sucesso.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao atualizar a casa.");
+                _logger.LogError(ex, "Erro ao atualizar a Casa.");
                 throw;
             }
         }
@@ -64,17 +64,17 @@ namespace home_energy_iot_core
             {
                 ValidateHouse(house);
 
-                _logger.LogInformation($"Deletando casa com Id [{house.Id}] da base de dados");
+                _logger.LogInformation($"Deletando Casa Id [{house.Id}].");
 
                 _context.Houses.Remove(house);
 
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Casa removida da base de dados");
+                _logger.LogInformation($"Casa Id [{house.Id}] deletada com sucesso.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao remover a casa.");
+                _logger.LogError(ex, $"Erro ao deletar a Casa.");
                 throw;
             }
         }
@@ -84,23 +84,26 @@ namespace home_energy_iot_core
             try
             {
                 if (id < 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), "Id inválido.");
+                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] da Casa inválido.");
 
-                _logger.LogInformation($"Buscando a casa com Id [{id}].");
+                _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
                 var house = _context.Houses.Find(id);
 
                 if (house != null)
+                {
+                    _logger.LogInformation($"Casa Id [{id}] encontrada. Retornando resultado.");
                     return Task.FromResult(house);
+                }
 
-                var errorMessage = $"Casa com Id [{id}] não encontrado.";
+                var errorMessage = $"Casa com Id [{id}] não encontrada.";
 
                 _logger.LogInformation(errorMessage);
                 throw new Exception(errorMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao buscar a casa com Id [{id}].");
+                _logger.LogError(ex, $"Erro ao buscar a Casa Id [{id}].");
                 throw;
             }
         }
@@ -109,21 +112,21 @@ namespace home_energy_iot_core
         {
             try
             {
-                _logger.LogInformation("Buscando casas na base de dados.");
+                _logger.LogInformation("Buscando Casas na base de dados.");
 
                 var houses = _context.Houses.ToList();
 
                 if (houses.Count > 0)
                     return Task.FromResult<IEnumerable<House>>(houses);
 
-                var message = "Nenhuma casa encontrada.";
+                var message = "Nenhuma Casa encontrada.";
 
                 _logger.LogInformation(message);
                 throw new Exception(message);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao consultar as casas.");
+                _logger.LogError(ex, $"Erro ao buscar as Casas.");
                 throw;
             }
         }

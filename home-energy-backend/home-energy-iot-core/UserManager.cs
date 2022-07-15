@@ -31,12 +31,12 @@ namespace home_energy_iot_core
                 user.SaltPassword = _hasher.CreateSalt(20);
                 user.Password = _hasher.GenerateHash(user.Password, user.SaltPassword);
 
-                _logger.LogInformation("Salvando o usuário na base de dados.");
+                _logger.LogInformation($"Criando Usuário: [{user.Username}]");
 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Usuário criado com sucesso.");
+                _logger.LogInformation($"Usuário [{user.Username}] criado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -51,13 +51,13 @@ namespace home_energy_iot_core
             {
                 ValidateUser(user);
 
-                _logger.LogInformation("Atualizando o usuário na base de dados.");
+                _logger.LogInformation($"Atualizando o Usuário Id [{user.Id}].");
 
                 _context.Users.Update(user);
 
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Usuário atualizado com sucesso.");
+                _logger.LogInformation($"Usuário Id [{user.Id}] atualizado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace home_energy_iot_core
             try
             {
                 if(id < 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), "Id do usuário inválido.");
+                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
 
                 _logger.LogInformation($"Consultando dados do usuário Id [{id}] na base de dados.");
 
@@ -101,21 +101,21 @@ namespace home_energy_iot_core
         {
             try
             {
-                _logger.LogInformation($"Consultando os usuários da base de dados.");
+                _logger.LogInformation($"Buscando os usuários na base de dados.");
 
                 var result = _context.Users.ToList();
 
                 if(result.Count > 0)
                     return Task.FromResult<IEnumerable<User>>(result);
 
-                var errorMessage = "Nenhum usuário encontrado.";
+                var errorMessage = "Nenhum Usuário encontrado.";
 
                 _logger.LogInformation(errorMessage);
                 throw new Exception(errorMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, "Erro ao consultar os usuários.");
+                _logger.LogInformation(ex, "Erro ao buscar os Usuários.");
                 throw;
             }
         }
