@@ -28,7 +28,7 @@ namespace home_energy_iot_core
                 await _context.Devices.AddAsync(device);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation($"Dispositivo Id [{device.Id}] criado com sucesso.");
+                _logger.LogInformation($"Dispositivo [{device.Name}] criado com sucesso.");
             }
             catch (Exception ex)
             {

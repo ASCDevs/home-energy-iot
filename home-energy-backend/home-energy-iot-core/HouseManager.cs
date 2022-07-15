@@ -28,7 +28,7 @@ namespace home_energy_iot_core
                 await _context.Houses.AddAsync(house);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation($"Casa Id [{house.Id}] criada com sucesso.");
+                _logger.LogInformation($"Casa [{house.Name}] criada com sucesso.");
             }
             catch (Exception ex)
             {
