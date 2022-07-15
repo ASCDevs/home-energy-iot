@@ -1,6 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using home_energy_iot_monitoring.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 
 namespace home_energy_iot_monitoring.Sockets
 {
@@ -8,19 +12,22 @@ namespace home_energy_iot_monitoring.Sockets
     {
         private readonly ILogger<WebSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
+        private readonly IHubContext<PanelsHub> _panelsHub;
 
-        public WebSocketHolder(ILogger<WebSocketHolder> logger)
+        public WebSocketHolder(ILogger<WebSocketHolder> logger, IHubContext<PanelsHub> panelsHub)
         {
             this.logger = logger;
+            _panelsHub = panelsHub;
         }
 
         public async Task AddAsync(HttpContext context)
         {
             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
             string idConnection = CreateId();
-            if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket,"")))
+            if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket,"",idConnection)))
             {
                 Console.WriteLine("[connected] id-connection: " + idConnection);
+                await NotifyClientsCount();
                 await EchoAsycn(webSocket);
             }
         }
@@ -43,7 +50,12 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     var client = clients.First(x => x.Value.web_socket == webSocket);
-                    if(clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket))) Console.WriteLine("[disconnected] id-connection: " + client.Key);
+                    if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
+                    {
+                        Console.WriteLine("[disconnected] id-connection: " + client.Key);
+                        await NotifyClientsCount();
+                    }
+                    
                     webSocket.Dispose();
                     break;
                 }
@@ -94,5 +106,21 @@ namespace home_energy_iot_monitoring.Sockets
             
 
         }
+
+        private async Task NotifyClientsCount()
+        {
+            await _panelsHub.Clients.All.SendAsync("updateClientsOn", clients.Count());
+        }
+
+        public async Task SendListClientsOn()
+        {
+            var listClients = clients.Select(c => new { deviceid = c.Value.device_id, connectionid = c.Value.conn_id }).ToList();
+            if (listClients.Any())
+            {
+                await _panelsHub.Clients.All.SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
+            }
+            
+        }
+
     }
 }

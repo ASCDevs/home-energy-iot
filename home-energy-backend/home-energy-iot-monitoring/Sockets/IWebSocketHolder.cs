@@ -6,5 +6,6 @@
         Task SendActionToClient(string idConnection, string Action);
 
         int CountClients();
+        Task SendListClientsOn();
     }
 }
