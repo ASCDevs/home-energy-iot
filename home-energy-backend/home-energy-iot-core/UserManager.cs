@@ -82,8 +82,11 @@ namespace home_energy_iot_core
 
                 var result = _context.Users.Find(id);
 
-                if(result != null)
+                if (result != null)
+                {
+                    _logger.LogInformation($"Usuário Id [{id}] encontrado. Retornando resultado.");
                     return Task.FromResult(result);
+                }
 
                 var errorMessage = $"Usuário com Id [{id}] não encontrado.";
 
