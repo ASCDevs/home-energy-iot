@@ -1,5 +1,4 @@
 ﻿using home_energy_iot_core.Interfaces;
-using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +11,10 @@ namespace home_energy_api.Controllers
         private ILogger<HouseController> _logger;
         private IHouseManager _houseManager;
 
-        private DataBaseContext _context;
-
-        public HouseController(ILogger<HouseController> logger, IHouseManager houseManager, DataBaseContext context)
+        public HouseController(ILogger<HouseController> logger, IHouseManager houseManager)
         {
             _logger = logger;
             _houseManager = houseManager;
-            _context = context;
         }
 
         [HttpPost]

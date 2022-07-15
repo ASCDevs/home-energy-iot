@@ -1,10 +1,7 @@
 ﻿using home_energy_iot_api.Models;
 using home_energy_iot_core.Interfaces;
-using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace home_energy_iot_api.Controllers
 {
@@ -15,13 +12,10 @@ namespace home_energy_iot_api.Controllers
         private readonly ILogger _logger;
         private readonly IUserManager _userManager;
 
-        private DataBaseContext _context;
-
-        public UserController(ILogger<UserController> logger, IUserManager userManager, DataBaseContext dbContext)
+        public UserController(ILogger<UserController> logger, IUserManager userManager)
         {
             _logger = logger;
             _userManager = userManager;
-            _context = dbContext;
         }
 
         [HttpPost]
