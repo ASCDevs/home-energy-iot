@@ -19,6 +19,7 @@ namespace home_energy_iot_monitoring.Hubs
             Console.WriteLine("[Panel on] Painel "+Context.ConnectionId+" conectou");
             await Clients.All.SendAsync("updatePanelsOn", PanelsHandler._connectedPanels.Count());
             await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
+            await _webSocket.SendListClientsOn();
             await base.OnConnectedAsync();
         }
 
