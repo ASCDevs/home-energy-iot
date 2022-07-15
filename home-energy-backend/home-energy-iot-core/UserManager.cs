@@ -20,7 +20,7 @@ namespace home_energy_iot_core
             _context = context;
         }
 
-        public async Task CreateUser(User user)
+        public async Task Create(User user)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task UpdateUser(User user)
+        public async Task Update(User user)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace home_energy_iot_core
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUser(int id)
+        public Task<User> Get(int id)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<User>> GetUsers()
+        public Task<IEnumerable<User>> GetAll()
         {
             try
             {
@@ -124,8 +124,6 @@ namespace home_energy_iot_core
         {
             if(user is null)
                 throw new ArgumentNullException(nameof(user), "Usuário nulo.");
-
-            //Incluir outras validações caso seja necessário.
         }
     }
 }

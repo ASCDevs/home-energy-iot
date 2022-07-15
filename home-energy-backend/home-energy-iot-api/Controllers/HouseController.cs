@@ -8,22 +8,22 @@ namespace home_energy_api.Controllers
     [ApiController]
     public class HouseController : ControllerBase
     {
-        private ILogger<HouseController> _logger;
         private IHouseManager _houseManager;
+        private ILogger<HouseController> _logger;
 
-        public HouseController(ILogger<HouseController> logger, IHouseManager houseManager)
+        public HouseController(IHouseManager houseManager, ILogger<HouseController> logger)
         {
-            _logger = logger;
             _houseManager = houseManager;
+            _logger = logger;
         }
 
         [HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> AddHouse([FromBody] House house)
+        [Route("Create")]
+        public async Task<IActionResult> Create([FromBody] House house)
         {
             try
             {
-                await _houseManager.CreateHouse(house);
+                await _houseManager.Create(house);
 
                 return Ok();
             }
@@ -35,11 +35,11 @@ namespace home_energy_api.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> UpdateHouse([FromBody] House house)
+        public async Task<IActionResult> Update([FromBody] House house)
         {
             try
             {
-                await _houseManager.UpdateHouse(house);
+                await _houseManager.Update(house);
 
                 return Ok();
             }
@@ -51,11 +51,11 @@ namespace home_energy_api.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public async Task<IActionResult> DeleteHouse([FromBody] House house)
+        public async Task<IActionResult> Delete([FromBody] House house)
         {
             try
             {
-                await _houseManager.DeleteHouse(house);
+                await _houseManager.Delete(house);
 
                 return Ok();
             }
@@ -67,11 +67,11 @@ namespace home_energy_api.Controllers
 
         [HttpGet]
         [Route("Get/{id}")]
-        public async Task<IActionResult> GetHouse(int id)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var house = await _houseManager.GetHouse(id);
+                var house = await _houseManager.Get(id);
                 
                 return Ok(house);
             }
@@ -83,11 +83,11 @@ namespace home_energy_api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetHouse()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var houses = await _houseManager.GetHouses();
+                var houses = await _houseManager.GetAll();
 
                 return Ok(houses);
             }

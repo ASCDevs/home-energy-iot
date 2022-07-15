@@ -16,19 +16,19 @@ namespace home_energy_iot_api.Controllers
         private IDeviceManager _deviceManager;
         private ILogger<DeviceController> _logger;
 
-        public DeviceController(ILogger<DeviceController> logger, IDeviceManager deviceManager)
+        public DeviceController(IDeviceManager deviceManager, ILogger<DeviceController> logger)
         {
-            _logger = logger;
             _deviceManager = deviceManager;
+            _logger = logger;
         }
 
         [HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> AddDevice([FromBody] Device device)
+        [Route("Create")]
+        public async Task<IActionResult> Create([FromBody] Device device)
         {
             try
             {
-                await _deviceManager.CreateDevice(device);
+                await _deviceManager.Create(device);
 
                 return Ok();
             }
@@ -40,11 +40,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> UpdateDevice([FromBody] Device device)
+        public async Task<IActionResult> Update([FromBody] Device device)
         {
             try
             {
-                await _deviceManager.UpdateDevice(device);
+                await _deviceManager.Update(device);
 
                 return Ok();
             }
@@ -56,11 +56,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public async Task<IActionResult> DeleteDevice([FromBody] Device device)
+        public async Task<IActionResult> Delete([FromBody] Device device)
         {
             try
             {
-                await _deviceManager.DeleteDevice(device);
+                await _deviceManager.Delete(device);
 
                 return Ok();
             }
@@ -72,11 +72,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("Get/{id}")]
-        public async Task<IActionResult> GetDevice(int id)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var device = await _deviceManager.GetDevice(id);
+                var device = await _deviceManager.Get(id);
 
                 return Ok(device);
             }
@@ -88,11 +88,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetDevice()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var devices = await _deviceManager.GetDevices();
+                var devices = await _deviceManager.GetAll();
 
                 return Ok(devices);
             }

@@ -17,7 +17,7 @@ namespace home_energy_iot_core
             _context = context;
         }
 
-        public async Task CreateDevice(Device device)
+        public async Task Create(Device device)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task UpdateDevice(Device device)
+        public async Task Update(Device device)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task DeleteDevice(Device device)
+        public async Task Delete(Device device)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<Device> GetDevice(int id)
+        public Task<Device> Get(int id)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<Device>> GetDevices()
+        public Task<IEnumerable<Device>> GetAll()
         {
             try
             {
@@ -125,8 +125,6 @@ namespace home_energy_iot_core
                 throw;
             }
         }
-
-
 
         private void ValidadeDevice(Device device)
         {

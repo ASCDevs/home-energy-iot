@@ -17,7 +17,7 @@ namespace home_energy_iot_core
             _context = context;
         }
 
-        public async Task CreateHouse(House house)
+        public async Task Create(House house)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task UpdateHouse(House house)
+        public async Task Update(House house)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task DeleteHouse(House house)
+        public async Task Delete(House house)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<House> GetHouse(int id)
+        public Task<House> Get(int id)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<House>> GetHouses()
+        public Task<IEnumerable<House>> GetAll()
         {
             try
             {
@@ -132,8 +132,6 @@ namespace home_energy_iot_core
         {
             if (house is null)
                 throw new ArgumentNullException(nameof(house), "Casa nula.");
-
-            //Incluir outras validações caso seja necessário.
         }
     }
 }

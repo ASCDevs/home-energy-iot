@@ -19,12 +19,12 @@ namespace home_energy_iot_api.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> AddUser([FromBody] User user)
+        [Route("Create")]
+        public async Task<IActionResult> Create([FromBody] User user)
         {
             try
             {
-                await _userManager.CreateUser(user);
+                await _userManager.Create(user);
 
                 return Ok();
             }
@@ -36,11 +36,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> UpdateUser([FromBody] User user)
+        public async Task<IActionResult> Update([FromBody] User user)
         {
             try
             {
-                await _userManager.UpdateUser(user);
+                await _userManager.Update(user);
 
                 return Ok();
             }
@@ -52,11 +52,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("Get/{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var user = await _userManager.GetUser(id);
+                var user = await _userManager.Get(id);
 
                 var result = FilterUserResult(user);
 
@@ -70,11 +70,11 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var users = await _userManager.GetUsers();
+                var users = await _userManager.GetAll();
                 
                 var usersFiltered = new List<UserView>();
 
