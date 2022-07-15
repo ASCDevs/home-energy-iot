@@ -91,6 +91,11 @@ namespace home_energy_iot_api.Controllers
 
         private UserView FilterUserResult(User user)
         {
+            if (user is null)
+                throw new ArgumentNullException(nameof(user), "Não foi possível filtrar o usuário. Usuário Nulo.");
+
+            _logger.LogInformation($"Filtrando as informações do Usuário com Id [{user.Id}].");
+
             return new UserView
             {
                 Id = user.Id,
