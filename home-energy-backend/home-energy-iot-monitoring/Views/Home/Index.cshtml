@@ -14,17 +14,12 @@
         <h1 class="text-sky-400 font-bold text-lg">Simulando dispositivos - Monitoramento</h1>
     </div>
     <div class="flex p-4 gap-x-1.5" >
-        <button id="add-device" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400" >Add</button>
-        <button id="clear-all" class="rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400">Limpar</button>
-        <div class="flex gap-2">
-            <label class="p-0" for=IdDevice>Identificador dispostivo:</label>
-            <input class="p-2" type="text" clasname="IdDevice" id="IdDevice"/>
-        </div>
+        <a href="/Home/Device" target="_blank" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Simular conexão Device</a>
     </div>
     <h2 class="p-2 font-bold">Dispositivos cadastrados: </h2>
-    <div id="area-devices" class="grid xl:grid-cols-4 md:grid-cols-2 gap-4 p-2">
-        @*<div class="rounded shadow-lg p-10 bg-red-500 hover:shadow-xl" style="background-color:#457B9D"></div>*@
-    </div>
+@*    <div id="area-devices" class="grid xl:grid-cols-4 md:grid-cols-2 gap-4 p-2">
+        
+    </div>*@
     
 
     <div class="p-2 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1  gap-4">
@@ -32,12 +27,12 @@
             <p>Status do painel: <span id="status-onoff"></span></p>
             <p>Painéis conectados: <span id="qtd-painel-online"></span></p>
             <p>Devices Clients Online: <span id="qtd-clients-on"></span></p>
-            <div id="area-log" class="p-2 mt-5 rounded-lg bg-indigo-100" style="overflow-x: auto; max-height: 120px;">
+            <div id="area-log" class="p-2 mt-5 rounded-lg bg-indigo-100" style="overflow-x: auto; max-height: 150px;">
                 
             </div>
         </div>
-        <div class="p-2 xl:col-span-2 rounded-lg bg-indigo-200">
-            Listagem de dispositvos
+        <div id="area-devices" class="p-2 gap-4 grid xl:grid-cols-4 md:grid-cols-2 xl:col-span-2 rounded-lg bg-indigo-200">
+            
         </div>
     </div>
 
@@ -49,14 +44,10 @@
     <script src="~/PageScript/DeviceItem.js"></script>
     <script src="~/PageScript/Devices.js"></script>
     <script>
-        var devices;
         var painel;
-        var connectionList = [];
         
         $(document).ready(() => {
-            
             painel = new PanelMonitoring();
-            //devices = new Devices();
         })
     </script>
 

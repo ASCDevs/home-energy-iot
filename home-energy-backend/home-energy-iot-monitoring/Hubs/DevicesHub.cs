@@ -14,7 +14,7 @@ namespace home_energy_iot_monitoring.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            Console.WriteLine(">> Dispositivo " + Context.ConnectionId + " conectou.");
+            Console.WriteLine(">> Dispositivo " + Context.ConnectionId + " conectou as "+DateTime.Now);
             DevicesHandler._connectedDevices.Add(Context.ConnectionId);
             await this.NotifyConnection(Context.ConnectionId, "Conectou (" + DevicesHandler._connectedDevices.Count + " conectados)");
             await base.OnConnectedAsync();

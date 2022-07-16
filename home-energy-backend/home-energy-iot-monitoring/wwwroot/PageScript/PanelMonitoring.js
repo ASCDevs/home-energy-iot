@@ -20,7 +20,15 @@
                 $("#qtd-clients-on").text(qtdClients)
             })
             connection.on("receiveListClients", function (listClients) {
-                console.log(JSON.parse(listClients))
+                let list = JSON.parse(listClients);
+                list.map(x => $("#area-devices").append(ThisClass.makeCardDevice(x)))
+            })
+            connection.on("addNewDeviceCard", function (deviceClient) {
+                let device = JSON.parse(deviceClient);
+                $("#area-devices").append(ThisClass.makeCardDevice(device))
+            })
+            connection.on("removeDeviceCard", function (connectionId) {
+                $("div[data-connid='" + connectionId+"']").remove();
             })
 
             connection.start().then(function () {
@@ -49,7 +57,20 @@
         })
     }
 
-    setFunctions() {
+ 
 
+    setFunctions() {
+        var ThisClass = this;
+
+        this.makeCardDevice = function (dados) {
+            let txtHtml = '<div data-connid="' + dados.connectionid + '" class="rounded shadow-lg p-10 bg-indigo-500 hover:shadow-xl">';
+            txtHtml += '';
+            txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
+            txtHtml += `<p class="text-white">Device ID: ${dados.deviceid}</p>`;
+            txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
+            txtHtml += '</div>'
+
+            return txtHtml;
+        }
     }
 }
