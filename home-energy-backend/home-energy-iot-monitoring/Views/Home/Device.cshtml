@@ -10,6 +10,22 @@
 </head>
 <body >
     @*https://coolors.co/palette/e63946-f1faee-a8dadc-457b9d-1d3557*@
+    <div class="flex p-4 justify-center bg-teal-500">
+        <h1 class="text-white font-bold text-lg">Interface de conexão / dados de energia [Simulação]</h1>
+    </div>
+    <div class="flex p-4 gap-x-1.5" >
+        <a href="#" id="btn-start" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Iniciar conexão</a>
+
+        <a href="#" id="btn-generate-volts" class="rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Gerar Volts</a>
+        <a href="#" id="btn-stop-volts" class="rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Parar Volts</a>
+    </div>
+    <div class="p-2 gap-4">
+        <p>ID Dispositivo: <span id="device-id"></span></p>
+        <p>Nome dispositivo: <span id="device-name"></span></p>
+        <p>Status dispositivo: <span id="status-device"></span></p>
+        <p>Valor Volts: <span id="value-volts"></span>V</p>
+    </div>
+
     <div id="log-server">
 
     </div>
@@ -20,11 +36,11 @@
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/PageScript/DeviceInterface.js"></script>
     <script>
-        //var device;
+        var device;
         
-        //$(document).ready(() => {
-        //    device = new DeviceInterface();
-        //})
+        $(document).ready(() => {
+            device = new DeviceInterface();
+        })
     </script>
 
 </body>

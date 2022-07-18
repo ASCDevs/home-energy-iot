@@ -25,7 +25,10 @@
             })
             connection.on("addNewDeviceCard", function (deviceClient) {
                 let device = JSON.parse(deviceClient);
-                $("#area-devices").append(ThisClass.makeCardDevice(device))
+                if ($("div[data-connid='" + device.connectionid + "'").length == 0) {
+                    $("#area-devices").append(ThisClass.makeCardDevice(device))
+                }
+                
             })
             connection.on("removeDeviceCard", function (connectionId) {
                 $("div[data-connid='" + connectionId+"']").remove();

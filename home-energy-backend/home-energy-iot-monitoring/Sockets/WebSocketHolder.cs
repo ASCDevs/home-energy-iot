@@ -124,12 +124,12 @@ namespace home_energy_iot_monitoring.Sockets
             await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn })));
         }
 
-        public async Task SendListClientsOn()
+        public async Task SendListClientsOn(string connectionId)
         {
             var listClients = clients.Select(c => new { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn }).ToList();
             if (listClients.Any())
             {
-                await _panelsHub.Clients.All.SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
+                await _panelsHub.Clients.Client(connectionId).SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
             }
             
         }
