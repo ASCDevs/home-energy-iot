@@ -1,6 +1,10 @@
 class DeviceInterface {
+
     constructor() {
-        this.urlSocket = "wss://localhost:7056/consocket";
+        this.DEV = "wss://localhost:7056/consocket";
+        this.LOCAL = "wss://localhost:7722/consocket";
+        this.PROD = "wss://monitoring-iot-devices.herokuapp.com/consocket";
+        this.urlSocket = this.DEV;
         this.setFunctions();
         this.setEvents();
     }
@@ -32,12 +36,17 @@ class DeviceInterface {
             Self.intervalEnergyValues = setInterval(function () {
                 var value = Self.generateFakeValue();
                 $("#value-volts").text(value)
+                Self.socketConnection.send("server>energyvalue>" + value)
             },800)
         }
 
         this.stopEnergyValues = function () {
             $("#value-volts").text("0")
             clearInterval(Self.intervalEnergyValues)
+        }
+
+        this.sendMessageSocket = function (message) {
+            Self.socketConnection.send(message)
         }
 
     }
@@ -50,10 +59,11 @@ class DeviceInterface {
 
         socket.onopen = function (e) {
             Self.socketConnection = socket;
+            Self.idConnection = socket.idConnection;
             let log = "<p>[open] Connection established</p>";
             logArea.insertAdjacentHTML('afterend', log);
-            socket.send(nomeConexao + " entroucon");
-            socket.send("server>idfinal>" + nomeConexao);
+            //socket.send(nomeConexao + " entroucon");
+            //socket.send("server>idfinal>" + nomeConexao);
         };
 
         socket.onmessage = function (event) {
@@ -74,11 +84,6 @@ class DeviceInterface {
         socket.onerror = function (error) {
             let log = "<p>[close] " + error.message + "</p>";
             logArea.insertAdjacentHTML('afterend', log);
-        }
-
-
-        function SendMessageServer(message) {
-            socket.send(message)
         }
     }
 

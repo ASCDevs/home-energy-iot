@@ -1,5 +1,5 @@
 var nomeConexao = prompt("Dê um nome para a conexão. ");
-var socket = new WebSocket("wss://localhost:7056/consocket");
+var socket = new WebSocket("wss://localhost:7722/consocket");
 var logArea = document.getElementById("log-server");
 
 socket.onopen = function(e){

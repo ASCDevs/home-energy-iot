@@ -67,7 +67,7 @@ namespace home_energy_iot_monitoring.Sockets
                 
                 string? msgReceive = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));                
                 string idConnection = clients.First(x => x.Value.web_socket == webSocket).Key;
-                if (msgReceive.Contains("server>")) Console.WriteLine("[From " + idConnection + "]" + msgReceive);
+                //if (msgReceive.Contains("server>")) Console.WriteLine("[From " + idConnection + "]" + msgReceive);
                 if(msgReceive.Contains("server>")) await HandleAction(msgReceive,idConnection);
                 
                 //Enviar para todos os clients
@@ -106,6 +106,10 @@ namespace home_energy_iot_monitoring.Sockets
             string valor = txtCommand.Split(">")[2];
 
             var um = 1;
+            if (acao == "energyvalue")
+            {
+                await SendEneryValueToPanel(idConnection, valor);
+            }
         }
 
         private async Task NotifyClientsCount()
@@ -124,6 +128,10 @@ namespace home_energy_iot_monitoring.Sockets
             await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn })));
         }
 
+        private async Task SendEneryValueToPanel(string idConnectionFrom, string valueEnergy)
+        {
+            await _panelsHub.Clients.All.SendAsync("receiveEnergyValue",idConnectionFrom,valueEnergy);
+        }
         public async Task SendListClientsOn(string connectionId)
         {
             var listClients = clients.Select(c => new { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn }).ToList();
