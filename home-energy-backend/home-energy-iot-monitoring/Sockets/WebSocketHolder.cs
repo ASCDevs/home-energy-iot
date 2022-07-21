@@ -23,16 +23,29 @@ namespace home_energy_iot_monitoring.Sockets
         public async Task AddAsync(HttpContext context)
         {
             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            string idConnection = CreateId();
-            if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket,"",idConnection)))
+            try
             {
-                Console.WriteLine("[connected] id-connection: " + idConnection);
-                await NotifyLogPanel("Device conectou");
-                await NotifyClientsCount();
-                await AddNewDeviceInPanel(idConnection);
+                string idConnection = CreateId();
+                if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket, "", idConnection)))
+                {
+                    Console.WriteLine("[connected] id-connection: " + idConnection);
+                    await NotifyLogPanel("Device conectou");
+                    await NotifyClientsCount();
+                    await AddNewDeviceInPanel(idConnection);
 
-                await EchoAsycn(webSocket);
+                    await EchoAsycn(webSocket);
+                }
+            }catch (Exception ex)
+            {
+                var client = clients.First(w => w.Value.web_socket == webSocket);
+                Console.WriteLine("[disconnected] id-connection: " + client.Key);
+                await NotifyLogPanel("Device desconectou");
+                await _panelsHub.Clients.All.SendAsync("removeDeviceCard", client.Key);
+                clients.TryRemove(client);
+                await NotifyClientsCount();
+                Console.WriteLine("[ERRO] > " + ex.Message +" || [["+ex.StackTrace+"]]");
             }
+            
         }
 
         private string CreateId()
@@ -109,6 +122,9 @@ namespace home_energy_iot_monitoring.Sockets
             if (acao == "energyvalue")
             {
                 await SendEneryValueToPanel(idConnection, valor);
+            }else if(acao == "keepalive")
+            {
+                await PingHoldConnection(idConnection);
             }
         }
 
@@ -140,6 +156,11 @@ namespace home_energy_iot_monitoring.Sockets
                 await _panelsHub.Clients.Client(connectionId).SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
             }
             
+        }
+
+        public async Task PingHoldConnection(string idConnection)
+        {
+            await SendActionToClient(idConnection, "pong");
         }
 
     }

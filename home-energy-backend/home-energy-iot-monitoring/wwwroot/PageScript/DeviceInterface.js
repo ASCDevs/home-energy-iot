@@ -4,7 +4,7 @@ class DeviceInterface {
         this.DEV = "wss://localhost:7056/consocket";
         this.LOCAL = "wss://localhost:7722/consocket";
         this.PROD = "wss://monitoring-iot-devices.herokuapp.com/consocket";
-        this.urlSocket = this.DEV;
+        this.urlSocket = this.PROD;
         this.setFunctions();
         this.setEvents();
     }
@@ -49,6 +49,14 @@ class DeviceInterface {
             Self.socketConnection.send(message)
         }
 
+        //Para manter socket ativo
+        this.initPingPong = function () {
+            
+            Self.intervalKeepAlive = setInterval(function () {
+                Self.socketConnection.send("server>keepalive>true");
+            }, 3000);
+        }
+
     }
 
     makeConnection() {
@@ -67,8 +75,12 @@ class DeviceInterface {
         };
 
         socket.onmessage = function (event) {
-            let log = "<p>[message] " + event.data + "</p>";
-            logArea.insertAdjacentHTML('afterend', log);
+            if (event.data == "pong") {
+                console.log(event.data);
+            } else {
+                let log = "<p>[message] " + event.data + "</p>";
+                logArea.insertAdjacentHTML('afterend', log);
+            }
         }
 
         socket.onclose = function (event) {
@@ -82,7 +94,7 @@ class DeviceInterface {
         }
 
         socket.onerror = function (error) {
-            let log = "<p>[close] " + error.message + "</p>";
+            let log = "<p>[close] error - " + error.message + "</p>";
             logArea.insertAdjacentHTML('afterend', log);
         }
     }
