@@ -10,6 +10,6 @@ namespace home_energy_iot_core.Interfaces
 {
     public interface IDeviceReporter
     {
-        void Report(DeviceReport device);
+        Task Report(DeviceReport device);
     }
 }

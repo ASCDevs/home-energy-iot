@@ -21,7 +21,7 @@ namespace home_energy_iot_core
             _logger = logger;
         }
 
-        public async void Report(DeviceReport device)
+        public async Task Report(DeviceReport device)
         {
             try
             {
