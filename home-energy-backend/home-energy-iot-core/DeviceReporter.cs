@@ -12,13 +12,14 @@ namespace home_energy_iot_core
 {
     public class DeviceReporter : IDeviceReporter
     {
-        private ILogger _logger;
+        private ILogger<DeviceReporter> _logger;
 
         private DataBaseContext _context;
 
-        public DeviceReporter(ILogger logger)
+        public DeviceReporter(ILogger<DeviceReporter> logger, DataBaseContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public async Task Report(DeviceReport device)
