@@ -26,12 +26,11 @@ namespace home_energy_iot_core
             {
                 ValidateUser(user);
 
+                _logger.LogInformation($"Criando Usuário: [{user.Username}]");
                 _logger.LogInformation("Iniciando a geração do Salt da senha.");
 
                 user.SaltPassword = _hasher.CreateSalt(20);
                 user.Password = _hasher.GenerateHash(user.Password, user.SaltPassword);
-
-                _logger.LogInformation($"Criando Usuário: [{user.Username}]");
 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
