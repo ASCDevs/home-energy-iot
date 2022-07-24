@@ -16,10 +16,12 @@ namespace home_energy_iot_monitoring.Hubs
         public override async Task OnConnectedAsync()
         {
             PanelsHandler._connectedPanels.Add(Context.ConnectionId);
-            Console.WriteLine("[Panel on] Painel "+Context.ConnectionId+" conectou");
+            Console.WriteLine("[Panel on] Painel "+Context.ConnectionId+" conectou ("+DateTime.Now+")");
             await Clients.All.SendAsync("updatePanelsOn", PanelsHandler._connectedPanels.Count());
             await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
-            await _webSocket.SendListClientsOn();
+            await GetListClientsOn();
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("sendPanelLog","Um painel conectou ("+DateTime.Now+")");
+            
             await base.OnConnectedAsync();
         }
 
@@ -29,6 +31,7 @@ namespace home_energy_iot_monitoring.Hubs
             Console.WriteLine("[Panel off] Painel " + Context.ConnectionId + " desconectou");
             await Clients.All.SendAsync("updatePanelsOn", PanelsHandler._connectedPanels.Count());
             await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("sendPanelLog", "Um painel desconectou (" + DateTime.Now + ")");
             await base.OnConnectedAsync();
         }
 
@@ -36,6 +39,11 @@ namespace home_energy_iot_monitoring.Hubs
         {
             Console.WriteLine("[Panel hub] websocket atualizado enviado para painéis");
             await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
+        }
+
+        public async Task GetListClientsOn()
+        {
+            await _webSocket.SendListClientsOn(Context.ConnectionId);
         }
     }
 }

@@ -8,5 +8,10 @@ namespace home_energy_iot_monitoring.Controllers
         {
             return View();
         }
+        
+        public IActionResult Device()
+        {
+            return View();
+        }
     }
 }
