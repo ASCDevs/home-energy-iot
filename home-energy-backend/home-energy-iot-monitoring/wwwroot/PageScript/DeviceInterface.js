@@ -4,7 +4,7 @@ class DeviceInterface {
         this.DEV = "wss://localhost:7056/consocket";
         this.LOCAL = "wss://localhost:7722/consocket";
         this.PROD = "wss://monitoring-iot-devices.herokuapp.com/consocket";
-        this.urlSocket = this.PROD;
+        this.urlSocket = this.DEV;
         this.setFunctions();
         this.setEvents();
     }
@@ -21,6 +21,7 @@ class DeviceInterface {
 
         $("#btn-stop-volts").click(() => {
             Self.stopEnergyValues();
+            Self.sendMessageSocket("server>energyvalue>0");
         })
     }
 
@@ -49,12 +50,26 @@ class DeviceInterface {
             Self.socketConnection.send(message)
         }
 
-        //Para manter socket ativo
-        this.initPingPong = function () {
-            
-            Self.intervalKeepAlive = setInterval(function () {
-                Self.socketConnection.send("server>keepalive>true");
-            }, 3000);
+        this.setTimer = function (time) {
+            console.log(`[Implementar timer visual para ${time} milisegundos]`)
+        }
+
+        this.HandleAction = function (action) {
+            let splitAction = action.split(">");
+
+            if (splitAction[1] == "stopenergy") {
+                Self.stopEnergyValues();
+                Self.sendMessageSocket("server>energyvalue>0");
+            } else if (splitAction[1] == "timerenergy") {
+                //valor recebido é em segundos
+                let valueReceived = parseInt(splitAction[2]);
+                let time = valueReceived * 1000; //transformado para milissegundos
+                Self.stopEnergyValues();
+                Self.sendMessageSocket("server>energyvalue>0");
+                setTimeout(() => Self.initEnergyValues(), time);
+                Self.setTimer(time);
+
+            }
         }
 
     }
@@ -75,8 +90,8 @@ class DeviceInterface {
         };
 
         socket.onmessage = function (event) {
-            if (event.data == "pong") {
-                console.log(event.data);
+            if (event.data.includes("client>")) {
+                Self.HandleAction();
             } else {
                 let log = "<p>[message] " + event.data + "</p>";
                 logArea.insertAdjacentHTML('afterend', log);
