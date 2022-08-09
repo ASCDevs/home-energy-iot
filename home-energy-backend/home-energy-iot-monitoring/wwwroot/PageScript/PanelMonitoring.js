@@ -1,6 +1,7 @@
 ﻿class PanelMonitoring {
 
     constructor() {
+        this.setEvents();
         this.setFunctions();
         this.makeConnection();
     }
@@ -8,18 +9,15 @@
     setEvents() {
         var Self = this;
 
-        this.setActionStopDevice = function (e) {
-            let divCard = $(e.target).parent().parent();
-            let connId = divCard.data("connid");
-
-            console.log("Conexão id: " + connId);
-        }
 
         this.setBtnStopDevice = function () {
-            $("body").off("click", ".btn-parar-device");
+            $(".btn-parar-device").off("click");
 
             $(".btn-parar-device").click(function (e) {
-                Self.setBtnStopDevice(e)
+                let divCard = $(this).parent().parent();
+                let connId = divCard.data("connid");
+
+                console.log("Conexão id: " + connId);
             })
 
         }
