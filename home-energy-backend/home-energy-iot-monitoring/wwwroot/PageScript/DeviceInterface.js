@@ -68,7 +68,8 @@ class DeviceInterface {
                 Self.sendMessageSocket("server>energyvalue>0");
                 setTimeout(() => Self.initEnergyValues(), time);
                 Self.setTimer(time);
-
+            } else if (splitAction[1] == "continueenergy") {
+                Self.initEnergyValues();
             }
         }
 
@@ -91,7 +92,7 @@ class DeviceInterface {
 
         socket.onmessage = function (event) {
             if (event.data.includes("client>")) {
-                Self.HandleAction();
+                Self.HandleAction(data);
             } else {
                 let log = "<p>[message] " + event.data + "</p>";
                 logArea.insertAdjacentHTML('afterend', log);

@@ -87,7 +87,7 @@
     }
 
     setFunctions() {
-        var ThisClass = this;
+        var Self = this;
 
         this.makeCardDevice = function (dados) {
             let txtHtml = '<div data-connid="' + dados.connectionid + '" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">';
@@ -103,6 +103,18 @@
             txtHtml += '</div>'
 
             return txtHtml;
+        }
+
+        this.sendStopEnergy = function () {
+            Self.conexao.send("client>stopenergy")
+        }
+
+        this.sendContinueEnergy = function () {
+            Self.conexao.send("client>continueenergy")
+        }
+
+        this.sendTimerEnergy = function (time) {
+            Self.conexao.send("client>timerenergy>"+time);
         }
     }
 }
