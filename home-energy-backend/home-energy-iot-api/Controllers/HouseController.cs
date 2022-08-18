@@ -72,7 +72,7 @@ namespace home_energy_api.Controllers
             try
             {
                 var house = await _houseManager.Get(id);
-                
+
                 return Ok(house);
             }
             catch (Exception ex)

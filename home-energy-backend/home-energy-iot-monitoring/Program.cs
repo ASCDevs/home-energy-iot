@@ -1,9 +1,6 @@
 using home_energy_iot_monitoring.Hubs;
 using home_energy_iot_monitoring.Sockets;
 using Microsoft.AspNetCore.ResponseCompression;
-using System.Net;
-using System.Net.WebSockets;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR().AddJsonProtocol(options => {
+builder.Services.AddSignalR().AddJsonProtocol(options =>
+{
     options.PayloadSerializerOptions.PropertyNamingPolicy = null;
 });
 builder.Services.AddSingleton<IWebSocketHolder, WebSocketHolder>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
-); 
+);
 
 var app = builder.Build();
 
@@ -29,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseResponseCompression();
-app.UseStaticFiles(); 
+app.UseStaticFiles();
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthorization();

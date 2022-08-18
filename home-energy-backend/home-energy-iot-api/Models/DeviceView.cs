@@ -6,6 +6,6 @@
         public int IdHouseUser { get; set; }
         public string? NameDevice { get; set; }
         public string? DescDevice { get; set; }
-        public string DtRegistration { get; set; }
+        public string? DtRegistration { get; set; }
     }
 }

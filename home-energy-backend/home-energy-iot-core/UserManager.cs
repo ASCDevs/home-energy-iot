@@ -74,7 +74,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if(id < 0)
+                if (id < 0)
                     throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
 
                 _logger.LogInformation($"Consultando dados do usuário Id [{id}] na base de dados.");
@@ -107,7 +107,7 @@ namespace home_energy_iot_core
 
                 var result = _context.Users.ToList();
 
-                if(result.Count > 0)
+                if (result.Count > 0)
                     return Task.FromResult<IEnumerable<User>>(result);
 
                 var errorMessage = "Nenhum Usuário encontrado.";
@@ -124,7 +124,7 @@ namespace home_energy_iot_core
 
         private void ValidateUser(User user)
         {
-            if(user is null)
+            if (user is null)
                 throw new ArgumentNullException(nameof(user), "Usuário nulo.");
         }
     }

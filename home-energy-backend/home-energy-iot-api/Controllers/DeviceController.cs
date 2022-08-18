@@ -1,9 +1,6 @@
-﻿using home_energy_iot_api.Models;
-using home_energy_iot_core.Interfaces;
-using home_energy_iot_entities;
+﻿using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

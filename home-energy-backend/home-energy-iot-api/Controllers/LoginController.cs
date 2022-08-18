@@ -31,7 +31,7 @@ namespace home_energy_api.Controllers
                 _logger.LogInformation($"Buscando o usuário [{username}]");
 
                 var userReturned = _loginService.GetUser(username);
-                
+
                 if (userReturned != null && _loginService.ValidPassword(password, userReturned))
                 {
                     _logger.LogInformation($"Usuário [{username}] encontrado e gerando token de autenticação.");
@@ -59,7 +59,7 @@ namespace home_energy_api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }            
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 
 namespace home_energy_iot_monitoring.Sockets
 {

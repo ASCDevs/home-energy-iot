@@ -1,8 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using home_energy_iot_entities.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using home_energy_iot_entities.Entities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace home_energy_api.Authentication
 {
@@ -17,7 +17,7 @@ namespace home_energy_api.Authentication
         }
 
         public string GenerateToken(User user)
-        {   
+        {
             var jwtKeyBytes = Encoding.ASCII.GetBytes(_configuration["SecretJwtKey"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor()
