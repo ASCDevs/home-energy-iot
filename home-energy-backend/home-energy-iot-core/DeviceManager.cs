@@ -8,7 +8,6 @@ namespace home_energy_iot_core
     public class DeviceManager : IDeviceManager
     {
         private ILogger<DeviceManager> _logger;
-
         private DataBaseContext _context;
 
         public DeviceManager(ILogger<DeviceManager> logger, DataBaseContext context)
