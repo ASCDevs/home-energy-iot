@@ -1,6 +1,5 @@
 ﻿using home_energy_iot_monitoring.Sockets;
 using Microsoft.AspNetCore.SignalR;
-using System.Collections.Concurrent;
 
 namespace home_energy_iot_monitoring.Hubs
 {
@@ -16,12 +15,12 @@ namespace home_energy_iot_monitoring.Hubs
         public override async Task OnConnectedAsync()
         {
             PanelsHandler._connectedPanels.Add(Context.ConnectionId);
-            Console.WriteLine("[Panel on] Painel "+Context.ConnectionId+" conectou ("+DateTime.Now+")");
+            Console.WriteLine("[Panel on] Painel " + Context.ConnectionId + " conectou (" + DateTime.Now + ")");
             await Clients.All.SendAsync("updatePanelsOn", PanelsHandler._connectedPanels.Count());
             await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
             await GetListClientsOn();
-            await Clients.AllExcept(Context.ConnectionId).SendAsync("sendPanelLog","Um painel conectou ("+DateTime.Now+")");
-            
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("sendPanelLog", "Um painel conectou (" + DateTime.Now + ")");
+
             await base.OnConnectedAsync();
         }
 

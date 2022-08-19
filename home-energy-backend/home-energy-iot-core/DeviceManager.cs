@@ -82,7 +82,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if(id < 0)
+                if (id < 0)
                     throw new ArgumentOutOfRangeException(nameof(id), $"Id do dispositivo inválido: [{id}].");
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");

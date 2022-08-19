@@ -75,7 +75,7 @@ namespace home_energy_iot_api.Controllers
             try
             {
                 var users = await _userManager.GetAll();
-                
+
                 var usersFiltered = new List<UserView>();
 
                 foreach (var user in users)

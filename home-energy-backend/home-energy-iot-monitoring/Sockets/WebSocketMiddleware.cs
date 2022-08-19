@@ -13,7 +13,7 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if(context.WebSockets.IsWebSocketRequest == false)
+            if (context.WebSockets.IsWebSocketRequest == false)
             {
                 context.Response.StatusCode = 400;
                 return;

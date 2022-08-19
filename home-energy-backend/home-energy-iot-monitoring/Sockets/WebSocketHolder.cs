@@ -35,7 +35,8 @@ namespace home_energy_iot_monitoring.Sockets
 
                     await EchoAsycn(webSocket);
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 var client = clients.First(w => w.Value.web_socket == webSocket);
                 Console.WriteLine("[disconnected] id-connection: " + client.Key);
@@ -43,20 +44,19 @@ namespace home_energy_iot_monitoring.Sockets
                 await _panelsHub.Clients.All.SendAsync("removeDeviceCard", client.Key);
                 clients.TryRemove(client);
                 await NotifyClientsCount();
-                Console.WriteLine("[ERRO] > " + ex.Message +" || [["+ex.StackTrace+"]]");
+                Console.WriteLine("[ERRO] > " + ex.Message + " || [[" + ex.StackTrace + "]]");
             }
-            
         }
 
         private string CreateId()
         {
-            return Guid.NewGuid().ToString(); 
+            return Guid.NewGuid().ToString();
         }
 
         private async Task EchoAsycn(WebSocket webSocket)
         {
             //Para enviar dados
-            byte[] buffer = new byte[1024*4];
+            byte[] buffer = new byte[1024 * 4];
             //Receber e enviar mensagens até as conexões serem fechadas.
             while (true)
             {
@@ -69,20 +69,20 @@ namespace home_energy_iot_monitoring.Sockets
                     if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                     {
                         Console.WriteLine("[disconnected] id-connection: " + client.Key);
-                        await NotifyLogPanel("Device desconectou"); 
+                        await NotifyLogPanel("Device desconectou");
                         await NotifyClientsCount();
                         await _panelsHub.Clients.All.SendAsync("removeDeviceCard", client.Key);
                     }
-                    
+
                     webSocket.Dispose();
                     break;
                 }
-                
-                string? msgReceive = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));                
+
+                string? msgReceive = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));
                 string idConnection = clients.First(x => x.Value.web_socket == webSocket).Key;
                 //if (msgReceive.Contains("server>")) Console.WriteLine("[From " + idConnection + "]" + msgReceive);
-                if(msgReceive.Contains("server>")) await HandleAction(msgReceive,idConnection);
-                
+                if (msgReceive.Contains("server>")) await HandleAction(msgReceive, idConnection);
+
                 //Enviar para todos os clients
                 foreach (var c in clients)
                 {
@@ -96,18 +96,18 @@ namespace home_energy_iot_monitoring.Sockets
 
         public int CountClients()
         {
-            return clients.Count(); 
+            return clients.Count();
         }
 
         public async Task SendActionToClient(string idConnection, string Action)
         {
             var client = clients.First(x => x.Key == idConnection);
             byte[] bytes = Encoding.ASCII.GetBytes(Action);
-            
-            await client.Value.web_socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text , true, CancellationToken.None);
+
+            await client.Value.web_socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        private async Task HandleAction(string txtCommand,string idConnection)
+        private async Task HandleAction(string txtCommand, string idConnection)
         {
             //{para-quem}>{acao}>{valor}
             //ex: server>updateid>1239
@@ -122,7 +122,8 @@ namespace home_energy_iot_monitoring.Sockets
             if (acao == "energyvalue")
             {
                 await SendEneryValueToPanel(idConnection, valor);
-            }else if(acao == "keepalive")
+            }
+            else if (acao == "keepalive")
             {
                 await PingHoldConnection(idConnection);
             }
@@ -135,19 +136,20 @@ namespace home_energy_iot_monitoring.Sockets
 
         private async Task NotifyLogPanel(string msg)
         {
-            await _panelsHub.Clients.All.SendAsync("sendPanelLog",msg+" ("+DateTime.Now+")");
+            await _panelsHub.Clients.All.SendAsync("sendPanelLog", msg + " (" + DateTime.Now + ")");
         }
 
         private async Task AddNewDeviceInPanel(string connId)
         {
-            var device = clients.First(x => x.Key==connId).Value;
+            var device = clients.First(x => x.Key == connId).Value;
             await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn })));
         }
 
         private async Task SendEneryValueToPanel(string idConnectionFrom, string valueEnergy)
         {
-            await _panelsHub.Clients.All.SendAsync("receiveEnergyValue",idConnectionFrom,valueEnergy);
+            await _panelsHub.Clients.All.SendAsync("receiveEnergyValue", idConnectionFrom, valueEnergy);
         }
+
         public async Task SendListClientsOn(string connectionId)
         {
             var listClients = clients.Select(c => new { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn }).ToList();
@@ -155,13 +157,11 @@ namespace home_energy_iot_monitoring.Sockets
             {
                 await _panelsHub.Clients.Client(connectionId).SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
             }
-            
         }
 
         public async Task PingHoldConnection(string idConnection)
         {
             await SendActionToClient(idConnection, "pong");
         }
-
     }
 }
