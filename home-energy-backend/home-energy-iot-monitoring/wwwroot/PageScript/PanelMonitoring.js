@@ -9,20 +9,17 @@
     setEvents() {
         var Self = this;
 
-
         this.setBtnStopDevice = function () {
             $(".btn-parar-device").off("click");
 
             $(".btn-parar-device").click(function (e) {
                 let divCard = $(this).parent().parent();
                 let connId = divCard.data("connid");
+                Self.sendStopEnergy(connId);
 
-                console.log("Conexão id: " + connId);
+                //console.log("Conexão id: " + connId);
             })
-
         }
-
-        
     }
 
     makeConnection() {
@@ -61,7 +58,7 @@
             })
 
             connection.start().then(function () {
-                ThisClass.conexao = connection;
+                ThisClass.conn = connection;
                 ThisClass.IdConnection = connection.connectionId;
                 $("#status-onoff").text("online")
                 let logMsg = `<p>[start] > Painel conetado</p>`;
@@ -105,16 +102,19 @@
             return txtHtml;
         }
 
-        this.sendStopEnergy = function () {
-            Self.conexao.send("client>stopenergy")
+        this.sendStopEnergy = function (connId) {
+            let txtCommand = "client>stopenergy";
+            Self.conn.invoke("SendActionToClient", connId, txtCommand)
         }
 
-        this.sendContinueEnergy = function () {
-            Self.conexao.send("client>continueenergy")
+        this.sendContinueEnergy = function (connId) {
+            let txtCommand = "client>continueenergy";
+            Self.conn.invoke("SendActionToClient", connId, txtCommand)
         }
 
-        this.sendTimerEnergy = function (time) {
-            Self.conexao.send("client>timerenergy>"+time);
+        this.sendTimerEnergy = function (connId,time) {
+            let txtCommand = "client>timerenergy>" + time;
+            Self.conn.send("SendActionToClient", connId, txtCommand);
         }
     }
 }
