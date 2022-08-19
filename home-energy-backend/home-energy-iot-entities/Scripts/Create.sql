@@ -61,8 +61,7 @@ CREATE TABLE [HouseBill](
 
 CREATE TABLE [DeviceReport](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
-	[StartDate] DATETIME NOT NULL,
-	[LastDate] DATETIME NOT NULL,
+	[RegisterDate] DATETIME NOT NULL,
 	[Consumption] DECIMAL(5,2) NOT NULL,
 
 	[IdDevice] INT,
@@ -70,8 +69,6 @@ CREATE TABLE [DeviceReport](
 	FOREIGN KEY ([IdDevice]) REFERENCES [Device]([Id])
 );
 
-
 --------------------Default Inserts--------------------
-
 -- Senha do usuário admin: admin
 INSERT INTO [User] VALUES ('admin', 'admin', 'YWFTaY0XBRNdOIHfgz/yWsu5vnyZgSQqgAUeH7lSoHw=', 'm94DPZqHhs3/U8ccJ/oiosgDm/U=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')

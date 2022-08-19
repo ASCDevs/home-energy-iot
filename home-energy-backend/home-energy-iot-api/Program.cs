@@ -7,6 +7,7 @@ using home_energy_iot_core.Interfaces;
 using home_energy_iot_core.Login;
 using home_energy_iot_entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

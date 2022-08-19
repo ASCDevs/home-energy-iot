@@ -47,7 +47,7 @@ namespace home_energy_iot_core
             }
         }
 
-        private bool ReportExists(DeviceReport device)
+        public bool ReportExists(DeviceReport device)
         {
             _logger.LogInformation($"Buscando o Dispositivo com Id [{device.Id}]");
 

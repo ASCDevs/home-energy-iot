@@ -23,7 +23,7 @@ namespace home_energy_iot_api.Controllers
         public async Task<IActionResult> Create([FromBody] User user)
         {
             try
-            {
+            {               
                 await _userManager.Create(user);
 
                 return Ok();
