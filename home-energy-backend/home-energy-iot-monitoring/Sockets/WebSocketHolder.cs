@@ -126,6 +126,11 @@ namespace home_energy_iot_monitoring.Sockets
             //Ações para enviar ao client
             if(actionTo == "client")
             {
+                string action = txtCommand.Split(">")[1];
+                if (action == "stopenergy" || action == "continueenergy" || action == "timerenergy")
+                {
+                    await this.ChangeDeviceCurrentState(idConnection, action);
+                }
                 await this.SendActionToClient(idConnection, txtCommand);
             }
         }
@@ -143,12 +148,19 @@ namespace home_energy_iot_monitoring.Sockets
         private async Task AddNewDeviceInPanel(string connId)
         {
             var device = clients.First(x => x.Key == connId).Value;
-            await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn })));
+            await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn, currentstate = device.current_sate })));
         }
 
         private async Task SendEnergyValueToPanel(string idConnectionFrom, string valueEnergy)
         {
             await _panelsHub.Clients.All.SendAsync("receiveEnergyValue", idConnectionFrom, valueEnergy);
+        }
+
+        private async Task ChangeDeviceCurrentState(string idConnection, string action)
+        {
+            var client = clients.First(x => x.Key == idConnection);
+            await Task.Run(() => client.Value.ChangeCurrentState(action) );
+
         }
 
         public async Task SendListClientsOn(string connectionId)
