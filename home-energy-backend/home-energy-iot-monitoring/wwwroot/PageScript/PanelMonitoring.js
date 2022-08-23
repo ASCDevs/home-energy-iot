@@ -9,6 +9,23 @@
     setEvents() {
         var Self = this;
 
+        this.HandleChangeCurrentState = function (divCard) {
+            debugger;
+            if (divCard.data("state") == "true") {
+                //Desabilita botão de continuar
+                //Habilita botão de Parar
+                //Habilita botão de Suspender
+
+            }
+
+            if (divCard.data("state") == "false") {
+                //Habilita botão de continuar
+                //Desabilita botão de Parar
+                //Desabilita botão de Suspender
+            }
+
+        };
+
         this.setBtnStopDevice = function () {
             $(".btn-parar-device").off("click");
 
@@ -16,9 +33,29 @@
                 let divCard = $(this).parent().parent();
                 let connId = divCard.data("connid");
                 Self.sendStopEnergy(connId);
-
                 //console.log("Conexão id: " + connId);
             })
+        }
+
+        this.setBtnContinueDevice = function () {
+            $(".btn-continuar-device").off("click");
+
+            $(".btn-continuar-device").click(function (e) {
+                let divCard = $(this).parent().parent();
+                let connId = divCard.data("connid");
+                Self.sendContinueEnergy(connId);
+                //console.log("Conexão id: " + connId);
+            });
+        }
+
+        this.setBtnSuspenderDevice = function () {
+            $(".btn-suspender-device").off("click");
+
+            $(".btn-suspender-device").click(function (e) {
+                let divCard = $(this).parent().parent();
+                let connId = divCard.data("connid");
+                Self.sendSuspendEnergy(connId);
+            });
         }
     }
 
@@ -40,16 +77,27 @@
                 let list = JSON.parse(listClients);
                 list.map(x => $("#area-devices").append(ThisClass.makeCardDevice(x)))
                 ThisClass.setBtnStopDevice();
+                ThisClass.setBtnContinueDevice();
+                ThisClass.setBtnSuspenderDevice();
                 
             })
             connection.on("receiveEnergyValue", function (idConnectionFrom, valueEnergy) {
                 $("div[data-connid='" + idConnectionFrom + "'] .field-value").text(valueEnergy+"V")
             })
+
+            connection.on("receiveCurrentState", function (idConnectionFrom, currentState) {
+                let divCard = $("div[data-connid='" + idConnectionFrom + "']");
+                divCard.attr("data-current", currentState);
+                ThisClass.HandleChangeCurrentState(divCard);
+            });
+
             connection.on("addNewDeviceCard", function (deviceClient) {
                 let device = JSON.parse(deviceClient);
                 if ($("div[data-connid='" + device.connectionid + "'").length == 0) {
                     $("#area-devices").append(ThisClass.makeCardDevice(device))
                     ThisClass.setBtnStopDevice();
+                    ThisClass.setBtnContinueDevice();
+                    ThisClass.setBtnSuspenderDevice();
                 }
                 
             })
@@ -87,15 +135,16 @@
         var Self = this;
 
         this.makeCardDevice = function (dados) {
-            let txtHtml = '<div data-connid="' + dados.connectionid + '" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">';
+            let txtHtml = '<div data-connid="' + dados.connectionid + '" data-state="'+data.state+'" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">';
             txtHtml += '';
             txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
             txtHtml += `<p class="text-white">Device ID: ${dados.deviceid}</p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
             txtHtml += `<p class="text-white">Consumo em tempo real: <span class="field-value"></span></p>`;
-            txtHtml += `<div class="flex justify-center p-2 gap-x-1.5">`;
-            txtHtml += `<button data-current="${dados.currentstate}" type="button" href="#" class="btn-parar-device rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disable:hover:bg-zinc-400">Parar energia</button>`;
-            txtHtml += `<button type="button" href="#" class="rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Suspender 10s</button>`;
+            txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;
+            txtHtml += `<button type="button" href="#" class="btn-continuar-device rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Continuar</button>`;
+            txtHtml += `<button type="button" href="#" class="btn-parar-device rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disable:hover:bg-zinc-400">Parar</button>`;
+            txtHtml += `<button type="button" href="#" class="btn-suspender-device rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Suspender 10s</button>`;
             txtHtml += `</div>`;
             txtHtml += '</div>'
 
