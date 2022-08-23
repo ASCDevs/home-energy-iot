@@ -91,9 +91,10 @@ class DeviceInterface {
         };
 
         socket.onmessage = function (event) {
+            console.log(event.data);
             if (event.data.includes("client>")) {
-                Self.HandleAction(data);
-            } else {
+                Self.HandleAction(event.data);
+            } else{
                 let log = "<p>[message] " + event.data + "</p>";
                 logArea.insertAdjacentHTML('afterend', log);
             }

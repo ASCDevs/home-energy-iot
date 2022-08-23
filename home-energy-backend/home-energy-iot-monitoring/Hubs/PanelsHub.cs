@@ -44,5 +44,10 @@ namespace home_energy_iot_monitoring.Hubs
         {
             await _webSocket.SendListClientsOn(Context.ConnectionId);
         }
+
+        public async Task SendActionToClient(string connId, string txtCommand)
+        {
+            await _webSocket.SendActionToClient(connId, txtCommand);
+        }
     }
 }
