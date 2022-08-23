@@ -19,7 +19,7 @@ namespace home_energy_iot_core.Helpers
 
         public string CreateSalt(int saltSize)
         {
-            var rng = new RNGCryptoServiceProvider();
+            var rng = new RNGCryptoServiceProvider();                      
 
             var buff = new byte[saltSize];
 

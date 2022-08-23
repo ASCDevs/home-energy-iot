@@ -1,6 +1,7 @@
 ﻿using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
+using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace home_energy_iot_core
@@ -8,12 +9,12 @@ namespace home_energy_iot_core
     public class DeviceManager : IDeviceManager
     {
         private ILogger<DeviceManager> _logger;
-        private DataBaseContext _context;
+        private IDeviceManagerRepository _deviceManagerRepository;
 
-        public DeviceManager(ILogger<DeviceManager> logger, DataBaseContext context)
+        public DeviceManager(ILogger<DeviceManager> logger, IDeviceManagerRepository deviceManagerRepository)
         {
             _logger = logger;
-            _context = context;
+            _deviceManagerRepository = deviceManagerRepository;
         }
 
         public async Task Create(Device device)
@@ -24,8 +25,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Dispositivo: [{device.Name}].");
 
-                await _context.Devices.AddAsync(device);
-                await _context.SaveChangesAsync();
+                await _deviceManagerRepository.Create(device);
 
                 _logger.LogInformation($"Dispositivo [{device.Name}] criado com sucesso.");
             }
@@ -44,8 +44,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando Dispositivo Id [{device.Id}].");
 
-                _context.Devices.Update(device);
-                await _context.SaveChangesAsync();
+                await _deviceManagerRepository.Update(device);
 
                 _logger.LogInformation($"Dispositivo Id [{device.Id}] atualizado com sucesso.");
             }
@@ -64,9 +63,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Deletando Dispositivo Id [{device.Id}].");
 
-                _context.Devices.Remove(device);
-
-                await _context.SaveChangesAsync();
+                await _deviceManagerRepository.Delete(device);
 
                 _logger.LogInformation($"Dispositivo Id [{device.Id}] deletado com sucesso.");
             }
@@ -86,7 +83,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
-                var device = _context.Devices.Find(id);
+                var device = _deviceManagerRepository.Get(id);
 
                 if (device != null)
                 {
@@ -112,7 +109,7 @@ namespace home_energy_iot_core
             {
                 _logger.LogInformation("Buscando Dispositivos na base de dados.");
 
-                var devices = _context.Devices.ToList();
+                var devices = _deviceManagerRepository.GetAll();
 
                 if (devices.Count > 0)
                     return Task.FromResult<IEnumerable<Device>>(devices);

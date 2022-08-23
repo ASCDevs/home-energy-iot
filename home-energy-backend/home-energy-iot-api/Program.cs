@@ -1,4 +1,3 @@
-using System.Text;
 using home_energy_api.Authentication;
 using home_energy_iot_core;
 using home_energy_iot_core.Helpers;
@@ -6,8 +5,10 @@ using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_core.Login;
 using home_energy_iot_entities;
+using home_energy_iot_repository;
+using home_energy_iot_repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,9 @@ builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IHouseManager, HouseManager>();
 builder.Services.AddTransient<IDeviceManager, DeviceManager>();
 builder.Services.AddTransient<IDeviceReporter, DeviceReporter>();
+
+//repositories
+builder.Services.AddTransient<IDeviceManagerRepository, DeviceManagerRepository>();
 
 //helpers
 builder.Services.AddTransient<IHasher, Hasher>();

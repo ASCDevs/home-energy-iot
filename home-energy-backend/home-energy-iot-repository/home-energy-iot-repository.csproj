@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>home_energy_iot_core</RootNamespace>
+    <RootNamespace>home_energy_iot_repository</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\home-energy-iot-entities\home-energy-iot-entities.csproj" />
-    <ProjectReference Include="..\home-energy-iot-repository\home-energy-iot-repository.csproj" />
   </ItemGroup>
 
 </Project>
