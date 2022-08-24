@@ -13,6 +13,7 @@
             debugger;
             if (divCard.data("state") == "true") {
                 //Desabilita botão de continuar
+
                 //Habilita botão de Parar
                 //Habilita botão de Suspender
 
@@ -54,7 +55,7 @@
             $(".btn-suspender-device").click(function (e) {
                 let divCard = $(this).parent().parent();
                 let connId = divCard.data("connid");
-                Self.sendSuspendEnergy(connId);
+                Self.sendTimerEnergy(connId);
             });
         }
     }
@@ -78,7 +79,7 @@
                 list.map(x => $("#area-devices").append(ThisClass.makeCardDevice(x)))
                 ThisClass.setBtnStopDevice();
                 ThisClass.setBtnContinueDevice();
-                ThisClass.setBtnSuspenderDevice();
+                //ThisClass.setBtnSuspenderDevice();
                 
             })
             connection.on("receiveEnergyValue", function (idConnectionFrom, valueEnergy) {
@@ -92,14 +93,14 @@
             });
 
             connection.on("addNewDeviceCard", function (deviceClient) {
+                debugger;
                 let device = JSON.parse(deviceClient);
-                if ($("div[data-connid='" + device.connectionid + "'").length == 0) {
+                if ($("div[data-connid='" + device.connectionid + "']").length == 0) {
                     $("#area-devices").append(ThisClass.makeCardDevice(device))
                     ThisClass.setBtnStopDevice();
                     ThisClass.setBtnContinueDevice();
-                    ThisClass.setBtnSuspenderDevice();
+                    //ThisClass.setBtnSuspenderDevice();
                 }
-                
             })
             connection.on("removeDeviceCard", function (connectionId) {
                 $("div[data-connid='" + connectionId+"']").remove();
@@ -135,8 +136,9 @@
         var Self = this;
 
         this.makeCardDevice = function (dados) {
-            let txtHtml = '<div data-connid="' + dados.connectionid + '" data-state="'+data.state+'" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">';
-            txtHtml += '';
+            debugger;
+            console.log(dados);
+            let txtHtml = `<div data-connid="${dados.connectionid}" data-state="${dados.state}" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">`;
             txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
             txtHtml += `<p class="text-white">Device ID: ${dados.deviceid}</p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
@@ -146,7 +148,8 @@
             txtHtml += `<button type="button" href="#" class="btn-parar-device rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disable:hover:bg-zinc-400">Parar</button>`;
             txtHtml += `<button type="button" href="#" class="btn-suspender-device rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Suspender 10s</button>`;
             txtHtml += `</div>`;
-            txtHtml += '</div>'
+            txtHtml += '</div>';
+            debugger;
 
             return txtHtml;
         }
