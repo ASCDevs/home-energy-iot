@@ -1,5 +1,4 @@
 ﻿using home_energy_iot_core.Interfaces;
-using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -112,7 +111,10 @@ namespace home_energy_iot_core
                 var devices = _deviceManagerRepository.GetAll();
 
                 if (devices.Count > 0)
+                {
+                    _logger.LogInformation("Retornando os dispositivos encontrados.");
                     return Task.FromResult<IEnumerable<Device>>(devices);
+                }
 
                 var message = "Nenhum Dispositivo encontrado.";
 

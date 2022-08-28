@@ -28,7 +28,7 @@ namespace home_energy_api.Controllers
         {
             try
             {
-                _logger.LogInformation($"Buscando o usuário [{username}]");
+                _logger.LogInformation($"Buscando o usuário [{username}].");
 
                 var userReturned = _loginService.GetUser(username);
 
@@ -58,7 +58,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao autenticar o usuário: " + ex.Message);
             }
         }
     }

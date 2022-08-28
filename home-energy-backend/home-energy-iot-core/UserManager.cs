@@ -2,6 +2,8 @@
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
+using home_energy_iot_repository;
+using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace home_energy_iot_core
@@ -11,13 +13,13 @@ namespace home_energy_iot_core
         private ILogger<UserManager> _logger;
         private IHasher _hasher;
 
-        private DataBaseContext _context;
+        private IUserManagerRepository _userManagerRepository;
 
-        public UserManager(ILogger<UserManager> logger, IHasher hasher, DataBaseContext context)
+        public UserManager(ILogger<UserManager> logger, IHasher hasher, IUserManagerRepository userManagerRepository)
         {
             _logger = logger;
             _hasher = hasher;
-            _context = context;
+            _userManagerRepository = userManagerRepository;
         }
 
         public async Task Create(User user)
@@ -26,14 +28,13 @@ namespace home_energy_iot_core
             {
                 ValidateUser(user);
 
-                _logger.LogInformation($"Criando Usuário: [{user.Username}]");
+                _logger.LogInformation($"Criando Usuário: [{user.Username}].");
                 _logger.LogInformation("Iniciando a geração do Salt da senha.");
 
                 user.SaltPassword = _hasher.CreateSalt(20);
                 user.Password = _hasher.GenerateHash(user.Password, user.SaltPassword);
 
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
+                await _userManagerRepository.Create(user);
 
                 _logger.LogInformation($"Usuário [{user.Username}] criado com sucesso.");
             }
@@ -52,9 +53,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando o Usuário Id [{user.Id}].");
 
-                _context.Users.Update(user);
-
-                await _context.SaveChangesAsync();
+                await _userManagerRepository.Update(user);
 
                 _logger.LogInformation($"Usuário Id [{user.Id}] atualizado com sucesso.");
             }
@@ -79,7 +78,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Consultando dados do usuário Id [{id}] na base de dados.");
 
-                var result = _context.Users.Find(id);
+                var result = _userManagerRepository.Get(id).Result;
 
                 if (result != null)
                 {
@@ -105,10 +104,13 @@ namespace home_energy_iot_core
             {
                 _logger.LogInformation($"Buscando os usuários na base de dados.");
 
-                var result = _context.Users.ToList();
+                var result = _userManagerRepository.GetAll().Result.ToList();
 
                 if (result.Count > 0)
+                {
+                    _logger.LogInformation("Retornando os usuários encontrados.");
                     return Task.FromResult<IEnumerable<User>>(result);
+                }
 
                 var errorMessage = "Nenhum Usuário encontrado.";
 

@@ -31,7 +31,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao criar o dispositivo: " + ex.Message);
             }
         }
 
@@ -47,7 +47,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao atualizar o dispositivo: " + ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao deletar o dispositivo: " + ex.Message);
             }
         }
 
@@ -79,7 +79,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao buscar o dispositivo: " + ex.Message);
             }
         }
 
@@ -95,7 +95,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
     }

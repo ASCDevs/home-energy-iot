@@ -1,6 +1,7 @@
 ﻿using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
+using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace home_energy_iot_core
@@ -8,13 +9,12 @@ namespace home_energy_iot_core
     public class HouseManager : IHouseManager
     {
         private ILogger<HouseManager> _logger;
+        private IHouseManagerRepository _houseManagerRepository;
 
-        private DataBaseContext _context;
-
-        public HouseManager(ILogger<HouseManager> logger, DataBaseContext context)
+        public HouseManager(ILogger<HouseManager> logger, IHouseManagerRepository houseManagerRepository)
         {
             _logger = logger;
-            _context = context;
+            _houseManagerRepository = houseManagerRepository;
         }
 
         public async Task Create(House house)
@@ -25,8 +25,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Casa: [{house.Name}].");
 
-                await _context.Houses.AddAsync(house);
-                await _context.SaveChangesAsync();
+                await _houseManagerRepository.Create(house);
 
                 _logger.LogInformation($"Casa [{house.Name}] criada com sucesso.");
             }
@@ -45,9 +44,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando Casa Id [{house.Id}].");
 
-                _context.Houses.Update(house);
-
-                await _context.SaveChangesAsync();
+                await _houseManagerRepository.Update(house);
 
                 _logger.LogInformation($"Casa Id [{house.Id}] atualizada com sucesso.");
             }
@@ -66,9 +63,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Deletando Casa Id [{house.Id}].");
 
-                _context.Houses.Remove(house);
-
-                await _context.SaveChangesAsync();
+                await _houseManagerRepository.Delete(house);
 
                 _logger.LogInformation($"Casa Id [{house.Id}] deletada com sucesso.");
             }
@@ -88,12 +83,12 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
-                var house = _context.Houses.Find(id);
+                var house = _houseManagerRepository.Get(id);
 
                 if (house != null)
                 {
                     _logger.LogInformation($"Casa Id [{id}] encontrada. Retornando resultado.");
-                    return Task.FromResult(house);
+                    return house;
                 }
 
                 var errorMessage = $"Casa com Id [{id}] não encontrada.";
@@ -114,10 +109,13 @@ namespace home_energy_iot_core
             {
                 _logger.LogInformation("Buscando Casas na base de dados.");
 
-                var houses = _context.Houses.ToList();
+                var houses = _houseManagerRepository.GetAll().Result.ToList();
 
                 if (houses.Count > 0)
+                {
+                    _logger.LogInformation("Retornando as Casas encontradas.");
                     return Task.FromResult<IEnumerable<House>>(houses);
+                }
 
                 var message = "Nenhuma Casa encontrada.";
 

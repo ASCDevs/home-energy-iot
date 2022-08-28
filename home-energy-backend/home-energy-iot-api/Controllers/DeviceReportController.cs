@@ -27,7 +27,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro reportar do dispositivo: " + ex.Message);
             }
         }
     }

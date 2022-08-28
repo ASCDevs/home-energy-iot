@@ -9,7 +9,7 @@ namespace home_energy_api.Authentication
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        private static JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        private static JwtSecurityTokenHandler tokenHandler = new();
 
         public TokenService(IConfiguration configuration)
         {

@@ -1,6 +1,8 @@
 ﻿using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
+using home_energy_iot_repository;
+using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace home_energy_iot_core
@@ -8,13 +10,12 @@ namespace home_energy_iot_core
     public class DeviceReporter : IDeviceReporter
     {
         private ILogger<DeviceReporter> _logger;
+        private IDeviceReporterRepository _deviceReporterRepository;
 
-        private DataBaseContext _context;
-
-        public DeviceReporter(ILogger<DeviceReporter> logger, DataBaseContext context)
+        public DeviceReporter(ILogger<DeviceReporter> logger, IDeviceReporterRepository deviceReporterRepository)
         {
             _logger = logger;
-            _context = context;
+            _deviceReporterRepository = deviceReporterRepository;
         }
 
         public async Task Report(DeviceReport device)
@@ -24,31 +25,17 @@ namespace home_energy_iot_core
                 if (device is null)
                     throw new ArgumentNullException(nameof(device), "Dispositivo nulo.");
 
-                if (ReportExists(device))
-                {
-                    _logger.LogInformation($"Atualizando o Report do Dispositivo com Id [{device.Id}]");
-                    _context.DevicesReports.Update(device);
-                    return;
-                }
+                _logger.LogInformation($"Adicionando Report do Dispositivo com Id [{device.IdDevice}].");
 
-                _logger.LogInformation($"Adicionando Report do Dispositivo com Id [{device.Id}]");
-                await _context.AddAsync(device);
-                await _context.SaveChangesAsync();
+                await _deviceReporterRepository.Report(device);
+
+                _logger.LogInformation($"Report do Dispositivo com Id [{device.IdDevice}] adicionado com sucesso.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogError("Erro ao reportar o Dispositivo");
+                _logger.LogError(ex, $"Erro ao reportar o Dispositivo com Id [{device.IdDevice}].");
                 throw;
             }
-        }
-
-        public bool ReportExists(DeviceReport device)
-        {
-            _logger.LogInformation($"Buscando o Dispositivo com Id [{device.Id}]");
-
-            var result = _context.DevicesReports.ToList().Find(x => x.IdDevice == device.Id);
-
-            return result != null;
         }
     }
 }

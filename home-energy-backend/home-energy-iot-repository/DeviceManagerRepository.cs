@@ -1,44 +1,43 @@
 ﻿using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace home_energy_iot_repository
 {
     public class DeviceManagerRepository : IDeviceManagerRepository
     {
-        private readonly DataBaseContext _dbContext;
-        public DeviceManagerRepository(DataBaseContext dbContext)
+        private readonly DataBaseContext _dataBaseContext;
+        public DeviceManagerRepository(DataBaseContext dataBaseContext)
         {
-            _dbContext = dbContext;
+            _dataBaseContext = dataBaseContext;
         }
 
         public async Task Create(Device device)
         {
-            await _dbContext.Devices.AddAsync(device);
-            await _dbContext.SaveChangesAsync();
+            await _dataBaseContext.Devices.AddAsync(device);
+            await _dataBaseContext.SaveChangesAsync();
         }
 
         public async Task Update(Device device)
         {
-            _dbContext.Devices.Update(device);
-            await _dbContext.SaveChangesAsync();
+            _dataBaseContext.Devices.Update(device);
+            await _dataBaseContext.SaveChangesAsync();
         }
 
         public async Task Delete(Device device)
         {
-            _dbContext.Devices.Remove(device);
-            await _dbContext.SaveChangesAsync();
+            _dataBaseContext.Devices.Remove(device);
+            await _dataBaseContext.SaveChangesAsync();
         }
 
         public Device Get(int id)
         {
-            return _dbContext.Devices.Find(id);
+            return _dataBaseContext.Devices.Find(id);
         }
 
         public List<Device> GetAll()
         {
-            return _dbContext.Devices.ToList();
+            return _dataBaseContext.Devices.ToList();
         }
     }
 }
