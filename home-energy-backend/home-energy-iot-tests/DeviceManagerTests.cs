@@ -23,6 +23,7 @@ namespace home_energy_iot_tests
 
             _deviceMock = new Device
             {
+                Id = 1,
                 Name = "Computer",
                 IdentificationCode = "PC:DS:48:FD",
                 IdHouse = 1,
@@ -311,6 +312,356 @@ namespace home_energy_iot_tests
 
             _deviceManagerRepository.Verify();
         }
+
+        #endregion
+
+        #region Update
+
+        #region ValidaveDeviceId
+
+        [Fact]
+        public async void UpdateDeviceIdZeroTest()
+        {
+            var device = new Device
+            {
+                Id = 0
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceIdNegativeTest()
+        {
+            var device = new Device
+            {
+                Id = -1
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        #region ValidateDeviceHouseId
+
+        [Fact]
+        public async void UpdateDeviceIdHouseZeroTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = 0,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceIdHouseNegativeTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = -1,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        #region ValidateDeviceName
+
+        [Fact]
+        public async void UpdateDeviceNullNameTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = null,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceEmptyNameTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = "",
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceEmptySpaceNameTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = " ",
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        #region ValidateDeviceIdentificationCode
+
+        [Fact]
+        public async void UpdateDeviceNullIdentificationCodeTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = null,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceEmptyIdentificationCodeTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = "",
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceWhiteSpaceIdentificationCodeTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = " ",
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        #region ValidateDeviceDescription
+
+        [Fact]
+        public async void UpdateDeviceNullDescriptionTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = null,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceEmptyDescriptionTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = "",
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceWhiteSpaceDescriptionTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = " ",
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        #region ValidateDeviceWatts
+
+        [Fact]
+        public async void UpdateDeviceZeroWattsTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = 0
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceNegativeWattsTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = -1
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+        }
+
+        #endregion
+
+        [Fact]
+        public async void UpdateDeviceNullTest()
+        {
+            Device device = null;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Update(device));
+        }
+
+        [Fact]
+        public async void UpdateDeviceSuccessTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id,
+                IdHouse = _deviceMock.IdHouse,
+                Name = _deviceMock.Name,
+                IdentificationCode = _deviceMock.IdentificationCode,
+                Description = _deviceMock.Description,
+                RegisterDate = _deviceMock.RegisterDate,
+                Watts = _deviceMock.Watts
+            };
+
+            _deviceManagerRepository.Setup(x => x.Update(device)).Verifiable();
+
+            var instance = GetInstance();
+
+            await instance.Update(device);
+
+            _deviceManagerRepository.Verify();
+        }
+
+        #endregion
+
+        #region Delete
+
+        #endregion
+
+        #region Get
+
+
+
+        #endregion
+
+        #region GetAll
+
+
 
         #endregion
 

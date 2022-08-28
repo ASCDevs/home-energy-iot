@@ -21,6 +21,9 @@ namespace home_energy_iot_core
         {
             try
             {
+                if(device is null)
+                    throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
+
                 ValidadeDevice(device);
 
                 _logger.LogInformation($"Criando Dispositivo: [{device.Name}].");
@@ -40,6 +43,9 @@ namespace home_energy_iot_core
         {
             try
             {
+                if (device is null)
+                    throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
+
                 ValidateDeviceId(device.Id);
                 ValidadeDevice(device);
 
@@ -60,6 +66,9 @@ namespace home_energy_iot_core
         {
             try
             {
+                if (device is null)
+                    throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
+
                 ValidateDeviceId(device.Id);
 
                 _logger.LogInformation($"Deletando Dispositivo Id [{device.Id}].");
@@ -131,9 +140,6 @@ namespace home_energy_iot_core
 
         private void ValidadeDevice(Device device)
         {
-            if (device is null)
-                throw new ArgumentNullException(nameof(device), "Dispositivo nulo.");
-
             if(device.IdHouse <= 0)
                 throw new InvalidEntityNumericValueException($"Id de referência à casa do dispositivo inválido: [{device.IdHouse}].");
 
