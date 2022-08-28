@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using home_energy_iot_core.Exceptions;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -39,6 +40,7 @@ namespace home_energy_iot_core
         {
             try
             {
+                ValidateDeviceId(device.Id);
                 ValidadeDevice(device);
 
                 _logger.LogInformation($"Atualizando Dispositivo Id [{device.Id}].");
@@ -58,7 +60,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                ValidadeDevice(device);
+                ValidateDeviceId(device.Id);
 
                 _logger.LogInformation($"Deletando Dispositivo Id [{device.Id}].");
 
@@ -77,8 +79,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id < 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), $"Id do dispositivo inválido: [{id}].");
+                ValidateDeviceId(id);
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
@@ -132,6 +133,27 @@ namespace home_energy_iot_core
         {
             if (device is null)
                 throw new ArgumentNullException(nameof(device), "Dispositivo nulo.");
+
+            if(device.IdHouse <= 0)
+                throw new InvalidEntityNumericValueException($"Id de referência à casa do dispositivo inválido: [{device.IdHouse}].");
+
+            if (string.IsNullOrWhiteSpace(device.Name))
+                throw new InvalidEntityTextValueException("Nome do dispositivo nulo ou vazio.");
+
+            if (string.IsNullOrWhiteSpace(device.IdentificationCode))
+                throw new InvalidEntityTextValueException("Código de identificação do dispositivo nulo ou vazio.");
+
+            if (string.IsNullOrWhiteSpace(device.Description))
+                throw new InvalidEntityTextValueException("Descrição do dispositivo nula ou vazia.");
+
+            if(device.Watts <= 0)
+                throw new InvalidEntityNumericValueException("Potência (Watts) do dispositivo inválida.");
+        }
+
+        private void ValidateDeviceId(int id)
+        {
+            if (id <= 0)
+                throw new InvalidEntityNumericValueException($"Id do dispositivo inválido: [{id}].");
         }
     }
 }
