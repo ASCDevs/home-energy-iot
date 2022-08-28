@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Security.Cryptography;
+using Xunit;
 using Moq;
 using Moq.EntityFrameworkCore;
 using home_energy_iot_core;
@@ -34,7 +35,17 @@ namespace home_energy_iot_tests
         }
 
         #region Create
-        
+
+        [Fact]
+        public async void CreateDeviceNullDeviceTest()
+        {
+            Device device = null;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Create(device));
+        }
+
         #region ValidateDeviceHouseId
 
         [Fact]
@@ -290,16 +301,6 @@ namespace home_energy_iot_tests
         #endregion
 
         [Fact]
-        public async void CreateDeviceNullDeviceTest()
-        {
-            Device device = null;
-
-            var instance = GetInstance();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Create(device));
-        }
-
-        [Fact]
         public async void CreateDeviceSuccessTest()
         {
             var device = _deviceMock;
@@ -316,6 +317,17 @@ namespace home_energy_iot_tests
         #endregion
 
         #region Update
+
+
+        [Fact]
+        public async void UpdateDeviceNullTest()
+        {
+            Device device = null;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Update(device));
+        }
 
         #region ValidaveDeviceId
 
@@ -614,15 +626,6 @@ namespace home_energy_iot_tests
 
         #endregion
 
-        [Fact]
-        public async void UpdateDeviceNullTest()
-        {
-            Device device = null;
-
-            var instance = GetInstance();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Update(device));
-        }
 
         [Fact]
         public async void UpdateDeviceSuccessTest()
@@ -650,6 +653,63 @@ namespace home_energy_iot_tests
         #endregion
 
         #region Delete
+
+        [Fact]
+        public async void DeleteDeviceNullDeviceTest()
+        {
+            Device device = null;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Delete(device));
+        }
+
+        #region ValidateDeviceId 
+
+        [Fact]
+        public async void DeleteDeviceIdZeroTest()
+        {
+            var device = new Device
+            {
+                Id = 0
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(device));
+        }
+
+        [Fact]
+        public async void DeleteDeviceIdNegativeTest()
+        {
+            var device = new Device
+            {
+                Id = -1
+            };
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(device));
+        }
+
+        #endregion
+
+        [Fact]
+        public async void DeleteDeviceSuccessTest()
+        {
+            var device = new Device
+            {
+                Id = _deviceMock.Id
+            };
+
+            _deviceManagerRepository.Setup(x => x.Delete(device)).Verifiable();
+
+            var instance = GetInstance();
+
+            await instance.Delete(device);
+
+            _deviceManagerRepository.Verify();
+        }
 
         #endregion
 
