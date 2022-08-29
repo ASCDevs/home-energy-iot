@@ -1,13 +1,10 @@
-﻿using System.Security.Cryptography;
-using Xunit;
-using Moq;
-using Moq.EntityFrameworkCore;
-using home_energy_iot_core;
+﻿using home_energy_iot_core;
 using home_energy_iot_core.Exceptions;
-using Microsoft.Extensions.Logging;
-using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Xunit;
 
 namespace home_energy_iot_tests
 {
@@ -739,7 +736,7 @@ namespace home_energy_iot_tests
         public async void GetDeviceNullTest()
         {
             int id = 1;
-            Device device = null;
+            Task<Device> device = Task.FromResult(new Device());
 
             _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
 
@@ -754,7 +751,7 @@ namespace home_energy_iot_tests
         public async void GetDeviceSuccessTest()
         {
             int id = 1;
-            var device = _deviceMock;
+            Task<Device> device = Task.FromResult(_deviceMock);
 
             _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
 
@@ -769,7 +766,38 @@ namespace home_energy_iot_tests
 
         #region GetAll
 
+        [Fact]
+        public void GetAllDevicesEmptyTest()
+        {
 
+            Task<List<Device>> devices = Task.FromResult(new List<Device>());
+
+            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices);
+
+            var instance = GetInstance();
+
+            Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetAll());
+
+            _deviceManagerRepository.Verify();
+        }
+
+        [Fact]
+        public async void GetAllDevicesSuccessTest()
+        {
+            Task<List<Device>> devices = Task.FromResult(new List<Device>
+            {
+                _deviceMock,
+                _deviceMock
+            });
+
+            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices);
+
+            var instance = GetInstance();
+
+            await instance.GetAll();
+
+            _deviceManagerRepository.Verify();
+        }
 
         #endregion
 

@@ -12,6 +12,6 @@ namespace home_energy_iot_core.Interfaces
 
         Task<Device> Get(int id);
 
-        Task<IEnumerable<Device>> GetAll();
+        Task<List<Device>> GetAll();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace home_energy_iot_repository
 {
@@ -30,12 +31,14 @@ namespace home_energy_iot_repository
             await _dataBaseContext.SaveChangesAsync();
         }
 
-        public Device Get(int id)
+        public async Task<Device> Get(int id)
         {
-            return _dataBaseContext.Devices.Find(id);
+             var result = await _dataBaseContext.Devices.FindAsync(id);
+
+             return result ?? new Device();
         }
 
-        public List<Device> GetAll()
+        public async Task<List<Device>> GetAll()
         {
             return _dataBaseContext.Devices.ToList();
         }

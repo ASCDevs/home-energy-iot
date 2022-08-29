@@ -84,7 +84,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<Device> Get(int id)
+        public async Task<Device> Get(int id)
         {
             try
             {
@@ -92,18 +92,18 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
-                var device = _deviceManagerRepository.Get(id);
+                var device = await _deviceManagerRepository.Get(id);
 
-                if (device != null)
+                if (device.Id > 0)
                 {
                     _logger.LogInformation($"Dispositivo Id [{id}] encontrado. Retornando resultado.");
-                    return Task.FromResult(device);
+                    return device;
                 }
 
-                var notFound = $"Dispositivo Id [{id}] não encontrado.";
+                var notFoundMessage = $"Dispositivo Id [{id}] não encontrado.";
                  
-                _logger.LogError(notFound);
-                throw new EntityNotFoundException(notFound);
+                _logger.LogError(notFoundMessage);
+                throw new EntityNotFoundException(notFoundMessage);
             }
             catch (Exception ex)
             {
@@ -112,24 +112,24 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<Device>> GetAll()
+        public async Task<List<Device>> GetAll()
         {
             try
             {
                 _logger.LogInformation("Buscando Dispositivos na base de dados.");
 
-                var devices = _deviceManagerRepository.GetAll();
+                var devices = _deviceManagerRepository.GetAll().Result.ToList();
 
                 if (devices.Count > 0)
                 {
                     _logger.LogInformation("Retornando os dispositivos encontrados.");
-                    return Task.FromResult<IEnumerable<Device>>(devices);
+                    return devices;
                 }
 
-                var message = "Nenhum Dispositivo encontrado.";
+                var notFoundMessage = "Nenhum Dispositivo encontrado.";
 
-                _logger.LogInformation(message);
-                throw new EntityNotFoundException(message);
+                _logger.LogInformation(notFoundMessage);
+                throw new EntityNotFoundException(notFoundMessage);
             }
             catch (Exception ex)
             {
