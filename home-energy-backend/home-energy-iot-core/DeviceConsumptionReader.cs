@@ -99,7 +99,16 @@ namespace home_energy_iot_core
 
             var kwhPrice = 0.80;
 
-            return (watts * totalHours / 1000) * kwhPrice;
+            var result =  (watts * totalHours / 1000) * kwhPrice;
+
+            _logger.LogInformation(
+                "Cálculo de consumo efetuado. Valores utilizados na fórmula: \n" +
+                $"Total de horas entre {initialDate} e {finalDate}: {totalHours} \n" +
+                $"Média de Watts do período: {watts} \n" +
+                $"Valor do kWh: {kwhPrice} \n" +
+                $"Resultado do cálculo: R${String.Format("{0:0.00}", result)}");
+
+            return result;
         }
     }
 }

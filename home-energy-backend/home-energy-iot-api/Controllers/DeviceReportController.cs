@@ -10,12 +10,10 @@ namespace home_energy_api.Controllers
     public class DeviceReportController : ControllerBase
     {
         private IDeviceReporter _deviceReporter;
-        private IDeviceConsumptionReader _deviceReportReader;
 
-        public DeviceReportController(IDeviceReporter deviceReporter, IDeviceConsumptionReader deviceReportReader)
+        public DeviceReportController(IDeviceReporter deviceReporter)
         {
             _deviceReporter = deviceReporter;
-            _deviceReportReader = deviceReportReader;
         }
 
         [HttpPost]
@@ -31,38 +29,6 @@ namespace home_energy_api.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Erro reportar o dispositivo: " + ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetConsumption/{deviceIdentificationCode}")]
-        public async Task<IActionResult> GetConsumption(string deviceIdentificationCode)
-        {
-            try
-            {
-                var result = _deviceReportReader.GetDeviceConsumptionTotalValue(deviceIdentificationCode);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("GetConsumptionBetweenDates")]
-        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilter reportFilter)
-        {
-            try
-            {
-                var result = _deviceReportReader.GetDeviceConsumptionValueBetweenDates(reportFilter.DeviceIdentificationCode, reportFilter.initialDate, reportFilter.finalDate);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
     }
