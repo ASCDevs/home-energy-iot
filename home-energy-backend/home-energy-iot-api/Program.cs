@@ -17,17 +17,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataBaseContext>();
 
-//entities managers
+//entities services
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IHouseManager, HouseManager>();
 builder.Services.AddTransient<IDeviceManager, DeviceManager>();
 builder.Services.AddTransient<IDeviceReporter, DeviceReporter>();
+builder.Services.AddTransient<IDeviceReportReader, DeviceReportReader>();
 
 //repositories
 builder.Services.AddTransient<IDeviceManagerRepository, DeviceManagerRepository>();
 builder.Services.AddTransient<IDeviceReporterRepository, DeviceReporterRepository>();
 builder.Services.AddTransient<IHouseManagerRepository, HouseManagerRepository>();
 builder.Services.AddTransient<IUserManagerRepository, UserManagerRepository>();
+builder.Services.AddTransient<IDeviceReportReaderRepository, DeviceReportReaderRepository>();
+
 
 //helpers
 builder.Services.AddTransient<IHasher, Hasher>();

@@ -1,8 +1,13 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using home_energy_iot_repository.Interfaces;
 
-namespace home_energy_iot_core
+namespace home_energy_iot_repository
 {
-    public class DeviceReportReader : IDeviceReportReader
+    public class DeviceReportReaderRepository : IDeviceReportReaderRepository
     {
         public decimal GetDeviceConsumptionTotalValueInReal(string deviceIdentificationCode)
         {
