@@ -55,7 +55,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public DeviceConsumption GetDeviceConsumptionValueBetween(string deviceIdentificationCode, 
+        public DeviceConsumption GetDeviceConsumptionValueBetweenDates(string deviceIdentificationCode, 
             DateTime initialDate,
             DateTime finalDate)
         {
@@ -63,7 +63,7 @@ namespace home_energy_iot_core
             {
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
-                var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetween(deviceIdentificationCode, initialDate, finalDate);
+                var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
 
                 _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
 

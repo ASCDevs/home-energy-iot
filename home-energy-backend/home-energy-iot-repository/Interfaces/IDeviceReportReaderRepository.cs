@@ -6,6 +6,6 @@ namespace home_energy_iot_repository.Interfaces
     {
         List<DeviceReport> GetDeviceConsumption(string deviceIdentificationCode);
 
-        List<DeviceReport> GetDeviceConsumptionBetween(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
+        List<DeviceReport> GetDeviceConsumptionBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
     }
 }

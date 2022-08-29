@@ -69,10 +69,19 @@ CREATE TABLE [DeviceReport](
 	FOREIGN KEY ([IdentificationCode]) REFERENCES [Device]([IdentificationCode])
 );
 
---------------------Default Inserts--------------------
+--------------------Inserts padrões para testes--------------------
 -- Senha do usuário admin: admin
 INSERT INTO [User] VALUES ('admin', 'admin', 'YWFTaY0XBRNdOIHfgz/yWsu5vnyZgSQqgAUeH7lSoHw=', 'm94DPZqHhs3/U8ccJ/oiosgDm/U=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
 
 INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, '2022-08-29 12:00:00.000', 1, 1)
 
 INSERT INTO [Device] VALUES('HU:34:DS4:D1', 'Computador', 'Computador da sala', '2022-08-29 12:00:00.000', 500, 1)
+
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 13:00:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 13:30:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 14:00:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 14:30:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 15:00:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 15:30:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 16:00:00.000', 100)
+INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 16:30:00.000', 100)

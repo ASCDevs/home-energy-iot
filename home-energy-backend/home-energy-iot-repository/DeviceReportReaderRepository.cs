@@ -21,12 +21,12 @@ namespace home_energy_iot_repository
         }
 
 
-        public List<DeviceReport> GetDeviceConsumptionBetween(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate)
+        public List<DeviceReport> GetDeviceConsumptionBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate)
         {
             var reports = _databaseContext.DevicesReports.Where(
                 x => x.IdentificationCode == deviceIdentificationCode && 
                 x.ReportDate >= initialDate && 
-                x.ReportDate <= initialDate).ToList();
+                x.ReportDate <= finalDate).ToList();
 
             return reports;
         }

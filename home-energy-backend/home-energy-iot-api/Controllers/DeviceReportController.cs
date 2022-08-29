@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using home_energy_api.Models;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,7 +46,23 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro reportar o dispositivo: " + ex.Message);
+                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("GetConsumptionBetweenDates")]
+        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates(ReportFilter reportFilter)
+        {
+            try
+            {
+                var result = _deviceReportReader.GetDeviceConsumptionValueBetweenDates(reportFilter.DeviceIdentificationCode, reportFilter.initialDate, reportFilter.finalDate);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
     }

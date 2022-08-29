@@ -10,6 +10,6 @@ namespace home_energy_iot_core.Interfaces
     public interface IDeviceReportReader
     {
         DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode);
-        DeviceConsumption GetDeviceConsumptionValueBetween(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
+        DeviceConsumption GetDeviceConsumptionValueBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
     }
 }
