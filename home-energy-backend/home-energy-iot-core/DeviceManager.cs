@@ -101,9 +101,9 @@ namespace home_energy_iot_core
                 }
 
                 var notFound = $"Dispositivo Id [{id}] não encontrado.";
-
+                 
                 _logger.LogError(notFound);
-                throw new Exception(notFound);
+                throw new EntityNotFoundException(notFound);
             }
             catch (Exception ex)
             {
@@ -129,7 +129,7 @@ namespace home_energy_iot_core
                 var message = "Nenhum Dispositivo encontrado.";
 
                 _logger.LogInformation(message);
-                throw new Exception(message);
+                throw new EntityNotFoundException(message);
             }
             catch (Exception ex)
             {

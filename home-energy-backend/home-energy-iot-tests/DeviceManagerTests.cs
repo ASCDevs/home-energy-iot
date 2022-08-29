@@ -715,7 +715,55 @@ namespace home_energy_iot_tests
 
         #region Get
 
+        [Fact]
+        public async void GetDeviceZeroIdTest()
+        {
+            var id = 0;
 
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Get(id));
+        }
+
+        [Fact]
+        public async void GetDeviceNegativeIdTest()
+        {
+            var id = -1;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Get(id));
+        }
+
+        [Fact]
+        public async void GetDeviceNullTest()
+        {
+            int id = 1;
+            Device device = null;
+
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.Get(id));
+
+            _deviceManagerRepository.Verify();
+        }
+
+        [Fact]
+        public async void GetDeviceSuccessTest()
+        {
+            int id = 1;
+            var device = _deviceMock;
+
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
+
+            var instance = GetInstance();
+
+            await instance.Get(id);
+
+            _deviceManagerRepository.Verify();
+        }
 
         #endregion
 
