@@ -22,14 +22,14 @@ builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IHouseManager, HouseManager>();
 builder.Services.AddTransient<IDeviceManager, DeviceManager>();
 builder.Services.AddTransient<IDeviceReporter, DeviceReporter>();
-builder.Services.AddTransient<IDeviceReportReader, DeviceReportReader>();
+builder.Services.AddTransient<IDeviceConsumptionReader, DeviceConsumptionReader>();
 
 //repositories
 builder.Services.AddTransient<IDeviceManagerRepository, DeviceManagerRepository>();
 builder.Services.AddTransient<IDeviceReporterRepository, DeviceReporterRepository>();
 builder.Services.AddTransient<IHouseManagerRepository, HouseManagerRepository>();
 builder.Services.AddTransient<IUserManagerRepository, UserManagerRepository>();
-builder.Services.AddTransient<IDeviceReportReaderRepository, DeviceReportReaderRepository>();
+builder.Services.AddTransient<IDeviceConsumptionReaderRepository, DeviceReportConsumptionRepository>();
 
 
 //helpers

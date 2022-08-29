@@ -2,7 +2,7 @@
 
 namespace home_energy_iot_repository.Interfaces
 {
-    public interface IDeviceReportReaderRepository
+    public interface IDeviceConsumptionReaderRepository
     {
         List<DeviceReport> GetDeviceConsumption(string deviceIdentificationCode);
 

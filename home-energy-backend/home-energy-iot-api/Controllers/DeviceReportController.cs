@@ -10,9 +10,9 @@ namespace home_energy_api.Controllers
     public class DeviceReportController : ControllerBase
     {
         private IDeviceReporter _deviceReporter;
-        private IDeviceReportReader _deviceReportReader;
+        private IDeviceConsumptionReader _deviceReportReader;
 
-        public DeviceReportController(IDeviceReporter deviceReporter, IDeviceReportReader deviceReportReader)
+        public DeviceReportController(IDeviceReporter deviceReporter, IDeviceConsumptionReader deviceReportReader)
         {
             _deviceReporter = deviceReporter;
             _deviceReportReader = deviceReportReader;

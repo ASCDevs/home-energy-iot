@@ -7,7 +7,7 @@ using home_energy_iot_core.Models;
 
 namespace home_energy_iot_core.Interfaces
 {
-    public interface IDeviceReportReader
+    public interface IDeviceConsumptionReader
     {
         DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode);
         DeviceConsumption GetDeviceConsumptionValueBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);

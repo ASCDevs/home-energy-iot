@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace home_energy_iot_core
 {
-    public class DeviceReportReader : IDeviceReportReader
+    public class DeviceConsumptionReader : IDeviceConsumptionReader
     {
-        private readonly ILogger<DeviceReportReader> _logger;
-        private readonly IDeviceReportReaderRepository _deviceReportReaderRepository;
+        private readonly ILogger<DeviceConsumptionReader> _logger;
+        private readonly IDeviceConsumptionReaderRepository _deviceReportReaderRepository;
 
-        public DeviceReportReader(ILogger<DeviceReportReader> logger, IDeviceReportReaderRepository deviceReportReaderRepository)
+        public DeviceConsumptionReader(ILogger<DeviceConsumptionReader> logger, IDeviceConsumptionReaderRepository deviceReportReaderRepository)
         {
             _logger = logger;
             _deviceReportReaderRepository = deviceReportReaderRepository;
@@ -92,7 +92,7 @@ namespace home_energy_iot_core
                 throw;
             }
         }
-
+        
         private double CalculateWattsToReal(double watts, DateTime initialDate, DateTime finalDate)
         {
             var totalHours = (finalDate - initialDate).TotalHours;
