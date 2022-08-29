@@ -52,7 +52,7 @@ namespace home_energy_api.Controllers
 
         [HttpPost]
         [Route("GetConsumptionBetweenDates")]
-        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates(ReportFilter reportFilter)
+        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilter reportFilter)
         {
             try
             {
