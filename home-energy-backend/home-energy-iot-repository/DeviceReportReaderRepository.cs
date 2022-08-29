@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using home_energy_iot_entities;
+using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 
 namespace home_energy_iot_repository
 {
     public class DeviceReportReaderRepository : IDeviceReportReaderRepository
     {
-        public decimal GetDeviceConsumptionTotalValueInReal(string deviceIdentificationCode)
+        private readonly DataBaseContext _databaseContext;
+
+        public DeviceReportReaderRepository(DataBaseContext databaseContext)
         {
-            throw new NotImplementedException();
+            _databaseContext = databaseContext;
         }
 
-        public decimal GetDeviceConsumptionValueBetweenInReal(string deviceIdentificationCode, DateTime initialDate,
-            DateTime finalDate)
+        public List<DeviceReport> GetDeviceConsumption(string deviceIdentificationCode)
         {
-            throw new NotImplementedException();
+            var reports = _databaseContext.DevicesReports.Where(x => x.IdentificationCode == deviceIdentificationCode).ToList();
+
+            return reports;
         }
 
-        public decimal GetDeviceConsumptionTotalValueInWatts(string deviceIdentificationCode)
-        {
-            throw new NotImplementedException();
-        }
 
-        public decimal GetDeviceConsumptionValueBetweenInWatts(string deviceIdentificationCode, DateTime initialDate,
-            DateTime finalDate)
+        public List<DeviceReport> GetDeviceConsumptionBetween(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate)
         {
-            throw new NotImplementedException();
+            var reports = _databaseContext.DevicesReports.Where(
+                x => x.IdentificationCode == deviceIdentificationCode && 
+                x.ReportDate >= initialDate && 
+                x.ReportDate <= initialDate).ToList();
+
+            return reports;
         }
     }
 }

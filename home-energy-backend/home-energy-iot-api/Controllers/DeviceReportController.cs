@@ -9,10 +9,12 @@ namespace home_energy_api.Controllers
     public class DeviceReportController : ControllerBase
     {
         private IDeviceReporter _deviceReporter;
+        private IDeviceReportReader _deviceReportReader;
 
-        public DeviceReportController(IDeviceReporter deviceReporter)
+        public DeviceReportController(IDeviceReporter deviceReporter, IDeviceReportReader deviceReportReader)
         {
             _deviceReporter = deviceReporter;
+            _deviceReportReader = deviceReportReader;
         }
 
         [HttpPost]
@@ -24,6 +26,22 @@ namespace home_energy_api.Controllers
                 await _deviceReporter.Report(device);
 
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro reportar o dispositivo: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetConsumption/{deviceIdentificationCode}")]
+        public async Task<IActionResult> GetConsumption(string deviceIdentificationCode)
+        {
+            try
+            {
+                var result = _deviceReportReader.GetDeviceConsumptionTotalValue(deviceIdentificationCode);
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
