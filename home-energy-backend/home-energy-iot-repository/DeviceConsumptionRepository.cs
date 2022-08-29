@@ -4,11 +4,11 @@ using home_energy_iot_repository.Interfaces;
 
 namespace home_energy_iot_repository
 {
-    public class DeviceReportConsumptionRepository : IDeviceConsumptionReaderRepository
+    public class DeviceConsumptionRepository : IDeviceConsumptionReaderRepository
     {
         private readonly DataBaseContext _databaseContext;
 
-        public DeviceReportConsumptionRepository(DataBaseContext databaseContext)
+        public DeviceConsumptionRepository(DataBaseContext databaseContext)
         {
             _databaseContext = databaseContext;
         }

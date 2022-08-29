@@ -29,7 +29,7 @@ builder.Services.AddTransient<IDeviceManagerRepository, DeviceManagerRepository>
 builder.Services.AddTransient<IDeviceReporterRepository, DeviceReporterRepository>();
 builder.Services.AddTransient<IHouseManagerRepository, HouseManagerRepository>();
 builder.Services.AddTransient<IUserManagerRepository, UserManagerRepository>();
-builder.Services.AddTransient<IDeviceConsumptionReaderRepository, DeviceReportConsumptionRepository>();
+builder.Services.AddTransient<IDeviceConsumptionReaderRepository, DeviceConsumptionRepository>();
 
 
 //helpers
