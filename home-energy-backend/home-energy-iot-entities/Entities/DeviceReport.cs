@@ -8,8 +8,8 @@ namespace home_energy_iot_entities.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int IdDevice { get; set; }
-        public DateTime RegisterDate { get; set; }
-        public decimal Consumption { get; set; }
+        public string IdentificationCode { get; set; }
+        public DateTime ReportDate { get; set; }
+        public decimal WattsUsage{ get; set; }
     }
 }

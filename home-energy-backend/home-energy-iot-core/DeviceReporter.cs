@@ -25,15 +25,17 @@ namespace home_energy_iot_core
                 if (device is null)
                     throw new ArgumentNullException(nameof(device), "Dispositivo nulo.");
 
-                _logger.LogInformation($"Adicionando Report do Dispositivo com Id [{device.IdDevice}].");
+                _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{device.IdentificationCode}].");
+
+                device.ReportDate = DateTime.Now;
 
                 await _deviceReporterRepository.Report(device);
 
-                _logger.LogInformation($"Report do Dispositivo com Id [{device.IdDevice}] adicionado com sucesso.");
+                _logger.LogInformation($"Report do Dispositivo com Código de identificação [{device.IdentificationCode}] adicionado com sucesso.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao reportar o Dispositivo com Id [{device.IdDevice}].");
+                _logger.LogError(ex, $"Erro ao reportar o Dispositivo com Código de identificação [{device.IdentificationCode}].");
                 throw;
             }
         }

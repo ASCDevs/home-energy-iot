@@ -36,8 +36,8 @@ CREATE TABLE [House](
 
 CREATE TABLE [Device](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
+	[IdentificationCode] VARCHAR(255) NOT NULL UNIQUE,
 	[Name] VARCHAR(255) NOT NULL,
-	[IdentificationCode] VARCHAR(255) NOT NULL,
 	[Description] VARCHAR(255) NOT NULL,
 	[RegisterDate] DATETIME NOT NULL,
 	[Watts] DECIMAL(5,2) NOT NULL,
@@ -62,14 +62,17 @@ CREATE TABLE [HouseBill](
 
 CREATE TABLE [DeviceReport](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
-	[RegisterDate] DATETIME NOT NULL,
-	[Consumption] DECIMAL(5,2) NOT NULL,
+	[IdentificationCode] VARCHAR(255),
+	[ReportDate] DATETIME NOT NULL,
+	[WattsUsage] DECIMAL(5,2) NOT NULL,
 
-	[IdDevice] INT,
-
-	FOREIGN KEY ([IdDevice]) REFERENCES [Device]([Id])
+	FOREIGN KEY ([IdentificationCode]) REFERENCES [Device]([IdentificationCode])
 );
 
 --------------------Default Inserts--------------------
 -- Senha do usuário admin: admin
 INSERT INTO [User] VALUES ('admin', 'admin', 'YWFTaY0XBRNdOIHfgz/yWsu5vnyZgSQqgAUeH7lSoHw=', 'm94DPZqHhs3/U8ccJ/oiosgDm/U=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
+
+INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, '2022-08-29 12:00:00.000', 1, 1)
+
+INSERT INTO [Device] VALUES('HU:34:DS4:D1', 'Computador', 'Computador da sala', '2022-08-29 12:00:00.000', 500, 1)
