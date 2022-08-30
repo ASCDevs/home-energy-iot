@@ -1,4 +1,6 @@
-﻿using home_energy_iot_monitoring.Hubs;
+﻿using home_energy_iot_monitoring.Domains;
+using home_energy_iot_monitoring.Hubs;
+using home_energy_iot_monitoring.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 using System.Collections.Concurrent;
@@ -13,11 +15,15 @@ namespace home_energy_iot_monitoring.Sockets
         private readonly ILogger<WebSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
         private readonly IHubContext<PanelsHub> _panelsHub;
+        private readonly IHubContext<CostumersHub> _costumersHub;
+        private readonly IReportAPI _reportAPI;
 
-        public WebSocketHolder(ILogger<WebSocketHolder> logger, IHubContext<PanelsHub> panelsHub)
+        public WebSocketHolder(ILogger<WebSocketHolder> logger, IHubContext<PanelsHub> panelsHub,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI)
         {
             this.logger = logger;
             _panelsHub = panelsHub;
+            _costumersHub = costumersHub;
+            _reportAPI = reportAPI;
         }
 
         public async Task AddAsync(HttpContext context)
@@ -26,7 +32,7 @@ namespace home_energy_iot_monitoring.Sockets
             try
             {
                 string idConnection = CreateId();
-                if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket, "", idConnection)))
+                if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket, idConnection)))
                 {
                     Console.WriteLine("[connected] id-connection: " + idConnection);
                     await NotifyLogPanel("Device conectou");
@@ -108,7 +114,8 @@ namespace home_energy_iot_monitoring.Sockets
         }
 
         private async Task HandleAction(string txtCommand, string idConnection)
-        {                    
+        {
+            ClientDeviceConnection device = clients.First(x => x.Key == idConnection).Value;
             string actionTo = txtCommand.Split(">")[0];
 
             //Ações para o servidor executar
@@ -119,7 +126,17 @@ namespace home_energy_iot_monitoring.Sockets
 
                 if (action == "energyvalue")
                 {
+                    await _reportAPI.SaveEnergyValue(value, device.device_id);
                     await SendEnergyValueToPanel(idConnection, value);
+                    await SendEnergyValueToCostumer(idConnection, value);
+                }
+
+                if (action == "addiddevice")
+                {
+                    await Task.Run(() =>
+                    {
+                        device.AddDeviceId(value);
+                    });
                 }
             }
 
@@ -156,6 +173,23 @@ namespace home_energy_iot_monitoring.Sockets
             await _panelsHub.Clients.All.SendAsync("receiveEnergyValue", idConnectionFrom, valueEnergy);
         }
 
+        private async Task SendEnergyValueToCostumer(string IdConnectionFrom, string valueEnergy)
+        {
+            ClientDeviceConnection device = clients.First(x => x.Key == IdConnectionFrom).Value;
+            if(device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumersHub.Clients.Client(costumer.conn_id).SendAsync("receiveEnergyValue", valueEnergy);
+                    }
+                }
+            }               
+        }
+
         private async Task ChangeDeviceCurrentState(string idConnection, string action)
         {
             var client = clients.First(x => x.Key == idConnection);
@@ -170,6 +204,25 @@ namespace home_energy_iot_monitoring.Sockets
             {
                 await _panelsHub.Clients.Client(connectionId).SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
             }
+        }
+
+        public ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID)
+        {
+            return clients.First(x => x.Value.device_id == DeviceID).Value;
+        }
+
+        public async Task CostumerActionStopDevice(string DevideID)
+        {
+            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
+            string command = "client>stopenergy";
+            await HandleAction(command, idConnection);
+        }
+
+        public async Task CostumerActionContinueDevice(string DevideID)
+        {
+            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
+            string command = "client>continueenergy";
+            await HandleAction(command, idConnection);
         }
     }
 }

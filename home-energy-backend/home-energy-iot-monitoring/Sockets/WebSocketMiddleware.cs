@@ -1,4 +1,6 @@
-﻿namespace home_energy_iot_monitoring.Sockets
+﻿using home_energy_iot_monitoring.Interfaces;
+
+namespace home_energy_iot_monitoring.Sockets
 {
     public class WebSocketMiddleware
     {

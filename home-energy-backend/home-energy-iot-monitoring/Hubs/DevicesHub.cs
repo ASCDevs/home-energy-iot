@@ -1,4 +1,4 @@
-﻿using home_energy_iot_monitoring.Sockets;
+﻿using home_energy_iot_monitoring.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace home_energy_iot_monitoring.Hubs

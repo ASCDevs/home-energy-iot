@@ -60,6 +60,7 @@ class DeviceInterface {
             if (splitAction[1] == "stopenergy") {
                 Self.stopEnergyValues();
                 Self.sendMessageSocket("server>energyvalue>0");
+                Self.sendMessageSocket("server>confirmstop");
             } else if (splitAction[1] == "timerenergy") {
                 //valor recebido é em segundos
                 let valueReceived = parseInt(splitAction[2]);
@@ -68,8 +69,10 @@ class DeviceInterface {
                 Self.sendMessageSocket("server>energyvalue>0");
                 setTimeout(() => Self.initEnergyValues(), time);
                 Self.setTimer(time);
+                Self.sendMessageSocket("server>confirmtimer");
             } else if (splitAction[1] == "continueenergy") {
                 Self.initEnergyValues();
+                Self.sendMessageSocket("server>confirmcontinue");
             }
         }
 
@@ -80,14 +83,17 @@ class DeviceInterface {
         //var nomeConexao = prompt("Dê um nome para a conexão. ");
         var socket = new WebSocket(Self.urlSocket);
         var logArea = document.getElementById("log-server");
+        var txtDeviceID = $("#txt-device-id").val();
 
         socket.onopen = function (e) {
             Self.socketConnection = socket;
             Self.idConnection = socket.idConnection;
             let log = "<p>[open] Connection established</p>";
             logArea.insertAdjacentHTML('afterend', log);
-            //socket.send(nomeConexao + " entroucon");
-            //socket.send("server>idfinal>" + nomeConexao);
+
+            if (txtDeviceID != null && txtDeviceID != undefined && txtDeviceID != "") {
+                Self.socketConnection.send("server>addiddevice>" + txtDeviceID);
+            }
         };
 
         socket.onmessage = function (event) {
