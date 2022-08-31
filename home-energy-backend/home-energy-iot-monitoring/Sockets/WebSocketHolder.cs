@@ -119,13 +119,13 @@ namespace home_energy_iot_monitoring.Sockets
             string actionTo = txtCommand.Split(">")[0];
 
             //Ações para o servidor executar
-            if(actionTo == "server")
+            if (actionTo == "server")
             {
                 string action = txtCommand.Split(">")[1];
-                string value = txtCommand.Split(">")[2];
 
                 if (action == "energyvalue")
                 {
+                    string value = txtCommand.Split(">")[2];
                     await _reportAPI.SaveEnergyValue(value, device.device_id);
                     await SendEnergyValueToPanel(idConnection, value);
                     await SendEnergyValueToCostumer(idConnection, value);
@@ -133,10 +133,20 @@ namespace home_energy_iot_monitoring.Sockets
 
                 if (action == "addiddevice")
                 {
+                    string value = txtCommand.Split(">")[2];
                     await Task.Run(() =>
                     {
                         device.AddDeviceId(value);
                     });
+                }
+
+                if (action == "confirmstop") {
+                    await this.ConfirmButtonAction(idConnection,"stop");
+                }
+
+                if (action == "confirmcontinue")
+                {
+                    await this.ConfirmButtonAction(idConnection, "continue");
                 }
             }
 
@@ -223,6 +233,11 @@ namespace home_energy_iot_monitoring.Sockets
             string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
             string command = "client>continueenergy";
             await HandleAction(command, idConnection);
+        }
+
+        private async Task ConfirmButtonAction(string IdConnectionFrom, string buttom)
+        {
+            await _panelsHub.Clients.All.SendAsync("disableButton", IdConnectionFrom,buttom);
         }
     }
 }
