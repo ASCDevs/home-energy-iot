@@ -1,35 +1,28 @@
 ﻿class PanelMonitoring {
 
     constructor() {
-        this.setEvents();
         this.setFunctions();
+        this.setEvents();
         this.makeConnection();
     }
 
     setEvents() {
         var Self = this;
 
-        this.HandleChangeCurrentState = function (divCard) {
-            debugger;
-            let state = divCard.data("state");
-            let conn = divCard.data("data-connid");
+        this.HandleCurrentState = function (idConnectionFrom) {
+            try {
+                let divCard = $("div[data-connid='" + idConnectionFrom + "']");
+                let state = divCard.data("state");
+                let conn = divCard.data("data-connid");
 
-            if (state == "true") {
-                
-                //Desabilita botão de continuar
-                console.log(`<> ${conn} <> Desabilita continuar e habilita parar`)
-                //Habilita botão de Parar
-                //Habilita botão de Suspender
-
+                if (state) {
+                    Self.disableButton(idConnectionFrom, "continue")
+                } else {
+                    Self.disableButton(idConnectionFrom, "stop")
+                }
+            } catch (e) {
+                console.log(e)
             }
-
-            if (state == "false") {
-                //Habilita botão de continuar
-                console.log(`<> ${conn} <> habilita continuar e desabilita parar`)
-                //Desabilita botão de Parar
-                //Desabilita botão de Suspender
-            }
-
         };
 
         this.setBtnStopDevice = function () {
@@ -84,6 +77,8 @@
                 list.map(x => $("#area-devices").append(ThisClass.makeCardDevice(x)))
                 ThisClass.setBtnStopDevice();
                 ThisClass.setBtnContinueDevice();
+                list.map(x => ThisClass.HandleCurrentState(x.connectionid))
+                console.log(list)
                 //ThisClass.setBtnSuspenderDevice();
                 
             })
@@ -94,7 +89,7 @@
             connection.on("receiveCurrentState", function (idConnectionFrom, currentState) {
                 let divCard = $("div[data-connid='" + idConnectionFrom + "']");
                 divCard.attr("data-current", currentState);
-                ThisClass.HandleChangeCurrentState(divCard);
+                ThisClass.HandleCurrentState(idConnectionFrom);
             });
 
             connection.on("addNewDeviceCard", function (deviceClient) {
@@ -103,6 +98,7 @@
                     $("#area-devices").append(ThisClass.makeCardDevice(device))
                     ThisClass.setBtnStopDevice();
                     ThisClass.setBtnContinueDevice();
+                    ThisClass.HandleCurrentState(device.connectionid)
                     //ThisClass.setBtnSuspenderDevice();
                 }
             })
@@ -111,15 +107,7 @@
             })
 
             connection.on("disableButton", function (idConnectionFrom, button) {
-                if (button == "stop") {
-                    $("div[data-connid='" + idConnectionFrom + "'] .btn-parar-device").prop("disabled", true)
-                    $("div[data-connid='" + idConnectionFrom + "'] .btn-continuar-device").prop("disabled", false)
-                }
-
-                if (button == "continue") {
-                    $("div[data-connid='" + idConnectionFrom + "'] .btn-continuar-device").prop("disabled", true)
-                    $("div[data-connid='" + idConnectionFrom + "'] .btn-parar-device").prop("disabled", false)
-                }
+                ThisClass.disableButton(idConnectionFrom,button)
             })
 
             connection.start().then(function () {
@@ -165,6 +153,18 @@
             txtHtml += '</div>';
 
             return txtHtml;
+        }
+
+        this.disableButton = function (idConnectionFrom, button) {
+            if (button == "stop") {
+                $("div[data-connid='" + idConnectionFrom + "'] .btn-parar-device").prop("disabled", true)
+                $("div[data-connid='" + idConnectionFrom + "'] .btn-continuar-device").prop("disabled", false)
+            }
+
+            if (button == "continue") {
+                $("div[data-connid='" + idConnectionFrom + "'] .btn-continuar-device").prop("disabled", true)
+                $("div[data-connid='" + idConnectionFrom + "'] .btn-parar-device").prop("disabled", false)
+            }
         }
 
         this.sendStopEnergy = function (connId) {

@@ -105,11 +105,13 @@ namespace home_energy_iot_monitoring.Sockets
             return clients.Count();
         }
 
-        public async Task SendActionToClient(string idConnection, string Action)
+        public async Task SendActionToClient(string idConnection, string command)
         {
             var client = clients.First(x => x.Key == idConnection);
-            byte[] bytes = Encoding.ASCII.GetBytes(Action);
+            byte[] bytes = Encoding.ASCII.GetBytes(command);
 
+            string action = command.Split(">")[1];
+            await this.HandleChangeState(idConnection, action);
             await client.Value.web_socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
@@ -141,11 +143,13 @@ namespace home_energy_iot_monitoring.Sockets
                 }
 
                 if (action == "confirmstop") {
+                    await this.HandleChangeState(idConnection, "stopenergy");
                     await this.ConfirmButtonAction(idConnection,"stop");
                 }
 
                 if (action == "confirmcontinue")
                 {
+                    await this.HandleChangeState(idConnection, "continueenergy");
                     await this.ConfirmButtonAction(idConnection, "continue");
                 }
             }
@@ -154,11 +158,17 @@ namespace home_energy_iot_monitoring.Sockets
             if(actionTo == "client")
             {
                 string action = txtCommand.Split(">")[1];
-                if (action == "stopenergy" || action == "continueenergy" || action == "timerenergy")
-                {
-                    await this.ChangeDeviceCurrentState(idConnection, action);
-                }
+                await this.HandleChangeState(idConnection, action);
                 await this.SendActionToClient(idConnection, txtCommand);
+            }
+        }
+
+        private async Task HandleChangeState(string idConnection, string action)
+        {
+            if (action == "stopenergy" || action == "continueenergy" || action == "timerenergy")
+            {
+                var client = clients.First(x => x.Key == idConnection);
+                await Task.Run(() => client.Value.ChangeCurrentState(action));
             }
         }
 
@@ -198,13 +208,6 @@ namespace home_energy_iot_monitoring.Sockets
                     }
                 }
             }               
-        }
-
-        private async Task ChangeDeviceCurrentState(string idConnection, string action)
-        {
-            var client = clients.First(x => x.Key == idConnection);
-            await Task.Run(() => client.Value.ChangeCurrentState(action) );
-
         }
 
         public async Task SendListClientsOn(string connectionId)

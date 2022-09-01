@@ -1,10 +1,7 @@
 class DeviceInterface {
 
-    constructor() {
-        this.DEV = "wss://localhost:7056/consocket";
-        this.LOCAL = "wss://localhost:7722/consocket";
-        this.PROD = "wss://monitoring-iot-devices.herokuapp.com/consocket";
-        this.urlSocket = this.DEV;
+    constructor(urlFromConfig) {
+        this.urlSocket = urlFromConfig;
         this.setFunctions();
         this.setEvents();
     }
@@ -17,11 +14,13 @@ class DeviceInterface {
 
         $("#btn-generate-volts").click(() => {
             Self.initEnergyValues();
+            Self.sendMessageSocket("server>confirmcontinue");
         })
 
         $("#btn-stop-volts").click(() => {
             Self.stopEnergyValues();
             Self.sendMessageSocket("server>energyvalue>0");
+            Self.sendMessageSocket("server>confirmstop");
         })
     }
 

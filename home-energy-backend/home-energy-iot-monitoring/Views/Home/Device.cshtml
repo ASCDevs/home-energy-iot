@@ -37,9 +37,12 @@
     <script src="~/PageScript/DeviceInterface.js"></script>
     <script>
         var device;
+        @{
+            string urlSocket = ViewBag.UrlSocketDevice;
+        }
         
         $(document).ready(() => {
-            device = new DeviceInterface();
+            device = new DeviceInterface("@urlSocket");
         })
     </script>
 
