@@ -1,4 +1,5 @@
 ﻿using home_energy_api.Authentication;
+using home_energy_api.Models;
 using home_energy_iot_api.Models;
 using home_energy_iot_core.Login;
 using Microsoft.AspNetCore.Authorization;
@@ -22,19 +23,19 @@ namespace home_energy_api.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         [AllowAnonymous]
-        public ActionResult<dynamic> Login(string username, string password)
+        public ActionResult<dynamic> Login([FromBody] LoginModel login)
         {
             try
             {
-                _logger.LogInformation($"Buscando o usuário [{username}].");
+                _logger.LogInformation($"Buscando o usuário [{login.Username}].");
 
-                var userReturned = _loginService.GetUser(username);
+                var userReturned = _loginService.GetUser(login.Username);
 
-                if (userReturned != null && _loginService.ValidPassword(password, userReturned))
+                if (userReturned != null && _loginService.ValidPassword(login.Password, userReturned))
                 {
-                    _logger.LogInformation($"Usuário [{username}] encontrado e gerando token de autenticação.");
+                    _logger.LogInformation($"Usuário [{login.Username}] encontrado e gerando token de autenticação.");
 
                     var token = _tokenService.GenerateToken(userReturned);
 
@@ -43,9 +44,7 @@ namespace home_energy_api.Controllers
                         user = new UserView
                         {
                             Id = userReturned.Id,
-                            Name = userReturned.Name,
-                            Email = userReturned.Email,
-                            DtRegistration = userReturned.RegisterDate
+                            Name = userReturned.Name
                         },
                         userToken = token
                     };

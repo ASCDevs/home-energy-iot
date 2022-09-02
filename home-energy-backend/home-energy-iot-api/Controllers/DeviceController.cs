@@ -1,5 +1,6 @@
 ﻿using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,6 +22,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPost]
         [Route("Create")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] Device device)
         {
             try
@@ -37,6 +39,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPut]
         [Route("Update")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] Device device)
         {
             try
@@ -53,6 +56,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpDelete]
         [Route("Delete")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromBody] Device device)
         {
             try
@@ -69,6 +73,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("Get/{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -85,6 +90,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             try

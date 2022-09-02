@@ -31,4 +31,17 @@ namespace home_energy_iot_repository
             return reports;
         }
     }
+
+    public class DeviceConsumptionRepositoryMongo : IDeviceConsumptionReaderRepository
+    {
+        public List<DeviceReport> GetDeviceConsumption(string deviceIdentificationCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DeviceReport> GetDeviceConsumptionBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

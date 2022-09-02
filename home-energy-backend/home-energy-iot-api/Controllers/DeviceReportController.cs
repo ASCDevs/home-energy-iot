@@ -1,6 +1,7 @@
 ﻿using home_energy_api.Models;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace home_energy_api.Controllers
@@ -18,6 +19,7 @@ namespace home_energy_api.Controllers
 
         [HttpPost]
         [Route("Report")]
+        [Authorize]
         public async Task<IActionResult> ReportDevice([FromBody] DeviceReport device)
         {
             try

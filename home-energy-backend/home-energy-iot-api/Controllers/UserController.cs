@@ -1,6 +1,7 @@
 ﻿using home_energy_iot_api.Models;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace home_energy_iot_api.Controllers
@@ -20,6 +21,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPost]
         [Route("Create")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] User user)
         {
             try
@@ -36,6 +38,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPut]
         [Route("Update")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] User user)
         {
             try
@@ -52,6 +55,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("Get/{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -70,6 +74,7 @@ namespace home_energy_iot_api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             try
