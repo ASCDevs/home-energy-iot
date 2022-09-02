@@ -14,12 +14,15 @@
         <h1 class="text-white font-bold text-lg">Interface de conexão / dados de energia [Simulação]</h1>
     </div>
     <div class="flex p-4 gap-x-1.5" >
-        <a href="#" id="btn-start" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Iniciar conexão</a>
+        <button id="btn-start" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Iniciar conexão</button>
 
-        <a href="#" id="btn-generate-volts" class="rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Gerar Volts</a>
-        <a href="#" id="btn-stop-volts" class="rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Parar Volts</a>
+        <button id="btn-generate-volts" class="rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Gerar Volts</button>
+        <button id="btn-stop-volts" class="rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Parar Volts</button>
     </div>
-    <div class="p-2 gap-4">
+    <div class="p-2 gap-4" style="max-width: 460px">
+        <span id="area-deviceid">
+
+        </span>
         <p>ID Dispositivo: <span id="device-id"></span></p>
         <p>Nome dispositivo: <span id="device-name"></span></p>
         <p>Status dispositivo: <span id="status-device"></span></p>
@@ -37,9 +40,14 @@
     <script src="~/PageScript/DeviceInterface.js"></script>
     <script>
         var device;
+        @{
+            string urlSocket = ViewBag.UrlSocketDevice;
+            string flAPISaveValue = ViewBag.FlApiSaveValue;
+            string urlCheck = ViewBag.UrlCheckDevice;
+        }
         
         $(document).ready(() => {
-            device = new DeviceInterface();
+            device = new DeviceInterface("@urlSocket","@urlCheck",@flAPISaveValue);
         })
     </script>
 

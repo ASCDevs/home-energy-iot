@@ -77,139 +77,83 @@ const char *pageLogin = R"raw(
 					}
 				}
 
-				.center {
-					text-align: center;
-				}
+      #myDiv {
+        display: none;
+        text-align: center;
+      }
 
-				body {
-					margin: 0;
-					padding: 5px;
-					background-color: #b5de6aba;
-					font-family: "Arial";
-				}
-
-				.login {
-					margin: 20 0 0 450px;
-					padding: 20px;
-					background: #23463f;
-					border-radius: 15px;
-				}
-
-				h2 {
-					font-size: 0.98em;
-					text-align: center;
-					color: #277582;
-					padding-top: 20px;
-				}
-
-				label {
-					color: #08ffd1;
-					font-size: 17px;
-				}
-
-				#selectSSIDS {
-					position: relative;
-					width: 310px;
-					height: 30px;
-					border: none;
-					border-radius: 3px;
-					padding-left: 8px;
-					margin-top: 10px;
-				}
-
-				#Pass {
-					position: relative;
-					width: 290px;
-					height: 30px;
-					border: none;
-					border-radius: 3px;
-					border-color: darkgray;
-				}
-
-				#post-btn {
-					position: relative;
-					top: 15px;
-					width: 300px;
-					height: 30px;
-					border: none;
-					border-radius: 17px;
-					background-color: rgb(32, 134, 55);
-					border-color: rgb(37, 156, 64);
-					color: white;
-					cursor: pointer;
-					margin-bottom: 10px;
-				}
-
-				#post-btn:hover {
-					background-color: rgb(52, 155, 76);
-					border-color: rgb(52, 155, 76);
-					color: white;
-				}
-
-				#informacao {
-					position: relative;
-					height: 30px;
-					color: red;
-					text-align: center;
-					top: 30px;
-				}
-			</style>
-
-			<!-- Responsive -->
-			<style>
-				@media only screen and (min-width: 400px) and (max-width: 530px) {
-					.responsive {
-						position: absolute;
-						top: 10%;
-						left: 10%;
-					}
-
-					#myDiv {
-						text-align: center;
-						width: 350px;
-					}
-				}
-
-				@media only screen and (min-width: 531px) and (max-width: 780px) {
-					.responsive {
-						position: absolute;
-						top: 10%;
-						left: 25%;
-					}
-
-					#myDiv {
-						width: 350px;
-					}
-				}
-
-				@media only screen and (min-width: 781px) {
-					.responsive {
-						position: absolute;
-						top: 13%;
-						left: 27%;
-					}
-
-					#myDiv {
-						width: 350px;
-					}
-				}
-
-				@media only screen and (min-width: 900px) {
-					.responsive {
-						position: absolute;
-						top: 12%;
-						left: 35%;
-					}
-
-					#myDiv {
-						width: 350px;
-					}
-				}
-			</style>
-		</head>
-
-		<body>
-			<div id="loader" style="display: none"></div>
+      .center {
+        text-align: center;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #b5de6aba;
+        font-family: "Arial";
+      }
+      .login {
+        width: 382px;
+        overflow: hidden;
+        margin: auto;
+        margin: 20 0 0 450px;
+        padding: 80px;
+        background: #23463f;
+        border-radius: 15px;
+      }
+      h2 {
+        text-align: center;
+        color: #277582;
+        padding: 20px;
+      }
+      label {
+        color: #08ffd1;
+        font-size: 17px;
+      }
+      #selectSSIDS {
+        position: relative;
+        left: 10px;
+        width: 300px;
+        height: 30px;
+        border: none;
+        border-radius: 3px;
+        padding-left: 8px;
+        margin-left: 10px;
+      }
+      #Pass {
+        position: relative;
+        left: 10px;
+        width: 290px;
+        height: 30px;
+        border: none;
+        border-radius: 3px;
+        padding-left: 8px;
+      }
+      #post-btn {
+        position: relative;
+        top: 15px;
+        width: 300px;
+        height: 30px;
+        border: none;
+        border-radius: 17px;
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+      }
+      #post-btn:hover {
+        background-color: rgb(87, 87, 220);
+        color: white;
+      }
+      #informacao {
+        position: relative;
+        height: 30px;
+        color: red;
+        text-align: center;
+        top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader" style="display: none"></div>
 
 			<h2> PowerMetrics - Authentication </h2>
 		
@@ -351,10 +295,9 @@ const char *pageLogin = R"raw(
 					document.getElementById("myDiv").style.display = "block";
 				}
 
-				window.addEventListener("load", function(event) {
-					insertOptionsValues();
-				});
-			</script>
-		</body>
-	</html>
-)raw";
+       window.addEventListener("load", function (event) {
+        insertOptionsValues();
+      });
+    </script>
+  </body>
+</html>)raw";

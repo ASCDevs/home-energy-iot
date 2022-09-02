@@ -1,4 +1,6 @@
+using home_energy_iot_monitoring.Domains;
 using home_energy_iot_monitoring.Hubs;
+using home_energy_iot_monitoring.Interfaces;
 using home_energy_iot_monitoring.Sockets;
 using Microsoft.AspNetCore.ResponseCompression;
 
@@ -13,6 +15,7 @@ builder.Services.AddSignalR().AddJsonProtocol(options =>
     options.PayloadSerializerOptions.PropertyNamingPolicy = null;
 });
 builder.Services.AddSingleton<IWebSocketHolder, WebSocketHolder>();
+builder.Services.AddSingleton<IReportAPI, ReportAPI>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 );
@@ -41,5 +44,6 @@ app.MapControllerRoute(
 
 app.MapHub<PanelsHub>("/panelhub");
 app.MapHub<DevicesHub>("/devicehub");
+app.MapHub<CostumersHub>("/costumerhub");
 
 app.Run();
