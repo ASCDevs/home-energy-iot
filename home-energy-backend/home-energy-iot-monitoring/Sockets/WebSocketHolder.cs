@@ -136,9 +136,10 @@ namespace home_energy_iot_monitoring.Sockets
                 if (action == "addiddevice")
                 {
                     string value = txtCommand.Split(">")[2];
-                    await Task.Run(() =>
+                    await Task.Run(async () =>
                     {
                         device.AddDeviceId(value);
+                        await this.NotifyDeviceID(idConnection, value);
                     });
                 }
 
@@ -163,6 +164,11 @@ namespace home_energy_iot_monitoring.Sockets
             }
         }
 
+        private async Task NotifyDeviceID(string idConnection, string deviceid)
+        {
+            ClientDeviceConnection device = clients.First(x => x.Key == idConnection).Value;
+            await _panelsHub.Clients.All.SendAsync("updateDeviceId", idConnection, deviceid);
+        }
         private async Task HandleChangeState(string idConnection, string action)
         {
             if (action == "stopenergy" || action == "continueenergy" || action == "timerenergy")

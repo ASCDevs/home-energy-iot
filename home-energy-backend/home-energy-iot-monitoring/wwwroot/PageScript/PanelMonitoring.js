@@ -66,6 +66,10 @@
                 let logMsg = `<p>[log] > ${message}</p>`;
                 document.getElementById("area-log").insertAdjacentHTML('afterbegin', logMsg);
             })
+            connection.on("updateDeviceId", function (idConnectionFrom, deviceId) {
+                debugger;
+                $("div[data-connid='" + idConnectionFrom + "'] .field-deviceid").text(deviceId)
+            })
             connection.on("updatePanelsOn", function (qtdPanels) {
                 $("#qtd-painel-online").text(qtdPanels)
             })
@@ -142,7 +146,7 @@
         this.makeCardDevice = function (dados) {
             let txtHtml = `<div data-connid="${dados.connectionid}" data-state="${dados.state}" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">`;
             txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
-            txtHtml += `<p class="text-white">Device ID: ${dados.deviceid}</p>`;
+            txtHtml += `<p class="text-white">Device ID: <span class="field-deviceid">${dados.deviceid}</span></p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
             txtHtml += `<p class="text-white">Consumo em tempo real: <span class="field-value"></span></p>`;
             txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;
