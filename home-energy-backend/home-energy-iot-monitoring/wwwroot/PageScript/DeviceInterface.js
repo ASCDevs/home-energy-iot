@@ -48,9 +48,9 @@ class DeviceInterface {
                 let isValidDevice = true;
 
                 if (Self.flApiSaveValue) {
-                    if (!Self.HasDeviceId(textDeviceID)) {
-                        isValidDevice = false;
-                    }
+                    //if (!Self.HasDeviceId(textDeviceID)) {
+                    //    isValidDevice = false;
+                    //}
                 }
 
                 if (isValidDevice) {

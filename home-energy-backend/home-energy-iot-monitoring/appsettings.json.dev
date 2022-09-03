@@ -1,0 +1,17 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "Environment": "", //prod - produção, vazio - desenvolvimento
+  "APISaveValueProd": "",
+  "APISaveValueDev": "https://localhost:7205/api/DeviceReport/Report",
+  "SocketDeviceProd": "wss://monitoring-iot-devices.herokuapp.com/consocket",
+  "SocketDeviceDev": "wss://localhost:7056/consocket",
+  "ChecktDeviceProd": "",
+  "ChecktDeviceDev": "",
+  "flAPISaveValue": false
+}
