@@ -9,5 +9,6 @@ namespace home_energy_iot_repository.Interfaces
         Task Delete(Device device);
         Task<Device> Get(int id);
         Task<List<Device>> GetAll();
+        Task<bool> Exists(string deviceid);
     }
 }
