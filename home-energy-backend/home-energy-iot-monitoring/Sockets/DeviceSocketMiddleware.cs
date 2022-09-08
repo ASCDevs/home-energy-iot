@@ -2,15 +2,15 @@
 
 namespace home_energy_iot_monitoring.Sockets
 {
-    public class WebSocketMiddleware
+    public class DeviceSocketMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly IWebSocketHolder webSocket;
+        private readonly IDeviceSocketHolder deviceSocket;
 
-        public WebSocketMiddleware(RequestDelegate next, IWebSocketHolder webSocket)
+        public DeviceSocketMiddleware(RequestDelegate next, IDeviceSocketHolder deviceSocket)
         {
             this.next = next;
-            this.webSocket = webSocket;
+            this.deviceSocket = deviceSocket;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -20,7 +20,7 @@ namespace home_energy_iot_monitoring.Sockets
                 context.Response.StatusCode = 400;
                 return;
             }
-            await webSocket.AddAsync(context);
+            await deviceSocket.AddAsync(context);
         }
     }
 }

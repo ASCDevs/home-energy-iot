@@ -1,10 +1,11 @@
-﻿using home_energy_iot_monitoring.Interfaces;
+﻿using home_energy_iot_monitoring.Domains;
+using home_energy_iot_monitoring.Interfaces;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace home_energy_iot_monitoring.Domains
+namespace home_energy_iot_monitoring.Infrasctructure
 {
     public class ReportAPI : IReportAPI
     {

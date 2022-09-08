@@ -2,7 +2,7 @@
 
 namespace home_energy_iot_monitoring.Interfaces
 {
-    public interface IWebSocketHolder
+    public interface IDeviceSocketHolder
     {
         Task AddAsync(HttpContext context);
         Task SendActionToClient(string idConnection, string Action);
