@@ -105,8 +105,6 @@ namespace home_energy_iot_api.Controllers
             {
                 Id = user.Id,
                 Name = user.Name,
-                Email = user.Email,
-                DtRegistration = user.RegisterDate
             };
         }
     }
