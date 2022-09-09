@@ -161,5 +161,10 @@ namespace home_energy_iot_core
             if (id <= 0)
                 throw new InvalidEntityNumericValueException($"Id do dispositivo inválido: [{id}].");
         }
+
+        public Task<bool> Exists(string deviceid)
+        {
+            return _deviceManagerRepository.Exists(deviceid);
+        }
     }
 }

@@ -104,5 +104,20 @@ namespace home_energy_iot_api.Controllers
                 return BadRequest("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("Exists/{deviceid}")]
+        public async Task<IActionResult> Exists(string deviceid)
+        {
+            try
+            {
+                bool HasDevice = await _deviceManager.Exists(deviceid);
+                return Ok(new { result = HasDevice });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro ao checar dispositivo: " + ex.Message);
+            }
+        }
     }
 }

@@ -1,14 +1,17 @@
-﻿using home_energy_iot_monitoring.Interfaces;
+﻿using home_energy_iot_monitoring.Domains;
+using home_energy_iot_monitoring.Interfaces;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
-namespace home_energy_iot_monitoring.Domains
+namespace home_energy_iot_monitoring.Infrasctructure
 {
     public class ReportAPI : IReportAPI
     {
         private string urlAPISaveValue { get; set; }
         private bool useAPI { get; set; }
+        private string tokenAPI { get; set; }
 
         public ReportAPI(IConfiguration configuration)
         {
@@ -19,6 +22,7 @@ namespace home_energy_iot_monitoring.Domains
             {
                 urlAPISaveValue = configuration["APISaveValueDev"];
             }
+            tokenAPI = configuration["TokenApi"];
             useAPI = Convert.ToBoolean(configuration["flAPISaveValue"]);
             
         }
@@ -37,12 +41,10 @@ namespace home_energy_iot_monitoring.Domains
                                 DeviceReport deviceReport = new DeviceReport(energyValue, deviceId);
 
                                 var httpClient = new HttpClient();
-                                var request = new HttpRequestMessage();
-                                //request.Headers.Add("Authorization", "Baerer <token>");
+                                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",tokenAPI);
 
                                 var contentReport = ToRequest(deviceReport);
                                 var response = await httpClient.PostAsync(urlAPISaveValue, contentReport);
-                                bool ok = false;
                             }
                         });
                     }

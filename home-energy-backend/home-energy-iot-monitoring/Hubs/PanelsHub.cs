@@ -5,9 +5,9 @@ namespace home_energy_iot_monitoring.Hubs
 {
     public class PanelsHub : Hub
     {
-        private readonly IWebSocketHolder _webSocket;
+        private readonly IDeviceSocketHolder _webSocket;
 
-        public PanelsHub(IWebSocketHolder webSocket)
+        public PanelsHub(IDeviceSocketHolder webSocket)
         {
             _webSocket = webSocket;
         }

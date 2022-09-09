@@ -10,15 +10,15 @@ using System.Text.Json;
 
 namespace home_energy_iot_monitoring.Sockets
 {
-    public class WebSocketHolder : IWebSocketHolder
+    public class DeviceSocketHolder : IDeviceSocketHolder
     {
-        private readonly ILogger<WebSocketHolder> logger;
+        private readonly ILogger<DeviceSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
         private readonly IHubContext<PanelsHub> _panelsHub;
         private readonly IHubContext<CostumersHub> _costumersHub;
         private readonly IReportAPI _reportAPI;
 
-        public WebSocketHolder(ILogger<WebSocketHolder> logger, IHubContext<PanelsHub> panelsHub,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI)
+        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger, IHubContext<PanelsHub> panelsHub,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI)
         {
             this.logger = logger;
             _panelsHub = panelsHub;
