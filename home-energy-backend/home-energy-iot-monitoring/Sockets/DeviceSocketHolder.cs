@@ -15,14 +15,15 @@ namespace home_energy_iot_monitoring.Sockets
     {
         private readonly ILogger<DeviceSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
-        private readonly IHubContext<CostumersHub> _costumersHub;
+        //private readonly IHubContext<CostumersHub> _costumersHub;
         private readonly IReportAPI _reportAPI;
         private readonly IPanelHubControl _panelHubControl;
+        private readonly ICostumerHubControl _costumerHubControl;
 
         public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI, IPanelHubControl panelHubControl)
         {
             this.logger = logger;
-            _costumersHub = costumersHub;
+            //_costumersHub = costumersHub;
             _reportAPI = reportAPI;
             _panelHubControl = panelHubControl;
         }
@@ -172,8 +173,8 @@ namespace home_energy_iot_monitoring.Sockets
 
         private async Task SendEnergyValueToCostumer(string IdConnectionFrom, string valueEnergy)
         {
-            ClientDeviceConnection device = clients.First(x => x.Key == IdConnectionFrom).Value;
-            if(device != null)
+            ClientDeviceConnection device = this.GetClientByIdConn(IdConnectionFrom).Value;
+            if (device != null)
             {
                 List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
 
@@ -181,7 +182,7 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     foreach (var costumer in costumersConn)
                     {
-                        await _costumersHub.Clients.Client(costumer.conn_id).SendAsync("receiveEnergyValue", valueEnergy);
+                        await _costumerHubControl.CostumerUIReceiveEnergyValue(costumer.conn_id, valueEnergy);
                     }
                 }
             }               
