@@ -4,6 +4,7 @@ using home_energy_iot_monitoring.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -14,16 +15,16 @@ namespace home_energy_iot_monitoring.Sockets
     {
         private readonly ILogger<DeviceSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
-        private readonly IHubContext<PanelsHub> _panelsHub;
         private readonly IHubContext<CostumersHub> _costumersHub;
         private readonly IReportAPI _reportAPI;
+        private readonly IPanelHubControl _panelHubControl;
 
-        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger, IHubContext<PanelsHub> panelsHub,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI)
+        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI, IPanelHubControl panelHubControl)
         {
             this.logger = logger;
-            _panelsHub = panelsHub;
             _costumersHub = costumersHub;
             _reportAPI = reportAPI;
+            _panelHubControl = panelHubControl;
         }
 
         public async Task AddAsync(HttpContext context)
@@ -31,32 +32,27 @@ namespace home_energy_iot_monitoring.Sockets
             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
             try
             {
-                string idConnection = CreateId();
+                string idConnection = Guid.NewGuid().ToString();
                 if (clients.TryAdd(idConnection, new ClientDeviceConnection(webSocket, idConnection)))
                 {
                     Console.WriteLine("[connected] id-connection: " + idConnection);
-                    await NotifyLogPanel("Device conectou");
-                    await NotifyClientsCount();
-                    await AddNewDeviceInPanel(idConnection);
+                    
+                    await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
+                    await _panelHubControl.PanelUIAddNewDeviceCard(this.GetClientByIdConn(idConnection));
 
                     await EchoAsycn(webSocket);
                 }
             }
             catch (Exception ex)
             {
-                var client = clients.First(w => w.Value.web_socket == webSocket);
-                Console.WriteLine("[disconnected] id-connection: " + client.Key);
-                await NotifyLogPanel("Device desconectou");
-                await _panelsHub.Clients.All.SendAsync("removeDeviceCard", client.Key);
-                clients.TryRemove(client);
-                await NotifyClientsCount();
+                var deviceClient = this.GetClientBySocket(webSocket);
+                Console.WriteLine("[disconnected] ("+deviceClient.Value.device_id+") id-connection: " + deviceClient.Key);
+                await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
+                clients.TryRemove(deviceClient);
+                await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
+                
                 Console.WriteLine("[ERRO] > " + ex.Message + " || [[" + ex.StackTrace + "]]");
             }
-        }
-
-        private string CreateId()
-        {
-            return Guid.NewGuid().ToString();
         }
 
         private async Task EchoAsycn(WebSocket webSocket)
@@ -71,13 +67,13 @@ namespace home_energy_iot_monitoring.Sockets
                 if (result.CloseStatus.HasValue)
                 {
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-                    var client = clients.First(x => x.Value.web_socket == webSocket);
+                    var deviceClient = clients.First(x => x.Value.web_socket == webSocket);
                     if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                     {
-                        Console.WriteLine("[disconnected] id-connection: " + client.Key);
-                        await NotifyLogPanel("Device desconectou");
-                        await NotifyClientsCount();
-                        await _panelsHub.Clients.All.SendAsync("removeDeviceCard", client.Key);
+                        Console.WriteLine("[disconnected] ("+ deviceClient.Value.device_id+ ") id-connection: " + deviceClient.Key);
+
+                        await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
+                        await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
                     }
 
                     webSocket.Dispose();
@@ -86,23 +82,17 @@ namespace home_energy_iot_monitoring.Sockets
 
                 string? msgReceive = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));
                 string idConnection = clients.First(x => x.Value.web_socket == webSocket).Key;
-                //if (msgReceive.Contains("server>")) Console.WriteLine("[From " + idConnection + "]" + msgReceive);
                 if (msgReceive.Contains("server>") || msgReceive.Contains("client>")) await HandleAction(msgReceive, idConnection);
 
                 //Enviar para todos os clients
-                foreach (var c in clients)
+                if (!msgReceive.Contains("server>") && !msgReceive.Contains("client>"))
                 {
-                    if (!msgReceive.Contains("server>") && !msgReceive.Contains("client>"))
+                    foreach (var c in clients)
                     {
                         await c.Value.web_socket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
                     }
                 }
             }
-        }
-
-        public int CountClients()
-        {
-            return clients.Count();
         }
 
         public async Task SendActionToClient(string idConnection, string command)
@@ -117,7 +107,8 @@ namespace home_energy_iot_monitoring.Sockets
 
         private async Task HandleAction(string txtCommand, string idConnection)
         {
-            ClientDeviceConnection device = clients.First(x => x.Key == idConnection).Value;
+            var deviceClient = this.GetClientByIdConn(idConnection);
+            ClientDeviceConnection device = deviceClient.Value;
             string actionTo = txtCommand.Split(">")[0];
 
             //Ações para o servidor executar
@@ -129,7 +120,7 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     string value = txtCommand.Split(">")[2];
                     await _reportAPI.SaveEnergyValue(value, device.device_id);
-                    await SendEnergyValueToPanel(idConnection, value);
+                    await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, value);
                     await SendEnergyValueToCostumer(idConnection, value);
                 }
 
@@ -138,20 +129,26 @@ namespace home_energy_iot_monitoring.Sockets
                     string value = txtCommand.Split(">")[2];
                     await Task.Run(async () =>
                     {
-                        device.AddDeviceId(value);
-                        await this.NotifyDeviceID(idConnection, value);
+                        try
+                        {
+                            device.AddDeviceId(value);
+                        }
+                        finally
+                        {
+                            await _panelHubControl.PanelUINotifyDeviceIdUpdated(deviceClient);
+                        }
                     });
                 }
 
                 if (action == "confirmstop") {
                     await this.HandleChangeState(idConnection, "stopenergy");
-                    await this.ConfirmButtonAction(idConnection,"stop");
+                    await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "stop");
                 }
 
                 if (action == "confirmcontinue")
                 {
                     await this.HandleChangeState(idConnection, "continueenergy");
-                    await this.ConfirmButtonAction(idConnection, "continue");
+                    await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "continue");
                 }
             }
 
@@ -164,39 +161,13 @@ namespace home_energy_iot_monitoring.Sockets
             }
         }
 
-        private async Task NotifyDeviceID(string idConnection, string deviceid)
-        {
-            ClientDeviceConnection device = clients.First(x => x.Key == idConnection).Value;
-            await _panelsHub.Clients.All.SendAsync("updateDeviceId", idConnection, deviceid);
-        }
         private async Task HandleChangeState(string idConnection, string action)
         {
             if (action == "stopenergy" || action == "continueenergy" || action == "timerenergy")
             {
-                var client = clients.First(x => x.Key == idConnection);
-                await Task.Run(() => client.Value.ChangeCurrentState(action));
+                var deviceClient = clients.First(x => x.Key == idConnection);
+                await Task.Run(() => deviceClient.Value.ChangeCurrentState(action));
             }
-        }
-
-        private async Task NotifyClientsCount()
-        {
-            await _panelsHub.Clients.All.SendAsync("updateClientsOn", clients.Count());
-        }
-
-        private async Task NotifyLogPanel(string msg)
-        {
-            await _panelsHub.Clients.All.SendAsync("sendPanelLog", msg + " (" + DateTime.Now + ")");
-        }
-
-        private async Task AddNewDeviceInPanel(string connId)
-        {
-            var device = clients.First(x => x.Key == connId).Value;
-            await _panelsHub.Clients.All.SendAsync("addNewDeviceCard", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = device.device_id, connectionid = device.conn_id, dateconn = device.dateconn, currentstate = device.current_sate })));
-        }
-
-        private async Task SendEnergyValueToPanel(string idConnectionFrom, string valueEnergy)
-        {
-            await _panelsHub.Clients.All.SendAsync("receiveEnergyValue", idConnectionFrom, valueEnergy);
         }
 
         private async Task SendEnergyValueToCostumer(string IdConnectionFrom, string valueEnergy)
@@ -216,13 +187,14 @@ namespace home_energy_iot_monitoring.Sockets
             }               
         }
 
-        public async Task SendListClientsOn(string connectionId)
+        public async Task SendListClientsOn(string PanelConnectionId)
         {
-            var listClients = clients.Select(c => new { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
-            if (listClients.Any())
-            {
-                await _panelsHub.Clients.Client(connectionId).SendAsync("receiveListClients", string.Format("{0}\n", JsonSerializer.Serialize(listClients)));
-            }
+            await _panelHubControl.PanelUIReceiveListDevicesClients(PanelConnectionId, this.GetDevicesClientList());
+        }
+
+        private List<ItemDeviceClient> GetDevicesClientList()
+        {
+            return clients.Select(c => new ItemDeviceClient { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
         }
 
         public ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID)
@@ -244,9 +216,19 @@ namespace home_energy_iot_monitoring.Sockets
             await HandleAction(command, idConnection);
         }
 
-        private async Task ConfirmButtonAction(string IdConnectionFrom, string buttom)
+        private KeyValuePair<string, ClientDeviceConnection> GetClientByIdConn(string IdConn)
         {
-            await _panelsHub.Clients.All.SendAsync("disableButton", IdConnectionFrom,buttom);
+            return clients.First(x => x.Key == IdConn);
+        }
+
+        private KeyValuePair<string, ClientDeviceConnection> GetClientBySocket(WebSocket webSocket)
+        {
+            return clients.First(w => w.Value.web_socket == webSocket);
+        }
+
+        public int CountClients()
+        {
+            return clients.Count();
         }
     }
 }

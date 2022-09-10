@@ -1,3 +1,4 @@
+using home_energy_iot_monitoring.Domains;
 using home_energy_iot_monitoring.Hubs;
 using home_energy_iot_monitoring.Infrasctructure;
 using home_energy_iot_monitoring.Interfaces;
@@ -16,6 +17,8 @@ builder.Services.AddSignalR().AddJsonProtocol(options =>
 });
 builder.Services.AddSingleton<IDeviceSocketHolder, DeviceSocketHolder>();
 builder.Services.AddSingleton<IReportAPI, ReportAPI>();
+builder.Services.AddSingleton<IPanelHubControl, PanelHubControl>();
+builder.Services.AddSingleton<ICostumerHubControl, CostumerHubControl>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 );
