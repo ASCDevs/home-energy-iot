@@ -2,6 +2,6 @@
 {
     public interface ICostumerHubControl
     {
-        
+        Task CostumerUIReceiveEnergyValue(string CostumerConnId, string ValueEnergy);
     }
 }
