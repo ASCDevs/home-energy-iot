@@ -38,7 +38,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<PanelsHub>("/panelhub");
-app.MapHub<DevicesHub>("/devicehub");
 app.MapHub<CostumersHub>("/costumerhub");
 
 app.Run();
