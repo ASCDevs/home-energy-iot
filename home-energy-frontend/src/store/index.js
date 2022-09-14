@@ -3,53 +3,51 @@ import createPersistedState from 'vuex-persistedstate';
 import http from '@/axios/http';
 
 export default createStore({
-  state: {
-    token: null,
-    user: {}
-  },
-
-  getters: {
-    usuarioLogado: state => Boolean(state.token)
-  },
-
-  mutations: {
-    USUARIO_LOGADO(state, {token, user}) {
-      state.token = token;
-      state.user = user;
+    state: {
+        token: null,
+        user: {}
     },
 
-    DESLOGAR_USUARIO(state) {
-        state.token = null;
-        state.user = {};
-    }
-  },
-
-  actions: {
-    logar({commit}, user) {
-        return new Promise((resolve, reject) => {
-            http.post('/auth', user)
-                .then((response) => {
-                    commit('USUARIO_LOGADO', {
-                        token: response.data.token,
-                        user: response.data.user
-                    });
-
-                    resolve(response.data);
-
-                }).catch(error => {
-                    reject(error);
-                })
-        })
+    getters: {
+        isAuthenticatedUser: state => Boolean(state.token)
     },
 
-    deslogar({commit}) {
-        return new Promise(() => {
-          commit('DESLOGAR_USUARIO');
-        })
-    } 
-  },
+    mutations: {
+        AUTHENTICATE_USER(state, {token, user}) {
+            state.token = token;
+            state.user = user;
+        },
 
-  plugins: [createPersistedState()]
+        LOGOUT_USER(state) {
+            state.token = null;
+            state.user = {};
+        }
+    },
 
-  // modules: {},
+    actions: {
+        login({commit}, loginModel) {
+            return new Promise((resolve, reject) => {
+                http.post('/api/login/login', loginModel)
+                    .then((response) => {
+                        commit('AUTHENTICATE_USER', {
+                            token: response.data.userToken,
+                            user: response.data.user
+                        });
+
+                        resolve(response.data);
+
+                    }).catch(error => {
+                        reject(error);
+                    })
+            })
+        },
+
+        logout({commit}) {
+            return new Promise(() => {
+                commit('LOGOUT_USER');
+            })
+        } 
+    },
+
+    plugins: [createPersistedState()]
 });
