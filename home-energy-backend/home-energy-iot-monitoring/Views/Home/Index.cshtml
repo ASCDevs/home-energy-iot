@@ -11,15 +11,19 @@
 <body style="background-color: #F1FAEE">
     @*https://coolors.co/palette/e63946-f1faee-a8dadc-457b9d-1d3557*@
     <div class="flex p-4 justify-center " style="background-color:#1D3557">
+        @{
+            string headerMessage = ViewBag.HeaderMessageAlert;
+        }
+        @if (!string.IsNullOrWhiteSpace(headerMessage))
+        {
+            <div class="rounded bg-red-600 text-sm flex p-2 text-white mr-4">@headerMessage </div>
+        }
         <h1 class="text-sky-400 font-bold text-lg">Simulando dispositivos - Monitoramento</h1>
     </div>
     <div class="flex p-4 gap-x-1.5" >
         <a href="/Home/Device" target="_blank" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Simular conexão Device</a>
     </div>
     <h2 class="p-2 font-bold">Dispositivos cadastrados: </h2>
-@*    <div id="area-devices" class="grid xl:grid-cols-4 md:grid-cols-2 gap-4 p-2">
-        
-    </div>*@
     
 
     <div class="p-2 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1  gap-4">
