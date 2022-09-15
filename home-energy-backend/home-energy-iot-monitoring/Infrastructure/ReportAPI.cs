@@ -15,7 +15,7 @@ namespace home_energy_iot_monitoring.Infrasctructure
 
         public ReportAPI(IConfiguration configuration)
         {
-            if (configuration["Ambiente"] == "prod") {
+            if (configuration["Environment"] == "prod") {
                 urlAPISaveValue = configuration["APISaveValueProd"];
             }
             else
@@ -45,6 +45,10 @@ namespace home_energy_iot_monitoring.Infrasctructure
 
                                 var contentReport = ToRequest(deviceReport);
                                 var response = await httpClient.PostAsync(urlAPISaveValue, contentReport);
+                                if (!response.IsSuccessStatusCode)
+                                {
+                                    throw new Exception("Valor não salvo para "+deviceId+" - "+response.StatusCode);
+                                }
                             }
                         });
                     }

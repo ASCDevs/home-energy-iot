@@ -4,14 +4,14 @@ namespace home_energy_iot_monitoring.Interfaces
 {
     public interface IPanelHubControl
     {
-        Task PanelUIRemoveDeviceCard(string IdConnDeviceSocket);
-        Task PanelUIUpdateDeviceId(string IdConnDeviceSocket, string DeviceId);
+        Task PanelUIRemoveDeviceCard(KeyValuePair<string, ClientDeviceConnection> DeviceClient);
         Task PanelUIUpdateDeviceClientsOn(int NumDevices);
         Task PanelUISendPanelLog(string Msg);
-        Task PanelUIAddNewDeviceCard(ClientDeviceConnection CliDeviceConn);
+        Task PanelUIAddNewDeviceCard(KeyValuePair<string, ClientDeviceConnection> DeviceClient);
         Task PanelUIReceiveEnergyValue(string IdConnDeviceFrom, string ValueEnergy);
-        Task PanelUIReceiveListDevicesClients(List<object> ListDevices);
-        Task PanelUIDisableButton(string IdConnDeviceFrom, string Button);
-
+        Task PanelUIReceiveListDevicesClients(string idConnPanel, List<ItemDeviceClient> ListDevices);
+        Task PanelUIDisableButtonConfirmed(string IdConnDeviceFrom, string Button);
+        Task PanelUINotifyDeviceClientsCount(int DevicesOnlineCount);
+        Task PanelUINotifyDeviceIdUpdated(KeyValuePair<string, ClientDeviceConnection> DeviceClient);
     }
 }

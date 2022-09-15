@@ -1,3 +1,4 @@
+using home_energy_iot_monitoring.Domains;
 using home_energy_iot_monitoring.Hubs;
 using home_energy_iot_monitoring.Infrasctructure;
 using home_energy_iot_monitoring.Interfaces;
@@ -8,26 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR().AddJsonProtocol(options =>
 {
     options.PayloadSerializerOptions.PropertyNamingPolicy = null;
 });
 builder.Services.AddSingleton<IDeviceSocketHolder, DeviceSocketHolder>();
 builder.Services.AddSingleton<IReportAPI, ReportAPI>();
+builder.Services.AddSingleton<IPanelHubControl, PanelHubControl>();
+builder.Services.AddSingleton<ICostumerHubControl, CostumerHubControl>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 );
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseResponseCompression();
 app.UseStaticFiles();
@@ -43,7 +38,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<PanelsHub>("/panelhub");
-app.MapHub<DevicesHub>("/devicehub");
 app.MapHub<CostumersHub>("/costumerhub");
 
 app.Run();

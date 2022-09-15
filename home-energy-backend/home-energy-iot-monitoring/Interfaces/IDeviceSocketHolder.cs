@@ -7,7 +7,7 @@ namespace home_energy_iot_monitoring.Interfaces
         Task AddAsync(HttpContext context);
         Task SendActionToClient(string idConnection, string Action);
         int CountClients();
-        Task SendListClientsOn(string connectionId);
+        Task SendListClientsOn(string PanelConnectionId);
         ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID);
         Task CostumerActionStopDevice(string DevideID);
         Task CostumerActionContinueDevice(string DevideID);

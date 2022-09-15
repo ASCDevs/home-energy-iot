@@ -1,8 +1,6 @@
 ﻿using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
-using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
-using home_energy_iot_repository;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
