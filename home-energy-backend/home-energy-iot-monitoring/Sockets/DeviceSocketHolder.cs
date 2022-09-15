@@ -20,12 +20,12 @@ namespace home_energy_iot_monitoring.Sockets
         private readonly IPanelHubControl _panelHubControl;
         private readonly ICostumerHubControl _costumerHubControl;
 
-        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger,IHubContext<CostumersHub> costumersHub, IReportAPI reportAPI, IPanelHubControl panelHubControl)
+        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger, IReportAPI reportAPI, IPanelHubControl panelHubControl, ICostumerHubControl costumerHubControl)
         {
             this.logger = logger;
-            //_costumersHub = costumersHub;
             _reportAPI = reportAPI;
             _panelHubControl = panelHubControl;
+            _costumerHubControl = costumerHubControl;
         }
 
         public async Task AddAsync(HttpContext context)
@@ -122,6 +122,7 @@ namespace home_energy_iot_monitoring.Sockets
                     string value = txtCommand.Split(">")[2];
                     await _reportAPI.SaveEnergyValue(value, device.device_id);
                     await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, value);
+                    await _costumerHubControl.CostumerUIReceiveEnergyValue(idConnection,value);
                     await SendEnergyValueToCostumer(idConnection, value);
                 }
 
