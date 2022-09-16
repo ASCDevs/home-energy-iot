@@ -25,7 +25,7 @@ namespace home_energy_api.Authentication
                 Subject = new ClaimsIdentity(new Claim[] {
                     new(ClaimTypes.Name, user.Username)
                 }),
-                Expires = DateTime.UtcNow.AddYears(100),
+                Expires = DateTime.UtcNow.AddMinutes(525960),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(jwtKeyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
 

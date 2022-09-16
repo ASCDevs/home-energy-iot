@@ -16,6 +16,8 @@ namespace home_energy_iot_core
             _deviceReportReaderRepository = deviceReportReaderRepository;
         }
 
+
+        //TODO: Adicionar a lista das datas no retorno do consumo
         public DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
         {
             try
