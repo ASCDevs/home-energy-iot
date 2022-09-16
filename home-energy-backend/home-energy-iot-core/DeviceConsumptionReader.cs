@@ -28,7 +28,7 @@ namespace home_energy_iot_core
 
                 if (reports.Count > 0)
                 {
-                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage)) / reports.Count;
+                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
                     var initialDate = reports[0].ReportDate;
                     var finalDate = reports[reports.Count - 1].ReportDate;
@@ -69,7 +69,7 @@ namespace home_energy_iot_core
 
                 if (reports.Count > 0)
                 {
-                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage)) / reports.Count;
+                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
                     var consumption = new DeviceConsumption
                     {

@@ -20,6 +20,7 @@ builder.Services.AddSingleton<ICostumerHubControl, CostumerHubControl>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 );
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -28,6 +29,11 @@ app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseHttpsRedirection();
+app.UseCors(p => {
+    p.AllowAnyHeader();
+    p.AllowAnyMethod();
+    p.AllowAnyOrigin();
+});
 app.UseAuthorization();
 
 app.UseWebSockets();
