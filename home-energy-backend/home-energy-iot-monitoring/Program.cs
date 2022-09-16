@@ -24,7 +24,6 @@ builder.Services.AddCors();
 
 var app = builder.Build();
 
-
 app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();

@@ -69,9 +69,8 @@ CREATE TABLE [DeviceReport](
 	FOREIGN KEY ([IdentificationCode]) REFERENCES [Device]([IdentificationCode])
 );
 
---------------------Inserts padrões para testes--------------------
--- Senha do usuário admin: admin
-INSERT INTO [User] VALUES ('admin', 'admin', 'YWFTaY0XBRNdOIHfgz/yWsu5vnyZgSQqgAUeH7lSoHw=', 'm94DPZqHhs3/U8ccJ/oiosgDm/U=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
+--------------------Inserts padrï¿½es para testes--------------------
+INSERT INTO [User] VALUES ('admin', 'admin', 'xFD4zcBV834YYjkXDXIF4HCgHKbOcezOGoUuNcJD0+Y=', 'oB8sB0NhEuvfSgUzK7d+Yg0jHk8=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
 
 INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, '2022-08-29 12:00:00.000', 1, 1)
 
