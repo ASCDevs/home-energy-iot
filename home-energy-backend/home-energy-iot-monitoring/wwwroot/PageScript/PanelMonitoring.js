@@ -9,28 +9,14 @@
     makeConnectionCostumer() {
         var ThisClass = this;
         $(function () {
+            debugger;
             var connect = new signalR.HubConnectionBuilder().withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub").withAutomaticReconnect().build();
            
-
             connect.start().then(function () {
-
                 console.log("Conectado ");
             }).catch(function (err) {
                 console.log(err.toString());
             });
-
-            connect.onreconnecting(function (error) {
-                $("#status-onoff").text("offline");
-                let logMsg = `<p>[reconnecting] > Conexão perdida (${error.message}])</p>`;
-                document.getElementById("area-log").insertAdjacentHTML('afterbegin', logMsg);
-            })
-
-            connect.onreconnected(function (connId) {
-                $("#status-onoff").text("online");
-                ThisClass.IdConnection = connId;
-                let logMsg = `<p>[reconnected] > Conexão reestabelecida (${connId}])</p>`;
-                document.getElementById("area-log").insertAdjacentHTML('afterbegin', logMsg);
-            })
 
         })
     }

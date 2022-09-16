@@ -28,8 +28,10 @@ var app = builder.Build();
 app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseHttpsRedirection();
-app.UseCors(p => {
+app.UseCors(p =>
+{
     p.AllowAnyHeader();
     p.AllowAnyMethod();
     p.AllowAnyOrigin();
