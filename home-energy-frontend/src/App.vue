@@ -2,4 +2,8 @@
     <router-view />
 </template>
 
-<style></style>
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>

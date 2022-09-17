@@ -1,5 +1,5 @@
 <template>
-    <div class="container border mt-3">
+    <div class="bg-default main-content">
         <div class="overlay" id="overlay">
 			<div class="overlay-content">
 				<span class="spinner"></span>
@@ -8,29 +8,108 @@
 			</div>
 		</div>
 
-        <form class="p-3">
-            <div class="form-group">
-                <label for="username"> Login </label>
-                
-                <input type="text" v-model="loginModel.username" class="form-control" name="username" id="username" placeholder="Enter login">
-                
-                <small id="emailHelp" class="form-text text-muted">
-                    We'll never share your email with anyone else.
-                </small>
-            </div>
+        <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
+            <div class="container px-4">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="form-group">
-                <label for="password"> Password </label>
-                
-                <input type="password" v-model="loginModel.password" class="form-control" name="password" id="password" placeholder="Enter password">
-            </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-main">
+                    <div class="navbar-collapse-header d-md-none">
+                        <div class="row">
+                            <div class="col-6 collapse-brand">
+                                <a href="../index.html"></a>
+                            </div>
 
-            <div v-if="errorAuth" class="alert alert-danger" role="alert">
-                {{ errorAuth }}
+                            <div class="col-6 collapse-close">
+                                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
+                                    <span></span>
+                                    <span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </nav>
 
-            <button @click="auth" type="button" class="btn btn-primary"> Sign In </button>
-        </form>
+        <div class="header bg-gradient-primary py-8 py-lg-8">
+            <div class="container">
+                <div class="header-body text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-6">
+                            <h1 class="text-white">
+                                Welcome!
+                            </h1>
+
+                            <p class="text-lead text-light">
+                                Welcome to PowerMetrics, a system for managing your home's electricity ;)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt--8 pb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-7">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <form @submit.prevent="auth" role="form">
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="ni ni-email-83"></i>
+                                            </span>
+                                        </div>
+
+                                        <input type="text" v-model="loginModel.username" class="form-control" name="username" id="username" placeholder="Enter username">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="ni ni-lock-circle-open"></i>
+                                            </span>
+                                        </div>
+
+                                        <input type="password" v-model="loginModel.password" class="form-control" name="password" id="password" placeholder="Enter password">
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-block my-4">
+                                        Sign in
+                                    </button>
+                                </div>
+
+                                <div v-if="errorAuth" class="alert alert-danger" role="alert">
+                                    {{ errorAuth }}
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <a href="#" class="text-muted">
+                                            <small> Forgot password? </small>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-6 text-right">
+                                        <a href="#" class="text-muted">
+                                            <small> Create new account </small>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -73,6 +152,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .main-content {
+        height: 100%;
+        margin: 0;
+    }
+
     p {
 	    color: white;
     }
