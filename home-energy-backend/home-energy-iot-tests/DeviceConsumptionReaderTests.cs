@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using home_energy_iot_core;
+﻿using home_energy_iot_core;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -22,6 +16,9 @@ namespace home_energy_iot_tests
             _logger = new Mock<ILogger<DeviceConsumptionReader>>(MockBehavior.Loose);
             _deviceConsumptionReaderRepository = new Mock<IDeviceConsumptionReaderRepository>();
         }
+
+        [Fact]
+        public void 
 
         public DeviceConsumptionReader GetInstance()
         {
