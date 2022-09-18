@@ -20,19 +20,26 @@ builder.Services.AddSingleton<ICostumerHubControl, CostumerHubControl>();
 builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 );
-builder.Services.AddCors();
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+        builder =>
+        {
+            builder.AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .SetIsOriginAllowed((host) => true)
+                   .AllowCredentials();
+        }));
+
+
+
 
 var app = builder.Build();
 
 app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseHttpsRedirection();
-app.UseCors(p => {
-    p.AllowAnyHeader();
-    p.AllowAnyMethod();
-    p.AllowAnyOrigin();
-});
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.UseWebSockets();
