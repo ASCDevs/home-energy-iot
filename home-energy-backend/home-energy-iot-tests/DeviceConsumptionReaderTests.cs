@@ -1,4 +1,5 @@
 ﻿using home_energy_iot_core;
+using home_energy_iot_core.Models;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -78,6 +79,69 @@ namespace home_energy_iot_tests
             _deviceConsumptionReaderRepository.Verify();
         }
 
+        [Fact]
+        public void GetDeviceConsumptionTotalValueTest()
+        {
+            string deviceIdentificationCode = "PC:12:XD:23";
+
+            var reports = new List<DeviceReport>
+            {
+                new DeviceReport
+                {
+                    Id = 1,
+                    IdentificationCode = deviceIdentificationCode,
+                    ReportDate = new DateTime(2022, 01, 02, 5, 0, 0),
+                    WattsUsage = 1.20m
+                },
+                new DeviceReport
+                {
+                    Id = 1,
+                    IdentificationCode = deviceIdentificationCode,
+                    ReportDate = new DateTime(2022, 01, 02, 7, 0, 0),
+                    WattsUsage = 1.20m
+                }
+            };
+
+            var initialDate = reports[0].ReportDate;
+            var finalDate = reports[reports.Count - 1].ReportDate;
+
+            var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+
+            var consumption = new DeviceConsumption
+            {
+                IdentificationCode = deviceIdentificationCode,
+                ConsumptionInReal = CalculateWatts(wattsTotal, initialDate, finalDate),
+                ConsumptionInWatts = wattsTotal,
+                ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                InitialDate = initialDate,
+                FinalDate = finalDate
+            };
+
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
+                .Returns(reports);
+
+            var instance = GetInstance();
+
+            var result = instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode);
+
+            Assert.Equal(consumption.IdentificationCode, result.IdentificationCode);
+            Assert.Equal(consumption.ConsumptionInReal, result.ConsumptionInReal);
+            Assert.Equal(consumption.ConsumptionInWatts, result.ConsumptionInWatts);
+            Assert.Equal(consumption.ConsumptionDates, result.ConsumptionDates);
+            Assert.Equal(consumption.InitialDate, result.InitialDate);
+            Assert.Equal(consumption.FinalDate, result.FinalDate);
+
+            _deviceConsumptionReaderRepository.Verify();
+        }
+
+        private double CalculateWatts(double watts, DateTime initialDate, DateTime finalDate)
+        {
+            var totalHours = (finalDate - initialDate).TotalHours;
+
+            var kwhPrice = 0.80;
+
+            return (watts * totalHours / 1000) * kwhPrice;
+        }
 
         public DeviceConsumptionReader GetInstance()
         {
