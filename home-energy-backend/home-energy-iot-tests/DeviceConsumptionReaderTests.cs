@@ -1,4 +1,5 @@
 ﻿using home_energy_iot_core;
+using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -18,7 +19,65 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public void 
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationNullTest()
+        {
+            string deviceIdentificationCode = null;
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() => instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationEmptyTest()
+        {
+            string deviceIdentificationCode = "";
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() => instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationEmptySpaceTest()
+        {
+            string deviceIdentificationCode = " ";
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() => instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationNullDevicesTest()
+        {
+            string deviceIdentificationCode = "PC:12:XD:23";
+
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode));
+
+            var instance = GetInstance();
+
+            Assert.Null(instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode).IdentificationCode);
+
+            _deviceConsumptionReaderRepository.Verify();
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationCountZeroDevicesTest()
+        {
+            string deviceIdentificationCode = "PC:12:XD:23";
+
+            List<DeviceReport> devices = new List<DeviceReport>();
+
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode)).Returns(devices);
+
+            var instance = GetInstance();
+
+            Assert.Null(instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode).IdentificationCode);
+
+            _deviceConsumptionReaderRepository.Verify();
+        }
+
 
         public DeviceConsumptionReader GetInstance()
         {

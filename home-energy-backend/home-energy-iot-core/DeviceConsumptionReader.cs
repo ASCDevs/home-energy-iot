@@ -16,20 +16,21 @@ namespace home_energy_iot_core
             _deviceReportReaderRepository = deviceReportReaderRepository;
         }
 
-
-        //TODO: Adicionar a lista das datas no retorno do consumo
         public DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(deviceIdentificationCode))
+                    throw new ArgumentNullException("Código de identificação do Dispositivo inválido.");
+
                 _logger.LogInformation($"Iniciando busca de todos os reports de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumption(deviceIdentificationCode);
-
-                _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
-
-                if (reports.Count > 0)
+                
+                if (reports?.Count > 0)
                 {
+                    _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
+
                     var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
                     var initialDate = reports[0].ReportDate;
@@ -49,7 +50,8 @@ namespace home_energy_iot_core
                 }
 
                 _logger.LogInformation($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
-                return null;
+
+                return new DeviceConsumption();
             }
             catch (Exception ex)
             {
@@ -64,6 +66,9 @@ namespace home_energy_iot_core
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(deviceIdentificationCode))
+                    throw new ArgumentNullException("Código de identificação do Dispositivo inválido.");
+
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
@@ -88,7 +93,8 @@ namespace home_energy_iot_core
                 }
 
                 _logger.LogInformation($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
-                return null;
+
+                return new DeviceConsumption();
             }
             catch (Exception ex)
             {
