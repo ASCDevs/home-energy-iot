@@ -7,7 +7,7 @@ import http from "@/axios/http";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/assets/vendor/js/plugins/nucleo/css/nucleo.css";
-import "@/assets/vendor/css/argon-dashboard.css?v=1.1.2";
+import "@/assets/vendor/css/argon-dashboard.min.css?v=1.1.2";
 
 const app = createApp(App);
 

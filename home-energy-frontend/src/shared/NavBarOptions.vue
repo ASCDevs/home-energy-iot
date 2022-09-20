@@ -6,7 +6,7 @@
             </button>
             
             <div class="d-none d-xl-block d-lg-block d-md-block">
-                <img src="../../public/logo-site.jpg" class="img-thumbnail" alt="logo">
+                <img src="@/assets/image/logo-site.jpg" class="img-thumbnail" alt="logo">
             </div>
 
             <ul class="nav align-items-center d-md-none">
@@ -30,7 +30,7 @@
                     <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="media align-items-center">
                             <span class="avatar avatar-sm rounded-circle">
-                                <img alt="Image placeholder" src="../../public/user.png">
+                                <img alt="Image placeholder" src="@/assets/image/user.png">
                             </span>
                         </div>
                     </a>
@@ -75,7 +75,7 @@
                     <div class="row">
                         <div class="col-6 collapse-brand">
                             <a href="./index.html">
-                                <img src="../../public/user.png">
+                                <img src="@/assets/image/user.png">
                             </a>
                         </div>
 
