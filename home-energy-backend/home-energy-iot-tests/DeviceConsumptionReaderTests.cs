@@ -54,7 +54,8 @@ namespace home_energy_iot_tests
         {
             string deviceIdentificationCode = "PC:12:XD:23";
 
-            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode));
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
+                .Verifiable();
 
             var instance = GetInstance();
 
@@ -70,7 +71,8 @@ namespace home_energy_iot_tests
 
             List<DeviceReport> devices = new List<DeviceReport>();
 
-            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode)).Returns(devices);
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
+                .Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
@@ -118,7 +120,7 @@ namespace home_energy_iot_tests
             };
 
             _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
-                .Returns(reports);
+                .Returns(reports).Verifiable();
 
             var instance = GetInstance();
 
