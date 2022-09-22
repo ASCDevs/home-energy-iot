@@ -62,10 +62,9 @@
 
                         <div class="dropdown-divider"></div>
                         
-                        <a @click="logout" type="button" class="dropdown-item">
-                            <i class="ni ni-user-run"></i>
-                            <span>Logout</span>
-                        </a>
+                        <button @click="logout" type="button" class="dropdown-item">
+                            <i class="ni ni-user-run"></i> Logout
+                        </button>
                     </div>
                 </li>
             </ul>
@@ -101,34 +100,16 @@
                 </form>
 
                 <ul class="navbar-nav">
-                    <li class="nav-item  active ">
-                        <a class="nav-link  active " href="./index.html">
-                            <i class="ni ni-tv-2 text-primary"></i> Dashboard
-                        </a>
+                    <li class="nav-item active">
+                        <router-link class="nav-link" :to="{name: 'registerHouse'}">
+                            <i class="ni ni-single-02 text-yellow"></i> Register House
+                        </router-link>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link " href="./examples/icons.html">
-                            <i class="ni ni-planet text-blue"></i> Icons
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link " href="./examples/maps.html">
-                            <i class="ni ni-pin-3 text-orange"></i> Maps
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link " href="./examples/profile.html">
-                            <i class="ni ni-single-02 text-yellow"></i> User profile
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link " href="./examples/tables.html">
-                            <i class="ni ni-bullet-list-67 text-red"></i> Tables
-                        </a>
+                        <router-link class="nav-link" :to="{name: 'viewConsumption'}">
+                            <i class="ni ni-bullet-list-67 text-red"></i> Realtime Consumption
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -144,7 +125,7 @@
         methods: {
             logout() {
                 this.$store.commit("LOGOUT_USER");
-                this.$router.push({name: "auth"});
+                this.$router.push({name: "login"});
             }
         }
     }

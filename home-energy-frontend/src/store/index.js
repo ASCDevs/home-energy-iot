@@ -45,6 +45,7 @@ export default createStore({
         logout({commit}) {
             return new Promise(() => {
                 commit('LOGOUT_USER');
+                localStorage.removeItem('vuex');
             })
         } 
     },

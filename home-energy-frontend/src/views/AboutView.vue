@@ -35,7 +35,7 @@
     import NavBarUser from "../shared/NavBarUser.vue";
 
     export default {
-        name: "Auth",
+        name: "AboutView",
 
         components: { 
             NavBarOptions, 
