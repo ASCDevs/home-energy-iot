@@ -32,6 +32,8 @@ namespace home_energy_iot_core
                 user.SaltPassword = _hasher.CreateSalt(20);
                 user.Password = _hasher.GenerateHash(user.Password, user.SaltPassword);
 
+                user.RegisterDate = DateTime.Now;
+
                 await _userManagerRepository.Create(user);
 
                 _logger.LogInformation($"Usuário [{user.Username}] criado com sucesso.");

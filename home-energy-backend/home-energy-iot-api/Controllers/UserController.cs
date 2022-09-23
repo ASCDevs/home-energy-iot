@@ -21,7 +21,6 @@ namespace home_energy_iot_api.Controllers
 
         [HttpPost]
         [Route("Create")]
-        [Authorize]
         public async Task<IActionResult> Create([FromBody] User user)
         {
             try
