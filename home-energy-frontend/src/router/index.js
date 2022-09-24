@@ -8,6 +8,10 @@ const routes = [
 
         name: "login",
 
+        meta: {
+            public: true
+        },
+
         component: Login,
     },
     
@@ -15,6 +19,10 @@ const routes = [
         path: "/about",
 
         name: "about",
+
+        meta: {
+            public: false
+        },
 
         component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
     },
@@ -24,6 +32,10 @@ const routes = [
 
         name: "registerHouse",
 
+        meta: {
+            public: false
+        },
+
         component: () => import(/* webpackChunkName: "registerHouse" */ "../views/RegisterHouse.vue"),
     },
 
@@ -32,7 +44,23 @@ const routes = [
 
         name: "viewConsumption",
 
+        meta: {
+            public: false
+        },
+
         component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/ViewConsumption.vue"),
+    },
+
+    {
+        path: "/register-user",
+
+        name: "registerUser",
+
+        meta: {
+            public: true
+        },
+
+        component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/RegisterUser.vue"),
     }
 ];
 
@@ -41,11 +69,11 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((routeTo, routeFrom, next) => {    
-    if(routeTo.path != '/') {
-        if(store.state.token == null) {
-            return next({path: '/'});
-        }
+router.beforeEach((routeTo, routeFrom, next) => {
+    console.log(routeTo)    
+    
+    if(store.state.token == null && !routeTo.meta.public) {
+        return next({path: '/'});
     }
 
     next();

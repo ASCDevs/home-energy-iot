@@ -74,7 +74,7 @@
                                     </div>
 
                                     <div class="col-6 text-right">
-                                        <router-link to="/" class="text-muted">
+                                        <router-link :to="{name: 'registerUser'}" class="text-muted">
                                             <small> Create new account </small>
                                         </router-link>
                                     </div>
