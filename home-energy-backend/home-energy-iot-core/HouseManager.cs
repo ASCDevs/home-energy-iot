@@ -24,6 +24,8 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Casa: [{house.Name}].");
 
+                house.RegisterDate = DateTime.Now;
+
                 await _houseManagerRepository.Create(house);
 
                 _logger.LogInformation($"Casa [{house.Name}] criada com sucesso.");
