@@ -41,7 +41,7 @@ namespace home_energy_api.Controllers
 
                     return new
                     {
-                        user = new UserView
+                        user = new UserModel
                         {
                             Id = userReturned.Id,
                             Name = userReturned.Name

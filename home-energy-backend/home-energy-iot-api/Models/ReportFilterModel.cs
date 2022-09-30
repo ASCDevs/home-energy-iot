@@ -1,6 +1,6 @@
 ﻿namespace home_energy_api.Models
 {
-    public class ReportFilter
+    public class ReportFilterModel
     {
         public string DeviceIdentificationCode { get; set; }
         public DateTime initialDate { get; set; }

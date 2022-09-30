@@ -37,7 +37,7 @@ namespace home_energy_iot_api.Controllers
         [HttpPost]
         [Route("GetConsumptionBetweenDates")]
         [Authorize]
-        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilter reportFilter)
+        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilterModel reportFilter)
         {
             try
             {
