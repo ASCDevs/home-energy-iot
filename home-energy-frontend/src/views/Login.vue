@@ -1,90 +1,12 @@
 <template>
-    <div class="bg-default main-content">
-        <div class="overlay" id="overlay">
-			<div class="overlay-content">
-				<span class="spinner"></span>
-				
-          		<p class="mt-3"> Autenticando... </p>
-			</div>
-		</div>
-
-        <div class="header bg-gradient-primary py-7 py-lg-7">
-            <div class="container">
-                <div class="header-body text-center">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 col-md-6">
-                            <img src="../assets/image/logo_site.png" class="img-fluid" alt="logo_site">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container mt--7 pb-7">
-            <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-7">
-                    <div class="card bg-secondary shadow border-0">
-                        <div class="card-body px-lg-5 py-lg-5">
-                            <form @submit.prevent="auth" role="form">
-                                <div class="form-group mb-3">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="ni ni-email-83"></i>
-                                            </span>
-                                        </div>
-
-                                        <input type="text" v-model="loginModel.username" class="form-control" name="username" id="username" placeholder="Enter username">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="ni ni-lock-circle-open"></i>
-                                            </span>
-                                        </div>
-
-                                        <input type="password" v-model="loginModel.password" class="form-control" name="password" id="password" placeholder="Enter password">
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary btn-block my-4">
-                                        Sign in
-                                    </button>
-                                </div>
-
-                                <div v-if="errorAuth" class="alert alert-danger" role="alert">
-                                    {{ errorAuth }}
-                                </div>
-
-                                <div class="row mt-3">
-                                    <div class="col-6">
-                                        <router-link to="/" class="text-muted">
-                                            <small> Forgot password? </small>
-                                        </router-link>
-                                    </div>
-
-                                    <div class="col-6 text-right">
-                                        <router-link :to="{name: 'registerUser'}" class="text-muted">
-                                            <small> Create new account </small>
-                                        </router-link>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <h1> Login </h1>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Auth",
+        name: "Login",
 
         data() {
             return {

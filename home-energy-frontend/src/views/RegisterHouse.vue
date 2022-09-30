@@ -1,156 +1,98 @@
 <template>
-    <div>
-        <NavBarOptions/>
+    <div id="page-top">
+        <div id="wrapper">
+            <Sidebar/>
 
-        <div class="main-content">
-            <NavBarUser />
-            
-            <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
-                <div class="container-fluid">
-                    <div class="header-body">
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <NavBarUser/>
+                    
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-end mb-4">
+                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                            </a>
+                        </div>
+
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card shadow">
-                                    <div class="card-header bg-transparent">
-                                        <div class="row">
-                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                <h3 class="mb-0"> House(s) </h3>
-                                            </div>
-                                        </div>
+                            <div class="col-xl-12 col-lg-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            Houses
+                                        </h6>
+                                        
+                                        <div class="dropdown no-arrow">
+                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                            </a>
 
-                                        <div class="row">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                    <i class="ni ni-fat-add"></i> Add house
-                                                </button>
+                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                                <div class="dropdown-header">
+                                                    Dropdown Header:
+                                                </div>
+
+                                                <a class="dropdown-item" href="#">Action</a>
+
+                                                <a class="dropdown-item" href="#">Another action</a>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <a class="dropdown-item" href="#">Something else here</a>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="card-body">
-                                        <div class="icon-examples">
-                                            <table class="table table-hover table-bordered table-responsive-sm">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th scope="col"> # </th>
-                                                        <th scope="col"> Codername </th>
-                                                        <th scope="col"> Type </th>
-                                                        <th scope="col"> Address </th>
-                                                        <th scope="col"> Number </th>
-                                                        <th scope="col"> Report each </th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    <tr v-for="house in houses" :key="house.id">
-                                                        <td> {{house.id}} </td>
-                                                        <td> {{house.name}} </td>
-                                                        <td> {{house.typeAddress}} </td>
-                                                        <td> {{house.nameAddress}} </td>
-                                                        <td> {{house.numberAddress}} </td>
-                                                        <td> {{house.periodDaysReport}} </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Register house
-                                                    </h5>
-                                                    
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">
-                                                            &times;
-                                                        </span>
-                                                    </button>
-                                                </div>
-
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                                            <label for="houseName"> 
-                                                                Name: 
-                                                            </label>
-
-                                                            <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName">
-                                                        </div>
-
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                                            <label for="typeAddress"> 
-                                                                Type Address: 
-                                                            </label>
-
-                                                            <select v-model="house.typeAddress" class="form-control form-control-sm" id="typeAddress">
-                                                                <option value="Rua"> 
-                                                                    Rua 
-                                                                </option>
-
-                                                                <option value="Avenida"> 
-                                                                    Avenida 
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row mt-3">
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                                            <label for="nameAddress"> 
-                                                                Address: 
-                                                            </label>
-
-                                                            <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress">
-                                                        </div>
-
-                                                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <label for="numberAddress"> 
-                                                                Number: 
-                                                            </label>
-
-                                                            <input v-model="house.numberAddress" type="text" class="form-control form-control-sm" id="numberAddress">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row mt-3">
-                                                        <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
-                                                            <label for="periodDaysReport"> 
-                                                                Period Days Report: 
-                                                            </label>
-
-                                                            <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport">
-                                                                <option value="1"> 1 </option>
-                                                                <option value="2"> 2 </option>
-                                                                <option value="3"> 3 </option>
-                                                                <option value="4"> 4 </option>
-                                                                <option value="5"> 5 </option>
-                                                                <option value="6"> 6 </option>
-                                                                <option value="7"> 7 </option>
-                                                                <option value="14"> 14 </option>
-                                                                <option value="30"> 30 </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button @click="register" type="button" class="btn btn-primary btn-sm"> 
-                                                        Register 
-                                                    </button>
-
-                                                    <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        <div class="chart-area">
+                                            <canvas id="myAreaChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span> Copyright &copy; PowerMetrics {{new Date().getFullYear()}} </span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+           
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Ready to Leave?
+                        </h5>
+
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        Select "Logout" below if you are ready to end your current session.
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm">
+                            Logout
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -159,82 +101,45 @@
 </template>
 
 <script>
-    import NavBarOptions from "../shared/NavBarOptions.vue";
+    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
+    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
+    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
+
+    import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
 
     export default {
         components: { 
-            NavBarOptions, 
+            Sidebar, 
             NavBarUser 
         },
 
-        data() {
-            return {
-                houses: [],
+        methods: {
+            logout() {
+                this.$store.commit("LOGOUT_USER");
+                this.$router.push({ name: "login" });
+            },
 
-                house: {
-                    id: 0,
-                    idUser: this.$store.state.user.id,
-                    name: '',
-                    typeAddress: '',
-                    nameAddress: '',
-                    numberAddress: 0,
-                    periodDaysReport: 1
+            ampliarNavBar() {
+                let accordion = document.querySelector("#accordionSidebar");
+                let body = document.querySelector("#page-top");
+
+                if(!accordion.classList.contains("toggled") && !body.classList.contains("sidebar-toggled")) {
+                    accordion.classList.add("toggled");
+                    body.classList.add("sidebar-toggled");
+                } else {
+                    accordion.classList.remove("toggled");
+                    body.classList.remove("sidebar-toggled");
                 }
             }
         },
-
-        methods: {
-            register() {
-                this.$http.post('/api/house/create', this.house)
-                    .then((response) => {
-                        if(response.status == 200) {
-                            this.closeModal();
-
-                            this.getHouses();
-
-                            this.house.name = '';
-
-                            this.house.typeAddress = '';
-
-                            this.house.nameAddress = '';
-
-                            this.house.numberAddress = 0;
-
-                            this.house.periodDaysReport = 1;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
-            },
-
-            getHouses() {
-                this.$http.get(`/api/house/getByUserId/${this.house.idUser}`)
-                    .then((response) => {
-                        if(response.status == 200) {
-                            this.houses = response.data;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
-            },
-
-            closeModal() {
-                $('#exampleModal').modal('hide');
-            }
-        },
-
-        created() {
-            this.closeModal();
-            this.getHouses();
-        }
     }
 </script>
 
 <style scoped>
-    .teste {
-        margin-right: 2px;
+    @import url('https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i');
+
+    #accordionSidebar {
+        height: 100%;
     }
 </style>
