@@ -82,11 +82,14 @@
                                     </div>
                                 </div>
 
-                                <div class="row my-4">
-                                    <div class="col-12 alert alert-success alert-dismissible fade show" role="alert">
-                                        <strong> Cadastro realizado com sucesso </strong> 
+                                <div v-if="status == 200" class="row my-4">
+                                    <div class="col-12 alert alert-success text-center alert-dismissible fade show" role="alert">
+                                        <strong> Cadastro realizado com sucesso </strong> <br/>
                                         
-                                        Você será redirecionado para a tela de login em alguns instantes :)
+                                        <small> 
+                                            Você será redirecionado para a tela de login em alguns 
+                                            instantes :)
+                                        </small>
                                         
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -114,6 +117,8 @@
 
         data() {
             return {
+                status: 0,
+
                 user: {
                     id: 0,
                     name: '',
@@ -129,9 +134,9 @@
             register() {
                this.$http.post('/api/user/create', this.user)
                     .then((response) => {
-                        console.log(response);
-
                         if(response.status == 200) {
+                            this.status = 200;
+
                             setTimeout(() => {
 
                             }, 2000);
@@ -140,7 +145,7 @@
                     .catch((error) => {
                         console.error(error);
                     })
-            }
+            },
         }
     }
 </script>

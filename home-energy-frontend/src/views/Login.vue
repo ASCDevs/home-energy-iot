@@ -8,25 +8,19 @@
 			</div>
 		</div>
 
-        <div class="header bg-gradient-primary py-8 py-lg-8">
+        <div class="header bg-gradient-primary py-7 py-lg-7">
             <div class="container">
                 <div class="header-body text-center">
                     <div class="row justify-content-center">
                         <div class="col-lg-5 col-md-6">
-                            <h1 class="text-white">
-                                Welcome!
-                            </h1>
-
-                            <p class="text-lead text-light">
-                                Welcome to PowerMetrics, a system for managing your home's electricity ;)
-                            </p>
+                            <img src="../assets/image/logo_site.png" class="img-fluid" alt="logo_site">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="container mt--8 pb-5">
+        <div class="container mt--7 pb-7">
             <div class="row justify-content-center">
                 <div class="col-lg-5 col-md-7">
                     <div class="card bg-secondary shadow border-0">
@@ -105,23 +99,25 @@
 
         methods: {
             auth() {
-                let overlay = document.getElementById("overlay");
-
-                overlay.style.display = "block";
+                $("#overlay").css("display", "block");
 
                 this.$store.dispatch('login', this.loginModel)
                     .then(() => {
                         this.$router.push({name: 'about'});
                     })
                     .catch((error) => {
-                        overlay.style.display = "none";
+                        $("#overlay").css("display", "none");
 
                         if(error.request.status == 400) {
                             this.errorAuth = error.response.data;
                         }
                     })
             }
-        }
+        },
+
+        mounted() {
+            $("#overlay").css("display", "none");
+        },
     };
 </script>
 

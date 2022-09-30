@@ -27,7 +27,7 @@ export default createStore({
     actions: {
         login({commit}, loginModel) {
             return new Promise((resolve, reject) => {
-                http.post('/api/login/login', loginModel)
+                http.post('/api/login/authenticate', loginModel)
                     .then((response) => {
                         commit('AUTHENTICATE_USER', {
                             token: response.data.userToken,

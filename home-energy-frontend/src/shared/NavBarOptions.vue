@@ -6,7 +6,7 @@
             </button>
             
             <div class="d-none d-xl-block d-lg-block d-md-block">
-                <img src="@/assets/image/logo-site.jpg" class="img-thumbnail" alt="logo">
+                <img src="@/assets/image/logo_site.png" class="img-thumbnail" alt="logo">
             </div>
 
             <ul class="nav align-items-center d-md-none">
