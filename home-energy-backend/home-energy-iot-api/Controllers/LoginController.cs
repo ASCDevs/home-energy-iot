@@ -23,7 +23,7 @@ namespace home_energy_api.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("Authenticate")]
         [AllowAnonymous]
         public ActionResult<dynamic> Login([FromBody] LoginModel login)
         {

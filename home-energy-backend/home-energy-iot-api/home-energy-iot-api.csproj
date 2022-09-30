@@ -23,4 +23,9 @@
     <ProjectReference Include="..\home-energy-iot-entities\home-energy-iot-entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Input\" />
+    <Folder Include="Models\EntityConverters\" />
+  </ItemGroup>
+
 </Project>

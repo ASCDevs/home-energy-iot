@@ -102,5 +102,22 @@ namespace home_energy_api.Controllers
                 return BadRequest("Erro ao buscar as casas: " + ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GetByUserId/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetByUserId(int id)
+        {
+            try
+            {
+                var houses = await _houseManager.GetByUserId(id);
+
+                return Ok(houses);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro ao buscar as casas: " + ex.Message);
+            }
+        }
     }
 }
