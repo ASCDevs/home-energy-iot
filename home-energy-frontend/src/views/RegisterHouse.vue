@@ -16,19 +16,70 @@
                                     </div>
 
                                     <div class="card-body px-5">
-                                        <div class="row icon-examples">
-                                            <div class="alert alert-success" role="alert">
-                                                <h4 class="alert-heading">Well done!</h4>
-                                                
-                                                <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-                                                
-                                                <hr>
-                                                
-                                                <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                                        <div class="icon-examples">
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label for="houseName"> Name: </label>
+
+                                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="typeAddress"> Type Address: </label>
+
+                                                        <select v-model="house.typeAddress" class="form-control form-control-sm" id="typeAddress">
+                                                            <option value="Rua"> Rua </option>
+                                                            <option value="Avenida"> Avenida </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-6">
+                                                        <label for="nameAddress"> Address: </label>
+
+                                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress">
+                                                    </div>
+
+                                                    <div class="col-2">
+                                                        <label for="numberAddress"> Number: </label>
+
+                                                        <input v-model="house.numberAddress" type="text" class="form-control form-control-sm" id="numberAddress">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-3">
+                                                        <label for="periodDaysReport"> Period Days Report: </label>
+
+                                                        <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport">
+                                                            <option value="1"> 1 </option>
+                                                            <option value="2"> 2 </option>
+                                                            <option value="3"> 3 </option>
+                                                            <option value="4"> 4 </option>
+                                                            <option value="5"> 5 </option>
+                                                            <option value="6"> 6 </option>
+                                                            <option value="7"> 7 </option>
+                                                            <option value="14"> 14 </option>
+                                                            <option value="30"> 30 </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-5">
+                                                    <div class="col-3">
+                                                        <button @click="register" class="btn btn-primary btn-sm">
+                                                            Register
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <span class="text-white"> {{ house }} </span>
                             </div>
                         </div>
                     </div>
@@ -46,6 +97,32 @@
         components: { 
             NavBarOptions, 
             NavBarUser 
+        },
+
+        data() {
+            return {
+                house: {
+                    id: 0,
+                    idUser: this.$store.state.user.id,
+                    name: 'Casa da praia',
+                    typeAddress: 'Rua',
+                    nameAddress: 'Laranjeira',
+                    numberAddress: 2000,
+                    periodDaysReport: 2
+                }
+            }
+        },
+
+        methods: {
+            register() {
+                this.$http.post('/api/house/create', this.house)
+                    .then((response) => {
+                        console.log(response);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            }
         }
     }
 </script>

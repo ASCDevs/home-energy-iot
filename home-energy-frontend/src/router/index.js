@@ -69,11 +69,9 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((routeTo, routeFrom, next) => {
-    console.log(routeTo)    
-    
+router.beforeEach((routeTo, routeFrom, next) => {    
     if(store.state.token == null && !routeTo.meta.public) {
-        return next({path: '/'});
+        return next({name: 'login'});
     }
 
     next();

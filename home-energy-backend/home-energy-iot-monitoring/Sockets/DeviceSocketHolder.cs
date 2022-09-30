@@ -15,12 +15,12 @@ namespace home_energy_iot_monitoring.Sockets
     {
         private readonly ILogger<DeviceSocketHolder> logger;
         private readonly ConcurrentDictionary<string, ClientDeviceConnection> clients = new();
-        //private readonly IHubContext<CostumersHub> _costumersHub;
         private readonly IReportAPI _reportAPI;
         private readonly IPanelHubControl _panelHubControl;
         private readonly ICostumerHubControl _costumerHubControl;
 
-        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger, IReportAPI reportAPI, IPanelHubControl panelHubControl, ICostumerHubControl costumerHubControl)
+        public DeviceSocketHolder(ILogger<DeviceSocketHolder> logger, IReportAPI reportAPI, 
+            IPanelHubControl panelHubControl, ICostumerHubControl costumerHubControl)
         {
             this.logger = logger;
             _reportAPI = reportAPI;
