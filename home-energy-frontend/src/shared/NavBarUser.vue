@@ -24,7 +24,6 @@
                     <i class="fas fa-search fa-fw"></i>
                 </a>
 
-                <!-- Dropdown - Messages -->
                 <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                     <form class="form-inline mr-auto w-100 navbar-search">
                         <div class="input-group">
@@ -40,7 +39,6 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell fa-fw"></i>
@@ -48,7 +46,6 @@
                     <span class="badge badge-danger badge-counter">3+</span>
                 </a>
 
-                <!-- Dropdown - Alerts -->
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                     <h6 class="dropdown-header">
                         Alerts Center
@@ -91,15 +88,12 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1">
-                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-envelope fa-fw"></i>
-                    <!-- Counter - Messages -->
                     <span class="badge badge-danger badge-counter">7</span>
                 </a>
-                <!-- Dropdown - Messages -->
+
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
                     
                     <h6 class="dropdown-header">
@@ -193,7 +187,7 @@
                     <img src="../assets/image/user.png" class="img-profile rounded-circle">
 
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small ml-2 mt-1">
-                        Douglas McGee
+                        {{ this.$store.state.user.name }}
                     </span>
                 </a>
 
@@ -218,12 +212,49 @@
                 </div>
             </li>
         </ul>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Ready to Leave?
+                        </h5>
+
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        Select "Logout" below if you are ready to end your current session.
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button @click="logout" type="button" class="btn btn-danger btn-sm">
+                            Logout
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
 </template>
 
 <script>
     export default {
+        name: "NavBarUser",
+
         methods: {
+            logout() {
+                this.$store.commit("LOGOUT_USER");
+                this.$router.push({name: "login"});
+            },
+
             ampliarNavBar() {
                 let accordion = document.querySelector('#accordionSidebar');
                 let body = document.querySelector('#page-top');

@@ -29,14 +29,15 @@ export default createStore({
             return new Promise((resolve, reject) => {
                 http.post('/api/login/authenticate', loginModel)
                     .then((response) => {
-                        commit('AUTHENTICATE_USER', {
-                            token: response.data.userToken,
-                            user: response.data.user
-                        });
+                        if(response.status == 200) {
+                            commit('AUTHENTICATE_USER', {
+                                token: response.data.userToken,
+                                user: response.data.user
+                            });
 
-                        resolve(response.data);
-
-                    }).catch(error => {
+                            resolve(response.data);
+                        }
+                    }).catch((error) => {
                         reject(error);
                     })
             })
