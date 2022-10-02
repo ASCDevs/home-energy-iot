@@ -69,12 +69,12 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((routeTo, routeFrom, next) => {    
+/*router.beforeEach((routeTo, routeFrom, next) => {    
     if(store.state.token == null && !routeTo.meta.public) {
         return next({name: 'login'});
     }
 
     next();
-});
+});*/
 
 export default router;
