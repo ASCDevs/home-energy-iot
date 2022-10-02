@@ -137,7 +137,7 @@ namespace home_energy_iot_core
                 if (id < 0)
                     throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
 
-                _logger.LogDebug($"Buscando as Casas do usuário Id [{id}]");
+                _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
                 var houses = _houseManagerRepository.GetByUserId(id).Result.ToList();
 

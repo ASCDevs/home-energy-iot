@@ -65,14 +65,14 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public void GetDeviceConsumptionTotalValueDeviceIdentificationCountZeroDevicesTest()
+        public void GetDeviceConsumptionTotalValueDeviceIdentificationNoReportFoundTest()
         {
             string deviceIdentificationCode = "PC:12:XD:23";
 
-            List<DeviceReport> devices = new List<DeviceReport>();
+            var reports = new List<DeviceReport>();
 
             _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
-                .Returns(devices).Verifiable();
+                .Returns(reports).Verifiable();
 
             var instance = GetInstance();
 
@@ -112,7 +112,7 @@ namespace home_energy_iot_tests
             var consumption = new DeviceConsumption
             {
                 IdentificationCode = deviceIdentificationCode,
-                ConsumptionInReal = CalculateWatts(wattsTotal, initialDate, finalDate),
+                ConsumptionInReal = CalculateWatts(wattsTotal,reports.Count),
                 ConsumptionInWatts = wattsTotal,
                 ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                 InitialDate = initialDate,
@@ -136,9 +136,140 @@ namespace home_energy_iot_tests
             _deviceConsumptionReaderRepository.Verify();
         }
 
-        private double CalculateWatts(double watts, DateTime initialDate, DateTime finalDate)
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesDeviceIdentificationNullTest()
         {
-            var totalHours = (finalDate - initialDate).TotalHours;
+            string deviceIdentificationCode = null;
+
+            var initialDate = new DateTime(2022, 01, 02, 5, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 7, 0, 0);
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() =>
+                instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesDeviceIdentificationEmptyTest()
+        {
+            string deviceIdentificationCode = "";
+
+            var initialDate = new DateTime(2022, 01, 02, 5, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 7, 0, 0);
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() =>
+                instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesDeviceIdentificationWhiteSpaceTest()
+        {
+            string deviceIdentificationCode = " ";
+
+            var initialDate = new DateTime(2022, 01, 02, 5, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 7, 0, 0);
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() =>
+                instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesInvalidDateTest()
+        {
+            string deviceIdentificationCode = "ABC123";
+
+            var initialDate = new DateTime(2022, 01, 02, 7, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 5, 0, 0);
+
+            var instance = GetInstance();
+
+            Assert.Throws<Exception>(() =>
+                instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate));
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesReportNotFoundTest()
+        {
+            string deviceIdentificationCode = "ABC123";
+
+            var initialDate = new DateTime(2022, 01, 02, 5, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 7, 0, 0);
+
+            var reports = new List<DeviceReport>();
+
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate)).
+                Returns(reports).Verifiable();
+
+            var instance = GetInstance();
+
+            Assert.Null(instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate).IdentificationCode);
+
+            _deviceConsumptionReaderRepository.Verify();
+        }
+
+        [Fact]
+        public void GetDeviceConsumptionValueBetweenDatesSuccessTest()
+        {
+            string deviceIdentificationCode = "ABC123";
+
+            var initialDate = new DateTime(2022, 01, 02, 5, 0, 0);
+            var finalDate = new DateTime(2022, 01, 02, 7, 0, 0);
+
+            var reports = new List<DeviceReport>
+            {
+                new DeviceReport
+                {
+                    Id = 1,
+                    IdentificationCode = deviceIdentificationCode,
+                    ReportDate = new DateTime(2022, 01, 02, 5, 0, 1),
+                    WattsUsage = 1.20m
+                },
+                new DeviceReport
+                {
+                    Id = 1,
+                    IdentificationCode = deviceIdentificationCode,
+                    ReportDate = new DateTime(2022, 01, 02, 5, 0, 2),
+                    WattsUsage = 1.20m
+                }
+            };
+
+            var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+
+            var consumption = new DeviceConsumption
+            {
+                IdentificationCode = deviceIdentificationCode,
+                ConsumptionInReal = CalculateWatts(wattsTotal, reports.Count),
+                ConsumptionInWatts = wattsTotal,
+                ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                InitialDate = initialDate,
+                FinalDate = finalDate
+            };
+
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
+                .Returns(reports).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode);
+
+            Assert.Equal(consumption.IdentificationCode, result.IdentificationCode);
+            Assert.Equal(consumption.ConsumptionInReal, result.ConsumptionInReal);
+            Assert.Equal(consumption.ConsumptionInWatts, result.ConsumptionInWatts);
+            Assert.Equal(consumption.ConsumptionDates, result.ConsumptionDates);
+            Assert.Equal(consumption.InitialDate, initialDate);
+            Assert.Equal(consumption.FinalDate, finalDate);
+
+            _deviceConsumptionReaderRepository.Verify();
+        }
+
+        private double CalculateWatts(double watts, double totalSecondsUsage)
+        {
+            var totalHours = totalSecondsUsage / 3600;
 
             var kwhPrice = 0.80;
 
