@@ -1,34 +1,167 @@
 <template>
-    <div>
-        <NavBarOptions/>
+    <div id="page-top">
+        <div id="wrapper">
+            <Sidebar/>
 
-        <div class="main-content">
-            <NavBarUser />
-            
-            <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
-                <div class="container-fluid">
-                    <div class="header-body">
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <NavBarUser/>
+                    
+                    <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card shadow">
-                                    <div class="card-header bg-transparent">
-                                        <h3 class="mb-0"> Register House(s) </h3>
+                            <div class="col-xl-12 col-lg-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            My Houses
+                                        </h6>
+
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
+                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <i class="fas fa-plus"></i> Add house
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="card-body px-5">
-                                        <div class="row icon-examples">
-                                            <div class="alert alert-success" role="alert">
-                                                <h4 class="alert-heading">Well done!</h4>
-                                                
-                                                <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-                                                
-                                                <hr>
-                                                
-                                                <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                                    <div class="card-body">
+                                        <div v-if="houses.length > 0" class="row">
+                                            <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 mb-4">
+                                                <div class="card border-left-primary shadow h-100 py-2">
+                                                    <div class="card-body">
+                                                        <div class="row no-gutters align-items-center">
+                                                            <div class="col-auto">
+                                                                <i class="fas fa-house-user fa-2x text-gray-300"></i>
+                                                            </div>
+
+                                                            <div class="col ml-3 mr-2">
+                                                                <div class="text-xs font-weight-bold text-dark mb-1">
+                                                                    {{ house.name }}
+                                                                </div>
+
+                                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                                    {{ house.nameAddress }}, {{house.numberAddress}}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-auto">
+                                                                <router-link to="/" title="Edit house">
+                                                                    <i class="fas fa-pen"></i>
+                                                                </router-link>
+
+                                                                <router-link to="/" class="ml-3" title="View consumption this device">
+                                                                    <i class="fas fa-angle-right"></i>
+                                                                </router-link>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div v-else class="row">
+                                            <div class="col-12 alert alert-info text-center" role="alert">
+                                                You don't own any registered house
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    Register house
+                                </h5>
+                                
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        &times;
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="houseName"> 
+                                            Name: 
+                                        </label>
+
+                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName">
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="typeAddress"> 
+                                            Type Address: 
+                                        </label>
+
+                                        <select v-model="house.typeAddress" class="form-control form-control-sm" id="typeAddress">
+                                            <option value="Rua"> 
+                                                Rua 
+                                            </option>
+
+                                            <option value="Avenida"> 
+                                                Avenida 
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="nameAddress"> 
+                                            Address: 
+                                        </label>
+
+                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress">
+                                    </div>
+
+                                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                        <label for="numberAddress"> 
+                                            Number: 
+                                        </label>
+
+                                        <input v-model="house.numberAddress" type="text" class="form-control form-control-sm" id="numberAddress">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
+                                        <label for="periodDaysReport"> 
+                                            Period Days Report: 
+                                        </label>
+
+                                        <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport">
+                                            <option value="1"> 1 </option>
+                                            <option value="2"> 2 </option>
+                                            <option value="3"> 3 </option>
+                                            <option value="4"> 4 </option>
+                                            <option value="5"> 5 </option>
+                                            <option value="6"> 6 </option>
+                                            <option value="7"> 7 </option>
+                                            <option value="14"> 14 </option>
+                                            <option value="30"> 30 </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button @click="register" type="button" class="btn btn-primary btn-sm"> 
+                                    Register 
+                                </button>
+
+                                <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -39,13 +172,76 @@
 </template>
 
 <script>
-    import NavBarOptions from "../shared/NavBarOptions.vue";
+    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
+    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
+    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
+
+    import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
 
     export default {
+        name: "RegisterHouse",
+
         components: { 
-            NavBarOptions, 
+            Sidebar, 
             NavBarUser 
+        },
+
+        data() {
+            return {
+                houses: [],
+
+                house: {
+                    id: 0,
+                    idUser: this.$store.state.user.id,
+                    name: '',
+                    typeAddress: '',
+                    nameAddress: '',
+                    numberAddress: 0,
+                    periodDaysReport: 1
+                }
+            }
+        },
+
+        methods: {
+            register() {
+                this.$http.post('/api/house/create', this.house)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.closeModal();
+                            this.getHousesUser();
+                            this.house.name = '';
+                            this.house.typeAddress = '';
+                            this.house.nameAddress = '';
+                            this.house.numberAddress = 0;
+                            this.house.periodDaysReport = 1;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            },
+
+            getHousesUser() {
+                this.$http.get(`/api/house/getByUserId/${this.house.idUser}`)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.houses = response.data;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            },
+
+            closeModal() {
+                $('#exampleModal').modal('hide');
+            }
+        },
+
+        created() {
+            this.closeModal();
+            this.getHousesUser();
         }
     }
 </script>

@@ -24,6 +24,8 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Casa: [{house.Name}].");
 
+                house.RegisterDate = DateTime.Now;
+
                 await _houseManagerRepository.Create(house);
 
                 _logger.LogInformation($"Casa [{house.Name}] criada com sucesso.");
@@ -128,10 +130,41 @@ namespace home_energy_iot_core
             }
         }
 
+        public Task<IEnumerable<House>> GetByUserId(int id)
+        {
+            try
+            {
+                if (id < 0)
+                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
+
+                _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
+
+                var houses = _houseManagerRepository.GetByUserId(id).Result.ToList();
+
+                if (houses.Count > 0)
+                {
+                    _logger.LogInformation("Retornando as Casas encontradas.");
+                    return Task.FromResult<IEnumerable<House>>(houses);
+                }
+
+                var message = $"Nenhuma Casa encontrada para o usuário Id [{id}].";
+
+                _logger.LogInformation(message);
+                throw new Exception(message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao buscas as Casas do usuário com Id [{id}].");
+                throw;
+            }
+
+
+        }
+
         private void ValidateHouse(House house)
         {
             if (house is null)
                 throw new ArgumentNullException(nameof(house), "Casa nula.");
-        }
+        }       
     }
 }

@@ -39,7 +39,7 @@ namespace home_energy_iot_core
                     var consumption = new DeviceConsumption
                     {
                         IdentificationCode = deviceIdentificationCode,
-                        ConsumptionInReal = CalculateWattsToReal(wattsTotal, initialDate, finalDate),
+                        ConsumptionInReal = CalculateWattsToReal(wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
                         ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                         InitialDate = initialDate,
@@ -69,6 +69,9 @@ namespace home_energy_iot_core
                 if (string.IsNullOrWhiteSpace(deviceIdentificationCode))
                     throw new ArgumentNullException("Código de identificação do Dispositivo inválido.");
 
+                if (finalDate < initialDate)
+                    throw new Exception("Período inválido. A data final deve ser maior que a inicial.");
+
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
@@ -82,7 +85,7 @@ namespace home_energy_iot_core
                     var consumption = new DeviceConsumption
                     {
                         IdentificationCode = deviceIdentificationCode,
-                        ConsumptionInReal = CalculateWattsToReal(wattsTotal, initialDate, finalDate),
+                        ConsumptionInReal = CalculateWattsToReal(wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
                         ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                         InitialDate = initialDate,
@@ -103,9 +106,9 @@ namespace home_energy_iot_core
             }
         }
         
-        private double CalculateWattsToReal(double watts, DateTime initialDate, DateTime finalDate)
+        private double CalculateWattsToReal(double watts, DateTime initialDate, DateTime finalDate, double totalSecondsUsage)
         {
-            var totalHours = (finalDate - initialDate).TotalHours;
+            var totalHours = totalSecondsUsage / 3600;
 
             var kwhPrice = 0.80;
 
@@ -113,7 +116,7 @@ namespace home_energy_iot_core
 
             _logger.LogInformation(
                 "Cálculo de consumo efetuado. Valores utilizados na fórmula: \n" +
-                $"Total de horas entre {initialDate} e {finalDate}: {totalHours} \n" +
+                $"Total de horas de consumo entre {initialDate} e {finalDate}: {totalHours} \n" +
                 $"Média de Watts do período: {watts} \n" +
                 $"Valor do kWh: {kwhPrice} \n" +
                 $"Resultado do cálculo: R${String.Format("{0:0.00}", result)}");

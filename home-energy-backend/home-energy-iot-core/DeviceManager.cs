@@ -28,6 +28,8 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Dispositivo: [{device.Name}].");
 
+                device.RegisterDate = DateTime.Now;
+
                 await _deviceManagerRepository.Create(device);
 
                 _logger.LogInformation($"Dispositivo [{device.Name}] criado com sucesso.");

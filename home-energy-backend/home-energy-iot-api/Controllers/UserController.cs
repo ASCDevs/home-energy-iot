@@ -80,7 +80,7 @@ namespace home_energy_iot_api.Controllers
             {
                 var users = await _userManager.GetAll();
 
-                var usersFiltered = new List<UserView>();
+                var usersFiltered = new List<UserModel>();
 
                 foreach (var user in users)
                     usersFiltered.Add(FilterUserResult(user));
@@ -93,14 +93,14 @@ namespace home_energy_iot_api.Controllers
             }
         }
 
-        private UserView FilterUserResult(User user)
+        private UserModel FilterUserResult(User user)
         {
             if (user is null)
                 throw new ArgumentNullException(nameof(user), "Não foi possível filtrar o usuário. Usuário Nulo.");
 
             _logger.LogInformation($"Filtrando as informações do Usuário Id [{user.Id}].");
 
-            return new UserView
+            return new UserModel
             {
                 Id = user.Id,
                 Name = user.Name,
