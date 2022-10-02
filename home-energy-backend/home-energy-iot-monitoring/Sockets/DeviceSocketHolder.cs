@@ -56,6 +56,45 @@ namespace home_energy_iot_monitoring.Sockets
             }
         }
 
+        public async Task SendListClientsOn(string PanelConnectionId)
+        {
+            await _panelHubControl.PanelUIReceiveListDevicesClients(PanelConnectionId, this.GetDevicesClientList());
+        }
+
+        public async Task SendActionToClient(string idConnection, string command)
+        {
+            var client = clients.First(x => x.Key == idConnection);
+            byte[] bytes = Encoding.ASCII.GetBytes(command);
+
+            string action = command.Split(">")[1];
+            await this.HandleChangeState(idConnection, action);
+            await client.Value.web_socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID)
+        {
+            return clients.First(x => x.Value.device_id == DeviceID).Value;
+        }
+
+        public async Task CostumerActionStopDevice(string DevideID)
+        {
+            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
+            string command = "client>stopenergy";
+            await HandleAction(command, idConnection);
+        }
+
+        public async Task CostumerActionContinueDevice(string DevideID)
+        {
+            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
+            string command = "client>continueenergy";
+            await HandleAction(command, idConnection);
+        }
+
+        public int CountClients()
+        {
+            return clients.Count();
+        }
+
         private async Task EchoAsycn(WebSocket webSocket)
         {
             //Para enviar dados
@@ -71,7 +110,7 @@ namespace home_energy_iot_monitoring.Sockets
                     var deviceClient = clients.First(x => x.Value.web_socket == webSocket);
                     if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                     {
-                        Console.WriteLine("[disconnected] ("+ deviceClient.Value.device_id+ ") id-connection: " + deviceClient.Key);
+                        Console.WriteLine("[disconnected] (" + deviceClient.Value.device_id + ") id-connection: " + deviceClient.Key);
 
                         await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                         await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
@@ -94,16 +133,6 @@ namespace home_energy_iot_monitoring.Sockets
                     }
                 }
             }
-        }
-
-        public async Task SendActionToClient(string idConnection, string command)
-        {
-            var client = clients.First(x => x.Key == idConnection);
-            byte[] bytes = Encoding.ASCII.GetBytes(command);
-
-            string action = command.Split(">")[1];
-            await this.HandleChangeState(idConnection, action);
-            await client.Value.web_socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         private async Task HandleAction(string txtCommand, string idConnection)
@@ -189,33 +218,9 @@ namespace home_energy_iot_monitoring.Sockets
             }               
         }
 
-        public async Task SendListClientsOn(string PanelConnectionId)
-        {
-            await _panelHubControl.PanelUIReceiveListDevicesClients(PanelConnectionId, this.GetDevicesClientList());
-        }
-
         private List<ItemDeviceClient> GetDevicesClientList()
         {
             return clients.Select(c => new ItemDeviceClient { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
-        }
-
-        public ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID)
-        {
-            return clients.First(x => x.Value.device_id == DeviceID).Value;
-        }
-
-        public async Task CostumerActionStopDevice(string DevideID)
-        {
-            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
-            string command = "client>stopenergy";
-            await HandleAction(command, idConnection);
-        }
-
-        public async Task CostumerActionContinueDevice(string DevideID)
-        {
-            string idConnection = clients.First(x => x.Value.device_id == DevideID).Key;
-            string command = "client>continueenergy";
-            await HandleAction(command, idConnection);
         }
 
         private KeyValuePair<string, ClientDeviceConnection> GetClientByIdConn(string IdConn)
@@ -226,11 +231,6 @@ namespace home_energy_iot_monitoring.Sockets
         private KeyValuePair<string, ClientDeviceConnection> GetClientBySocket(WebSocket webSocket)
         {
             return clients.First(w => w.Value.web_socket == webSocket);
-        }
-
-        public int CountClients()
-        {
-            return clients.Count();
         }
     }
 }
