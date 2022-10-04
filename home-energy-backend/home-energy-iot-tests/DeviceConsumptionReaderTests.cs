@@ -250,12 +250,12 @@ namespace home_energy_iot_tests
                 FinalDate = finalDate
             };
 
-            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate))
                 .Returns(reports).Verifiable();
 
             var instance = GetInstance();
 
-            var result = instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode);
+            var result = instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate);
 
             Assert.Equal(consumption.IdentificationCode, result.IdentificationCode);
             Assert.Equal(consumption.ConsumptionInReal, result.ConsumptionInReal);

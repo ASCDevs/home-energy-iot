@@ -76,10 +76,10 @@ namespace home_energy_iot_core
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
 
-                _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
-
                 if (reports.Count > 0)
                 {
+                    _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
+
                     var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
                     var consumption = new DeviceConsumption
