@@ -50,7 +50,7 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </router-link>
 
-                                                                <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-3" title="View consumption this device">
+                                                                <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-3" title="See all devices in this house">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
                                                             </div>
@@ -75,7 +75,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
+                        <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
                                     Register house
@@ -95,22 +95,18 @@
                                             Name: 
                                         </label>
 
-                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName">
+                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName" required>
                                     </div>
 
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-sm-3 mt-md-0 mt-lg-0 mt-xl-0">
                                         <label for="typeAddress"> 
                                             Type Address: 
                                         </label>
 
-                                        <select v-model="house.typeAddress" class="form-control form-control-sm" id="typeAddress">
-                                            <option value="Rua"> 
-                                                Rua 
-                                            </option>
-
-                                            <option value="Avenida"> 
-                                                Avenida 
-                                            </option>
+                                        <select v-model="house.typeAddress" class="form-control form-control-sm" id="typeAddress" required>
+                                            <option value=""> Select Type Address </option>                                           
+                                            <option value="Rua"> Rua </option>
+                                            <option value="Avenida"> Avenida </option>
                                         </select>
                                     </div>
                                 </div>
@@ -121,7 +117,7 @@
                                             Address: 
                                         </label>
 
-                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress">
+                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress" required>
                                     </div>
 
                                     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
@@ -129,7 +125,7 @@
                                             Number: 
                                         </label>
 
-                                        <input v-model="house.numberAddress" type="text" class="form-control form-control-sm" id="numberAddress">
+                                        <input v-model="house.numberAddress" type="text" class="form-control form-control-sm" id="numberAddress" required>
                                     </div>
                                 </div>
 
@@ -139,7 +135,8 @@
                                             Period Days Report: 
                                         </label>
 
-                                        <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport">
+                                        <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport" required>
+                                            <option value="" disabled> Select day </option>
                                             <option value="1"> 1 </option>
                                             <option value="2"> 2 </option>
                                             <option value="3"> 3 </option>
@@ -155,7 +152,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button @click="register" type="button" class="btn btn-primary btn-sm"> 
+                                <button type="submit" class="btn btn-primary btn-sm"> 
                                     Register 
                                 </button>
 
@@ -163,7 +160,7 @@
                                     Close
                                 </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -205,10 +202,12 @@
 
         methods: {
             register() {
-                this.$http.post('/api/house/create', this.house)
+                console.log(this.house);
+
+                /*this.$http.post('/api/house/create', this.house)
                     .then((response) => {
                         if(response.status == 200) {
-                            this.closeModal();
+                            $('#exampleModal').modal('hide');
                             this.getHousesUser();
                             this.house.name = '';
                             this.house.typeAddress = '';
@@ -219,7 +218,7 @@
                     })
                     .catch((error) => {
                         console.error(error);
-                    })
+                    })*/
             },
 
             getHousesUser() {
@@ -232,16 +231,15 @@
                     .catch((error) => {
                         console.error(error);
                     })
-            },
-
-            closeModal() {
-                $('#exampleModal').modal('hide');
             }
+        },
+
+        beforeCreate() {
+            $(".modal-backdrop").remove();
         },
 
         created() {
             this.getHousesUser();
-            this.closeModal();
         }
     }
 </script>

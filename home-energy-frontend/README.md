@@ -33,3 +33,5 @@ https://www.chartjs.org/docs/latest/samples/line/point-styling.html
 https://home-energy-iot-api.azurewebsites.net/swagger/index.html
 
 https://servicehomeiotmonitoring.azurewebsites.net/
+
+https://www.w3schools.com/icons/icons_reference.asp

@@ -71,7 +71,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
+                        <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
                                     Register device
@@ -91,7 +91,7 @@
                                             Device name: 
                                         </label>
 
-                                        <input v-model="device.name" type="text" class="form-control form-control-sm" id="deviceName" placeholder="Nome/Apelido do dispositivo">
+                                        <input v-model="device.name" type="text" class="form-control form-control-sm" id="deviceName" placeholder="Nome/Apelido do dispositivo" required>
                                     </div>
                                 </div>
 
@@ -101,7 +101,7 @@
                                             MAC Address:
                                         </label>
 
-                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress" placeholder="MAC Address, encontra-se no aparelho">
+                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress" placeholder="MAC Address, encontra-se no aparelho" required>
                                     </div>
                                 </div>
 
@@ -111,7 +111,7 @@
                                             Watts: 
                                         </label>
 
-                                        <input v-model="device.watts" class="form-control form-control-sm" id="wattsDevice" placeholder="Quantidade de watts do aparelho">
+                                        <input v-model="device.watts" class="form-control form-control-sm" id="wattsDevice" placeholder="Quantidade de watts do aparelho" required>
                                     </div>
                                 </div>
 
@@ -121,13 +121,13 @@
                                             Description: 
                                         </label>
 
-                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações"></textarea>
+                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações" required></textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <button @click="register" type="button" class="btn btn-primary btn-sm"> 
+                                <button type="submit" class="btn btn-primary btn-sm"> 
                                     Register 
                                 </button>
 
@@ -135,7 +135,7 @@
                                     Close
                                 </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -181,11 +181,16 @@
                 this.$http.post(`/api/device/create`, this.device)
                     .then((response) => {
                         if(response.status == 200) {
-                            this.closeModal();
+                            $('#exampleModal').modal('hide');
+
                             this.getDevicesHouse();
+
                             this.device.name = '';
+
                             this.device.identificationCode = '';
+
                             this.device.description = '';
+
                             this.device.watts = 0;
                         }
                     })
@@ -204,15 +209,14 @@
                     .catch((error) => {
                         console.error(error);
                     })
-            },
-
-            closeModal() {
-                $('#exampleModal').modal('hide');
             }
         },
 
+        beforeCreate() {
+            $(".modal-backdrop").remove();
+        },
+
         created() {
-            this.closeModal();
             this.getDevicesHouse();
         }
     }

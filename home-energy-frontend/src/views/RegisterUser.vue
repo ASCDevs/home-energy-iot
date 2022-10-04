@@ -1,36 +1,38 @@
 <template>
-    <div class="container">
-        <div class="row py-5 mt-4 align-items-center">
-            <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
-                <img src="https://bootstrapious.com/i/snippets/sn-registeration/illustration.svg" class="img-fluid mb-3 d-none d-md-block">
-                
-                <h1> Create an Account </h1>
-                
-                <p class="font-italic text-muted mb-0">
-                    Create a minimal registeration page using Bootstrap 4 HTML form elements.
-                </p>
+    <div class="container border rounded mt-3">
+        <router-link to="/" class="text-left">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </router-link>
+
+        <div class="container text-center">
+            <h1> Create an Account </h1>
+        </div>
+
+        <div class="row align-items-center">                
+            <div class="col-lg-6 col-md-6 mb-md-0">
+                <img src="../assets/image/banner.jpg" class="img-fluid mb-3 d-none d-md-block">
             </div>
 
             <div class="col-md-7 col-lg-6 ml-auto">
-                <div class="row">
+                <form @submit.prevent="register" class="row">
                     <div class="col-lg-6 mb-4">
-                        <input v-model="user.name" id="name" type="text" name="name" placeholder="Name" class="form-control bg-white border-md">
+                        <input v-model="user.name" id="name" type="text" name="name" placeholder="Name" class="form-control" required>
                     </div>
 
                     <div class="col-lg-6 mb-4">
-                        <input v-model="user.username" id="username" type="text" name="username" placeholder="Username" class="form-control bg-white border-md">
+                        <input v-model="user.username" id="username" type="text" name="username" placeholder="Username" class="form-control" required>
                     </div>
 
                     <div class="col-lg-8 mb-4">
-                        <input v-model="user.cpf" id="cpf" type="text" name="cpf" placeholder="CPF" class="form-control bg-white border-md">
+                        <input v-model="user.cpf" id="cpf" type="text" name="cpf" placeholder="CPF" class="form-control" required>
                     </div>
 
                     <div class="col-lg-12 mb-4">
-                        <input v-model="user.email" id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-md">
+                        <input v-model="user.email" id="email" type="email" name="email" placeholder="Email Address" class="form-control" required>
                     </div>
 
                     <div class="col-lg-9 mb-4">
-                        <input v-model="user.password" id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-md">
+                        <input v-model="user.password" id="password" type="password" name="password" placeholder="Password" class="form-control" required>
                     </div>
 
                     <div v-if="status == 200" class="my-4">
@@ -46,7 +48,7 @@
                     </div>
 
                     <div class="form-group col-lg-12 mx-auto mb-0">
-                        <button @click="register" type="button" class="btn btn-primary btn-block py-2">
+                        <button type="submit" class="btn btn-primary btn-block py-2">
                             Create your account
                         </button>
                     </div>
@@ -70,7 +72,7 @@
                             </router-link>
                         </p>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -97,7 +99,7 @@
 
         methods: {
             register() {
-               this.$http.post('/api/user/create', this.user)
+                this.$http.post('/api/user/create', this.user)
                     .then((response) => {
                         if(response.status == 200) {
                             setTimeout(() => {
@@ -110,7 +112,7 @@
                     .catch((error) => {
                         console.error(error);
                     })
-            },
+            }
         }
     }
 </script>
