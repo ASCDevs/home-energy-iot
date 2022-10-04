@@ -75,12 +75,24 @@ const routes = [
         },
 
         component: () => import(/* webpackChunkName: "consumptionDevice" */ "../views/ConsumptionDevice.vue")
-    }
+    },
+
+    {
+        path: "/:pathMatch(.*)*",
+
+        name: "notFound",
+
+        meta: {
+            publico: false
+        },
+
+        component: () => import(/* webpackChunkName: "notFound" */ "../views/NotFound.vue")
+    },
 ];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes,
+    routes
 });
 
 router.beforeEach((routeTo, routeFrom, next) => {    
