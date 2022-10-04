@@ -50,7 +50,7 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </router-link>
 
-                                                                <router-link to="/" class="ml-3" title="View consumption this device">
+                                                                <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-3" title="View consumption this device">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
                                                             </div>
@@ -240,8 +240,8 @@
         },
 
         created() {
-            this.closeModal();
             this.getHousesUser();
+            this.closeModal();
         }
     }
 </script>

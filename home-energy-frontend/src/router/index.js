@@ -12,47 +12,37 @@ const routes = [
             public: true
         },
 
-        component: Login,
+        component: Login
     },
     
     {
-        path: "/about",
-
-        name: "about",
-
-        meta: {
-            public: false
-        },
-
-        component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-    },
-
-    {
-        path: "/register-house",
+        path: "/house/register",
 
         name: "registerHouse",
 
-        meta: {
-            public: false
-        },
-
-        component: () => import(/* webpackChunkName: "registerHouse" */ "../views/RegisterHouse.vue"),
-    },
-
-    {
-        path: "/view-consumption",
-
-        name: "viewConsumption",
+        title: "House",
 
         meta: {
             public: false
         },
 
-        component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/ViewConsumption.vue"),
+        component: () => import(/* webpackChunkName: "registerHouse" */ "../views/House.vue")
     },
 
     {
-        path: "/register-user",
+        path: "/house/:id/devices",
+
+        name: "devicesHouse",
+
+        meta: {
+            public: false
+        },
+
+        component: () => import(/* webpackChunkName: "devicesHouse" */ "../views/Device.vue")
+    },
+
+    {
+        path: "/user/register",
 
         name: "registerUser",
 
@@ -60,11 +50,11 @@ const routes = [
             public: true
         },
 
-        component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/RegisterUser.vue"),
+        component: () => import(/* webpackChunkName: "registerUser" */ "../views/RegisterUser.vue")
     },
 
     {
-        path: "/register-device",
+        path: "/device/register",
 
         name: "registerDevice",
 
@@ -72,7 +62,19 @@ const routes = [
             public: true
         },
 
-        component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/RegisterDevice.vue"),
+        component: () => import(/* webpackChunkName: "registerDevice" */ "../views/Device.vue")
+    },
+
+    {
+        path: "/device/:id/consumption",
+
+        name: "consumptionDevice",
+
+        meta: {
+            public: false
+        },
+
+        component: () => import(/* webpackChunkName: "consumptionDevice" */ "../views/ConsumptionDevice.vue")
     }
 ];
 
@@ -83,7 +85,7 @@ const router = createRouter({
 
 router.beforeEach((routeTo, routeFrom, next) => {    
     if(store.state.token == null && !routeTo.meta.public) {
-        return next({name: 'login'});
+        return next({name: "login"});
     }
 
     next();

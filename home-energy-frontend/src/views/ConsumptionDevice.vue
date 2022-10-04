@@ -13,7 +13,7 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
-                                            About
+                                            Consumption in RealTime
                                         </h6>
                                     </div>
 
@@ -31,7 +31,7 @@
                                                         Parar
                                                     </button>
 
-                                                    <h3> {{ watts }} </h3>
+                                                    <h3> {{ idDevice }} </h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -49,31 +49,33 @@
 <script>
     let signalR = require("@aspnet/signalr");
 
+    import { useRoute } from "vue-router";
     import Sidebar from "../shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
-import { watch } from "vue";
 
     export default {
         name: "AboutView",
 
-        components: { 
-            Sidebar, 
+        components: {
+            Sidebar,
             NavBarUser 
         },
 
         data() {
             return {
                 connection: null,
-                watts: 0
+                watts: 0,
+                idUser: this.$store.state.user.id,
+                idDevice: useRoute().params.id
             };
         },
 
         methods: {
             connect() {
                 this.connection.start().then(() => {
-                    let idUser = this.$store.state.user.id;
+                    // idDeviceTest = 'HU:34:DS4:D1', idUser = '0'
 
-                    this.connection.invoke("CompleteInfo", "HU:34:DS4:D1", `${idUser}`); // idDevice = 'HU:34:DS4:D1', idUser = 0
+                    this.connection.invoke("CompleteInfo", `${this.idDevice}`, `${this.idUser}`);
 
                     this.connection.on("receiveEnergyValue", function(valueEnergy) {                    
                         console.log(valueEnergy);
@@ -109,18 +111,8 @@ import { watch } from "vue";
         },
 
         mounted() {
-            this.configureSignalR();
-            this.connect();
-        },
-
-        watch: {
-            watts(newValue, oldValue) {
-                console.log(newValue);
-
-                console.log(oldValue);
-
-                this.watts = newValue
-            }
+            //this.configureSignalR();
+            //this.connect();
         }
     }
 </script>

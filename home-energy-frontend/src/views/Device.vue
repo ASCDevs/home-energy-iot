@@ -27,21 +27,17 @@
 
                                     <div class="card-body">
                                         <div v-if="devices.length > 0" class="row">
-                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-6 col-md-12 mb-4">
+                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-4 col-md-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
                                                         <div class="row no-gutters align-items-center">
                                                             <div class="col-auto">
-                                                                <i class="fas fa-house-user fa-2x text-gray-300"></i>
+                                                                <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
                                                             <div class="col ml-3 mr-2">
-                                                                <div class="text-xs font-weight-bold text-dark mb-1">
-                                                                    tttttttttt
-                                                                </div>
-
                                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                                    yyyyyyyyyyyyyyyy, aaaaaaaaaaaaaaa
+                                                                    {{ device.name }}
                                                                 </div>
                                                             </div>
 
@@ -50,7 +46,7 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </router-link>
 
-                                                                <router-link to="/" class="ml-3" title="View consumption this device">
+                                                                <router-link :to="{path: `/device/${device.id}/consumption`}" class="ml-3" title="View consumption this device">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
                                                             </div>
@@ -90,64 +86,48 @@
 
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="deviceName"> 
                                             Device name: 
                                         </label>
 
-                                        <input v-model="device.name" type="text" class="form-control form-control-sm" id="deviceName">
+                                        <input v-model="device.name" type="text" class="form-control form-control-sm" id="deviceName" placeholder="Nome/Apelido do dispositivo">
                                     </div>
+                                </div>
 
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="row mt-3">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="macAddress"> 
                                             MAC Address:
                                         </label>
 
-                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress">
+                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress" placeholder="MAC Address, encontra-se no aparelho">
                                     </div>
                                 </div>
 
                                 <div class="row mt-3">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                        <label for="nameAddress"> 
-                                            Address: 
+                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                        <label for="wattsDevice"> 
+                                            Watts: 
                                         </label>
 
-                                        <input type="text" class="form-control form-control-sm" id="nameAddress">
-                                    </div>
-
-                                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <label for="numberAddress"> 
-                                            Number: 
-                                        </label>
-
-                                        <input type="text" class="form-control form-control-sm" id="numberAddress">
+                                        <input v-model="device.watts" class="form-control form-control-sm" id="wattsDevice" placeholder="Quantidade de watts do aparelho">
                                     </div>
                                 </div>
 
                                 <div class="row mt-3">
-                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
-                                        <label for="periodDaysReport"> 
-                                            Period Days Report: 
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label for="descriptionDevice"> 
+                                            Description: 
                                         </label>
 
-                                        <select class="form-control form-control-sm" id="periodDaysReport">
-                                            <option value="1"> 1 </option>
-                                            <option value="2"> 2 </option>
-                                            <option value="3"> 3 </option>
-                                            <option value="4"> 4 </option>
-                                            <option value="5"> 5 </option>
-                                            <option value="6"> 6 </option>
-                                            <option value="7"> 7 </option>
-                                            <option value="14"> 14 </option>
-                                            <option value="30"> 30 </option>
-                                        </select>
+                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações"></textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary btn-sm"> 
+                                <button @click="register" type="button" class="btn btn-primary btn-sm"> 
                                     Register 
                                 </button>
 
@@ -164,6 +144,8 @@
 </template>
 
 <script>
+    import { useRoute } from "vue-router";
+
     import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
     import "../assets/vendor/jquery-easing/jquery.easing.min.js";
     import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
@@ -182,10 +164,10 @@
         data() {
             return {
                 devices: [],
-
+                
                 device: {
                     id: 0,
-                    idHouse: 0,
+                    idHouse: useRoute().params.id,
                     identificationCode: '', // macAddress
                     name: '',
                     description: '',
@@ -195,11 +177,43 @@
         },
 
         methods: {
-            
+            register() {
+                this.$http.post(`/api/device/create`, this.device)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.closeModal();
+                            this.getDevicesHouse();
+                            this.device.name = '';
+                            this.device.identificationCode = '';
+                            this.device.description = '';
+                            this.device.watts = 0;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            },
+
+            getDevicesHouse() {
+                this.$http.get(`/api/device/getByHouseId/${this.device.idHouse}`)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.devices = response.data;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            },
+
+            closeModal() {
+                $('#exampleModal').modal('hide');
+            }
         },
 
         created() {
-
+            this.closeModal();
+            this.getDevicesHouse();
         }
     }
 </script>
