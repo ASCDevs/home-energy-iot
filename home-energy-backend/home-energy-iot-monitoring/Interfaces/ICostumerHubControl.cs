@@ -3,5 +3,6 @@
     public interface ICostumerHubControl
     {
         Task CostumerUIReceiveEnergyValue(string CostumerConnId, string ValueEnergy);
+        Task CostumerUIDisableButtonConfirmed(string CostumerConnId, string Button);
     }
 }

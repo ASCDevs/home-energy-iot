@@ -13,6 +13,7 @@
     <div class="flex p-4 justify-center " style="background-color:#1D3557">
         @{
             string headerMessage = ViewBag.HeaderMessageAlert;
+            bool flSaveValue = ViewBag.FlSaveValue;
         }
         @if (!string.IsNullOrWhiteSpace(headerMessage))
         {
@@ -20,9 +21,14 @@
         }
         <h1 class="text-sky-400 font-bold text-lg">Simulando dispositivos - Monitoramento</h1>
     </div>
-    <div class="flex p-4 gap-x-1.5" >
-        <a href="/Home/Device" target="_blank" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Simular conexão Device</a>
-    </div>
+
+    @if(!flSaveValue)
+    {
+        <div class="flex p-4 gap-x-1.5" >
+            <a href="/Home/Device" target="_blank" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Simular conexão Device</a>
+        </div>    
+    }
+    
     <h2 class="p-2 font-bold">Dispositivos cadastrados: </h2>
     
 

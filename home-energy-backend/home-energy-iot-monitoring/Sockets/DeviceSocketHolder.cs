@@ -174,12 +174,14 @@ namespace home_energy_iot_monitoring.Sockets
                 if (action == "confirmstop") {
                     await this.HandleChangeState(idConnection, "stopenergy");
                     await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "stop");
+                    await this._costumerHubControl.CostumerUIDisableButtonConfirmed(idConnection, "stop");
                 }
 
                 if (action == "confirmcontinue")
                 {
                     await this.HandleChangeState(idConnection, "continueenergy");
                     await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "continue");
+                    await this._costumerHubControl.CostumerUIDisableButtonConfirmed(idConnection, "continue");
                 }
             }
 
