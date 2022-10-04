@@ -17,3 +17,19 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+<hr/>
+
+### Links auxiliares
+
+https://www.youtube.com/watch?v=aw8d2f3xfPA
+
+https://brunoseco.medium.com/implementando-signalr-client-javascript-utilizando-vue-js-1b5e393c5ad
+
+https://www.figma.com/file/4Q2B66obYqyKOjfg9P8vfB/Fluxo-interface-Cliente?node-id=1%3A2
+
+https://www.chartjs.org/docs/latest/samples/line/point-styling.html
+
+https://home-energy-iot-api.azurewebsites.net/swagger/index.html
+
+https://servicehomeiotmonitoring.azurewebsites.net/

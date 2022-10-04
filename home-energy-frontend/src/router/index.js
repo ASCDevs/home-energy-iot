@@ -61,6 +61,18 @@ const routes = [
         },
 
         component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/RegisterUser.vue"),
+    },
+
+    {
+        path: "/register-device",
+
+        name: "registerDevice",
+
+        meta: {
+            public: true
+        },
+
+        component: () => import(/* webpackChunkName: "viewConsumption" */ "../views/RegisterDevice.vue"),
     }
 ];
 
@@ -69,12 +81,12 @@ const router = createRouter({
     routes,
 });
 
-/*router.beforeEach((routeTo, routeFrom, next) => {    
+router.beforeEach((routeTo, routeFrom, next) => {    
     if(store.state.token == null && !routeTo.meta.public) {
         return next({name: 'login'});
     }
 
     next();
-});*/
+});
 
 export default router;
