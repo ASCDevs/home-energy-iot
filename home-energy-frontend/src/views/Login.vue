@@ -99,10 +99,10 @@
             }
         },
 
-        created() {
-            $("#overlay").css("display", "none");
-        },
-    };
+        beforeCreate() {
+            $(".modal-backdrop").remove();
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

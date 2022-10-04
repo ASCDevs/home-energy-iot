@@ -15,6 +15,12 @@
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             Consumption in RealTime
                                         </h6>
+
+                                        <div class="d-sm-flex align-items-center justify-content-end">
+                                            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div class="card-body">
@@ -30,8 +36,6 @@
                                                     <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm ml-5">
                                                         Parar
                                                     </button>
-
-                                                    <h3> {{ idDevice }} </h3>
                                                 </div>
                                             </div>
                                         </div>
