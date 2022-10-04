@@ -767,7 +767,7 @@ namespace home_energy_iot_tests
         #region GetAll
 
         [Fact]
-        public void GetAllDevicesEmptyTest()
+        public async void GetAllDevicesEmptyTest()
         {
 
             Task<List<Device>> devices = Task.FromResult(new List<Device>());
@@ -776,7 +776,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetAll());
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetAll());
 
             _deviceManagerRepository.Verify();
         }
@@ -795,6 +795,80 @@ namespace home_energy_iot_tests
             var instance = GetInstance();
 
             await instance.GetAll();
+
+            _deviceManagerRepository.Verify();
+        }
+
+        #endregion
+
+        #region GetByHouseId
+
+        
+
+        #endregion
+
+        #region Exists
+
+        [Fact]
+        public async void DeviceExistsNullIdentificationCodeTest()
+        {
+            string deviceIdentificationCode = null;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public async void DeviceExistsEmptyIdentificationCodeTest()
+        {
+            string deviceIdentificationCode = "";
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public async void DeviceExistsWhiteSpaceIdentificationCodeTest()
+        {
+            string deviceIdentificationCode = " ";
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+        }
+
+        [Fact]
+        public void DeviceExistsTrueTest()
+        {
+            string deviceIdentificationCode = "ABC123";
+
+            _deviceManagerRepository.Setup(x => x.Exists(deviceIdentificationCode))
+                .Returns(Task.FromResult(true)).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.Exists(deviceIdentificationCode).Result;
+
+            Assert.True(result);
+
+            _deviceManagerRepository.Verify();
+        }
+
+        [Fact]
+        public void DeviceExistsFalseTest()
+        {
+            string deviceIdentificationCode = "ABC123";
+
+            _deviceManagerRepository.Setup(x => x.Exists(deviceIdentificationCode))
+                .Returns(Task.FromResult(false)).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.Exists(deviceIdentificationCode).Result;
+
+            Assert.False(result);
 
             _deviceManagerRepository.Verify();
         }

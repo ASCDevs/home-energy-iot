@@ -48,9 +48,9 @@ namespace home_energy_iot_repository
             return _dataBaseContext.Devices.Where(x => x.IdHouse == id).ToList();
         }
 
-        public async Task<bool> Exists(string deviceid)
+        public async Task<bool> Exists(string deviceIdentificationCode)
         {
-            return _dataBaseContext.Devices.FirstOrDefault(x => x.IdentificationCode == deviceid) != null;
+            return _dataBaseContext.Devices.FirstOrDefault(x => x.IdentificationCode == deviceIdentificationCode) != null;
         }
     }
 }

@@ -123,13 +123,13 @@ namespace home_energy_iot_api.Controllers
         }
 
         [HttpGet]
-        [Route("Exists/{deviceid}")]
+        [Route("Exists/{deviceIdentificationCode}")]
         [Authorize]
-        public async Task<IActionResult> Exists(string deviceid)
+        public async Task<IActionResult> Exists(string deviceIdentificationCode)
         {
             try
             {
-                bool HasDevice = await _deviceManager.Exists(deviceid);
+                bool HasDevice = await _deviceManager.Exists(deviceIdentificationCode);
                 return Ok(new { result = HasDevice });
             }
             catch (Exception ex)

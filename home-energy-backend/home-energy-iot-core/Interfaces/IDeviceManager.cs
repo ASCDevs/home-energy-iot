@@ -16,6 +16,6 @@ namespace home_energy_iot_core.Interfaces
 
         Task<List<Device>> GetByHouseId(int id);
 
-        Task<bool> Exists(string deviceid);
+        Task<bool> Exists(string deviceIdentificationCode);
     }
 }

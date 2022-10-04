@@ -24,7 +24,7 @@ namespace home_energy_iot_core
                 if(device is null)
                     throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
 
-                ValidadeDevice(device);
+                ValidateDevice(device);
 
                 _logger.LogInformation($"Criando Dispositivo: [{device.Name}].");
 
@@ -49,7 +49,7 @@ namespace home_energy_iot_core
                     throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
 
                 ValidateDeviceId(device.Id);
-                ValidadeDevice(device);
+                ValidateDevice(device);
 
                 _logger.LogInformation($"Atualizando Dispositivo Id [{device.Id}].");
 
@@ -166,7 +166,34 @@ namespace home_energy_iot_core
             }
         }
 
-        private void ValidadeDevice(Device device)
+        public Task<bool> Exists(string deviceIdentificationCode)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(deviceIdentificationCode))
+                    throw new InvalidEntityTextValueException("Código de identificação do dispositivo nulo ou vazio.");
+
+                _logger.LogInformation($"Verificando a existência do Dispositivo com código de identificação [{deviceIdentificationCode}]");
+
+                var result = _deviceManagerRepository.Exists(deviceIdentificationCode);
+
+                if (result.Result)
+                {
+                    _logger.LogInformation($"Dispositivo com código de identificação [{deviceIdentificationCode}] encontrado.");
+                    return result;
+                }
+
+                _logger.LogInformation($"Dispositivo com código de identificação [{deviceIdentificationCode}] não encontrado.");
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, $"Erro ao buscar os Dispositivos.");
+                throw;
+            }
+        }
+
+        private void ValidateDevice(Device device)
         {
             if(device.IdHouse <= 0)
                 throw new InvalidEntityNumericValueException($"Id de referência à casa do dispositivo inválido: [{device.IdHouse}].");
@@ -188,11 +215,6 @@ namespace home_energy_iot_core
         {
             if (id <= 0)
                 throw new InvalidEntityNumericValueException($"Id do dispositivo inválido: [{id}].");
-        }
-
-        public Task<bool> Exists(string deviceid)
-        {
-            return _deviceManagerRepository.Exists(deviceid);
         }
     }
 }
