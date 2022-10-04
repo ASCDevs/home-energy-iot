@@ -140,6 +140,32 @@ namespace home_energy_iot_core
             }
         }
 
+        public async Task<List<Device>> GetByHouseId(int id)
+        {
+            try
+            {
+                _logger.LogInformation($"Buscando Dispositivos na base de dados da Casa Id [{id}].");
+
+                var devices = _deviceManagerRepository.GetByHouseId(id).Result.ToList();
+
+                if (devices.Count > 0)
+                {
+                    _logger.LogInformation($"Retornando os dispositivos encontrados para a Casa Id [{id}].");
+                    return devices;
+                }
+
+                var notFoundMessage = $"Nenhum Dispositivo encontrado para a Casa Id [{id}].";
+
+                _logger.LogInformation(notFoundMessage);
+                throw new EntityNotFoundException(notFoundMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao buscar os Dispositivos.");
+                throw;
+            }
+        }
+
         private void ValidadeDevice(Device device)
         {
             if(device.IdHouse <= 0)
