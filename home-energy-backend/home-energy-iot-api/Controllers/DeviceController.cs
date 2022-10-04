@@ -106,7 +106,25 @@ namespace home_energy_iot_api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByHouseId/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetByHouseId(int id)
+        {
+            try
+            {
+                var devices = await _deviceManager.GetByHouseId(id);
+
+                return Ok(devices);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro ao buscar os dispositivos: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("Exists/{deviceid}")]
+        [Authorize]
         public async Task<IActionResult> Exists(string deviceid)
         {
             try

@@ -69,14 +69,17 @@ namespace home_energy_iot_core
                 if (string.IsNullOrWhiteSpace(deviceIdentificationCode))
                     throw new ArgumentNullException("Código de identificação do Dispositivo inválido.");
 
+                if (finalDate < initialDate)
+                    throw new Exception("Período inválido. A data final deve ser maior que a inicial.");
+
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
 
-                _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
-
                 if (reports.Count > 0)
                 {
+                    _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
+
                     var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
                     var consumption = new DeviceConsumption
