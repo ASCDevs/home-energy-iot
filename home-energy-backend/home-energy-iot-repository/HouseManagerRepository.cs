@@ -45,5 +45,15 @@ namespace home_energy_iot_repository
         {
             return _dataBaseContext.Houses.Where(x => x.IdUser == id).ToList();
         }
+
+        //TODO: Buscar o valor do kwh hora
+        //query exemplo para criar o LINQ
+        //
+        // select[h].[ValuePerKWH], [d].[IdentificationCode] from device d
+        // inner join house h on d.IdHouse where d.IdentificationCode = 'HU:34:DS4:D1'
+        public double GetHouseBaseKwhByDeviceIdentificationCode(string deviceIdentificationCode)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

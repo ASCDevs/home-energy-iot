@@ -15,5 +15,7 @@ namespace home_energy_iot_repository.Interfaces
         Task<IEnumerable<House>> GetAll();
 
         Task<IEnumerable<House>> GetByUserId(int id);
+
+        double GetHouseBaseKwhByDeviceIdentificationCode(string deviceIdentificationCode);
     }
 }
