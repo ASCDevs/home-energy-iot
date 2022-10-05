@@ -15,7 +15,6 @@ namespace home_energy_iot_entities
 
         public DbSet<Device> Devices { get; set; }
         public DbSet<DeviceReport> DevicesReports { get; set; }
-        public DbSet<HouseBill> HousesBills { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<House> Houses { get; set; }
 

@@ -45,5 +45,22 @@ namespace home_energy_iot_repository
         {
             return _dataBaseContext.Houses.Where(x => x.IdUser == id).ToList();
         }
+
+        public double GetHouseBaseKwhByDeviceIdentificationCode(string deviceIdentificationCode)
+        {
+            double kwhValue = 0;
+
+            var query = from device in _dataBaseContext.Devices
+                join house in _dataBaseContext.Houses
+                    on device.IdHouse equals house.Id where device.IdentificationCode == deviceIdentificationCode
+                        select new { result = house.ValuePerKWH };
+
+            foreach (var result in query)
+            {
+                kwhValue = result.result;
+            }
+
+            return kwhValue;
+        }
     }
 }
