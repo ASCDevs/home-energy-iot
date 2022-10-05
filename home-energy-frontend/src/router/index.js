@@ -14,6 +14,18 @@ const routes = [
 
         component: Login
     },
+
+    {
+        path: "/forgot/password",
+
+        name: "forgotPassword",
+
+        meta: {
+            public: true
+        },
+
+        component: () => import(/* webpackChunkName: "registerHouse" */ "../views/ForgotPassword.vue")
+    },
     
     {
         path: "/house/register",

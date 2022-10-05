@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container pt-5">
         <div class="overlay" id="overlay">
 			<div class="overlay-content">
 				<span class="spinner"></span>
@@ -10,8 +10,8 @@
 
         <div class="row">
             <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
-                <div class="panel border bg-white">
-                    <div class="panel-heading">
+                <div class="panel border bg-white rounded">
+                    <div class="text-center">
                         <h3 class="pt-3 font-weight-bold">
                             Login
                         </h3>
@@ -37,14 +37,14 @@
 
                             <div v-if="errorAuth != ''" class="container">
                                 <div class="alert alert-danger text-center" role="alert">
-                                    {{ errorAuth }}
+                                    <small> {{ errorAuth }} </small>
                                 </div>
                             </div>
                             
-                            <div class="form-inline"> 
-                                <button type="button" class="btn btn-link btn-sm" id="forgot" data-toggle="modal" data-target="#exampleModal">
+                            <div class="form-inline justify-content-end"> 
+                                <router-link to="/forgot/password" class="btn btn-link btn-sm">
                                     Forgot password?
-                                </button>
+                                </router-link>
                             </div>
                             
                             <button type="submit" class="btn btn-primary btn-block mt-3">
@@ -107,28 +107,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .container {
-        margin: 50px auto
-    }
-
-    .panel-heading {
-        text-align: center;
-        margin-bottom: 10px
-    }
-
-    #forgot {
-        min-width: 100px;
-        margin-left: auto;
-        text-decoration: none
-    }
-
     a:hover {
         text-decoration: none
-    }
-
-    .form-inline label {
-        padding-left: 10px;
-        margin: 0;
     }
 
     .btn.btn-primary {
@@ -136,20 +116,13 @@
         border-radius: 15px
     }
 
-    .panel {
-        min-height: 380px;
-        box-shadow: 20px 20px 80px rgb(218, 218, 218);
-        border-radius: 12px
-    }
-
     .input-field {
         border-radius: 5px;
         padding: 5px;
         display: flex;
         align-items: center;
-        cursor: pointer;
         border: 1px solid #ddd;
-        color: #4343ff
+        color: #4e73df;
     }
 
     input[type='text'], input[type='password'] {
@@ -163,52 +136,6 @@
         border: none;
         outline: none;
         box-shadow: none
-    }
-
-    img {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        border-radius: 50%;
-        position: relative
-    }
-
-    a[target='_blank'] {
-        position: relative;
-        transition: all 0.1s ease-in-out
-    }
-
-    .bordert {
-        border-top: 1px solid #aaa;
-        position: relative
-    }
-
-    .bordert:after {
-        content: "or connect with";
-        position: absolute;
-        top: -13px;
-        left: 33%;
-        background-color: #fff;
-        padding: 0px 8px
-    }
-
-    @media(max-width: 360px) {
-        #forgot {
-            margin-left: 0;
-            padding-top: 10px
-        }
-
-        body {
-            height: 100%
-        }
-
-        .container {
-            margin: 30px 0
-        }
-
-        .bordert:after {
-            left: 25%
-        }
     }
 
     /* Overlay */
