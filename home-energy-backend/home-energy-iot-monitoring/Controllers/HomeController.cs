@@ -19,16 +19,22 @@ namespace home_energy_iot_monitoring.Controllers
         public IActionResult Index()
         {
             ViewBag.HeaderMessageAlert = headerMessageAlert;
+            ViewBag.FlSaveValue = _flApiSaveValue;
             return View();
         }
 
         public IActionResult Device()
         {
-            ViewBag.UrlSocketDevice = _urlSocketDevice;
-            ViewBag.FlApiSaveValue = Convert.ToString(_flApiSaveValue).ToLower();
-            ViewBag.UrlCheckDevice = _urlCheckDevice;
+            if (!_flApiSaveValue)
+            {
+                ViewBag.UrlSocketDevice = _urlSocketDevice;
+                ViewBag.FlApiSaveValue = Convert.ToString(_flApiSaveValue).ToLower();
+                ViewBag.UrlCheckDevice = _urlCheckDevice;
+
+                return View();
+            }
             
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -37,7 +37,6 @@ namespace home_energy_iot_monitoring.Hubs
             CostumerConnection costumerFrom = CostumersHandler.GetCostumerByConnection(IdConnFrom);
             ClientDeviceConnection deviceInfo = _webSocket.GetDeviceOnlineInfo(costumerFrom.device_id);
             await Clients.Client(costumerFrom.conn_id).SendAsync("receiveInfoDevice", string.Format("{0}\n", JsonSerializer.Serialize(new { deviceid = deviceInfo.device_id, }))); ;
-
         }
 
         public async Task ActionStopDevice()

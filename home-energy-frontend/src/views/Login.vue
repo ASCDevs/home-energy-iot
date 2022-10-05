@@ -23,7 +23,7 @@
                                 <div class="input-field"> 
                                     <span class="far fa-user px-2"></span> 
                                     
-                                    <input v-model="loginModel.username" class="form form-control" type="text" placeholder="Username"> 
+                                    <input v-model="loginModel.username" class="form form-control" type="text" placeholder="Username" required> 
                                 </div>
                             </div>
                             
@@ -31,7 +31,7 @@
                                 <div class="input-field">
                                     <span class="fas fa-lock px-2"></span> 
                                     
-                                    <input v-model="loginModel.password" class="form form-control" type="password" placeholder="Enter your Password">
+                                    <input v-model="loginModel.password" class="form form-control" type="password" placeholder="Enter your Password" required>
                                 </div>
                             </div>
 
@@ -54,7 +54,7 @@
                             <div class="text-center pt-4 text-muted">
                                 Don't have an account?
                                 
-                                <router-link to="/register-user" class="text-primary ml-2">
+                                <router-link to="/user/register" class="text-primary ml-2">
                                     Sign up
                                 </router-link>
                             </div>
@@ -99,10 +99,10 @@
             }
         },
 
-        created() {
-            $("#overlay").css("display", "none");
-        },
-    };
+        beforeCreate() {
+            $(".modal-backdrop").remove();
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
