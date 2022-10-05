@@ -106,19 +106,25 @@
                                 </div>
 
                                 <div class="row mt-3">
-                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                         <label for="wattsDevice"> 
                                             Watts: 
                                         </label>
 
                                         <input v-model="device.watts" class="form-control form-control-sm" id="wattsDevice" placeholder="Quantidade de watts do aparelho" required>
                                     </div>
+
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-0">
+                                        <small class="text-muted">
+                                            Amount of Watts (W) that the product consumes
+                                        </small>
+                                    </div>
                                 </div>
 
                                 <div class="row mt-3">
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="descriptionDevice"> 
-                                            Description: 
+                                            Description:
                                         </label>
 
                                         <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações" required></textarea>

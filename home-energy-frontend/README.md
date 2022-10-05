@@ -35,3 +35,9 @@ https://home-energy-iot-api.azurewebsites.net/swagger/index.html
 https://servicehomeiotmonitoring.azurewebsites.net/
 
 https://www.w3schools.com/icons/icons_reference.asp
+
+https://vinceumo.github.io/devNotes/Dotnet/signalR/  # Importante
+
+https://apexcharts.com/javascript-chart-demos/line-charts/realtime/
+
+https://vue-chartjs.org/

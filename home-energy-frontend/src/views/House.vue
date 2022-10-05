@@ -95,7 +95,7 @@
                                             Name: 
                                         </label>
 
-                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName" required>
+                                        <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName" placeholder="Codername of house" required>
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-sm-3 mt-md-0 mt-lg-0 mt-xl-0">
@@ -117,7 +117,7 @@
                                             Address: 
                                         </label>
 
-                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress" required>
+                                        <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress" placeholder="Rua/Avenida ..." required>
                                     </div>
 
                                     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
@@ -202,9 +202,7 @@
 
         methods: {
             register() {
-                console.log(this.house);
-
-                /*this.$http.post('/api/house/create', this.house)
+                this.$http.post('/api/house/create', this.house)
                     .then((response) => {
                         if(response.status == 200) {
                             $('#exampleModal').modal('hide');
@@ -218,7 +216,7 @@
                     })
                     .catch((error) => {
                         console.error(error);
-                    })*/
+                    })
             },
 
             getHousesUser() {
