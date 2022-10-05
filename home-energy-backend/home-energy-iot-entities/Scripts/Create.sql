@@ -62,7 +62,7 @@ INSERT INTO [User] VALUES ('admin', 'admin', 'xFD4zcBV834YYjkXDXIF4HCgHKbOcezOGo
 
 INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, '2022-08-29 12:00:00.000', 1, 0.85, 1)
 
-INSERT INTO [Device] VALUES('HU:34:DS4:D1', 'Computador', 'Computador da sala', '2022-08-29 12:00:00.000', 500, 4)
+INSERT INTO [Device] VALUES('HU:34:DS4:D1', 'Computador', 'Computador da sala', '2022-08-29 12:00:00.000', 500, 1)
 
 INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 13:00:00.000', 100)
 INSERT INTO [DeviceReport] VALUES('HU:34:DS4:D1', '2022-08-29 13:30:00.000', 100)
