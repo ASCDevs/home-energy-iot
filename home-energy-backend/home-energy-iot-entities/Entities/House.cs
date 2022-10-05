@@ -15,6 +15,6 @@ namespace home_energy_iot_entities.Entities
         public string? NameAddress { get; set; }
         public int NumberAddress { get; set; }
         public DateTime RegisterDate { get; set; }
-        public decimal ValuePerKWH { get; set; }
+        public double ValuePerKWH { get; set; }
     }
 }
