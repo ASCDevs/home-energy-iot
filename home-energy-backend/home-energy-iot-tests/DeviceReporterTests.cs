@@ -98,7 +98,7 @@ namespace home_energy_iot_tests
             
             _deviceReporterRepository.Setup(x => x.Report(report)).Verifiable();
 
-            instance.Report(report);
+            await instance.Report(report);
 
             _deviceReporterRepository.Verify(x => x.Report(report), Times.Exactly(1));
         }

@@ -61,8 +61,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id <= 0)
-                    throw new InvalidEntityNumericValueException("Id da Casa inválido.");
+                ValidateDeviceId(id);
 
                 _logger.LogInformation($"Deletando Casa Id [{id}].");
 
@@ -81,8 +80,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] da Casa inválido.");
+                ValidateDeviceId(id);
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
@@ -136,8 +134,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
+                ValidateDeviceId(id);
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
@@ -165,6 +162,12 @@ namespace home_energy_iot_core
         {
             if (house is null)
                 throw new ArgumentNullException(nameof(house), "Casa nula.");
-        }       
+        }
+
+        private void ValidateDeviceId(int id)
+        {
+            if (id <= 0)
+                throw new InvalidEntityNumericValueException($"Id da casa inválido: [{id}].");
+        }
     }
 }
