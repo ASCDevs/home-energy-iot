@@ -91,7 +91,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
-                var device = await _deviceManagerRepository.Get(id);
+                var device = _deviceManagerRepository.Get(id).Result;
 
                 if (device.Id > 0)
                 {
