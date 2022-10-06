@@ -73,7 +73,7 @@ namespace home_energy_iot_monitoring.Sockets
 
         public ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID)
         {
-            return clients.First(x => x.Value.device_id == DeviceID).Value;
+            return clients.FirstOrDefault(x => x.Value.device_id == DeviceID).Value;
         }
 
         public async Task CostumerActionStopDevice(string DevideID)
@@ -151,7 +151,6 @@ namespace home_energy_iot_monitoring.Sockets
                     string value = txtCommand.Split(">")[2];
                     await _reportAPI.SaveEnergyValue(value, device.device_id);
                     await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, value);
-                    await _costumerHubControl.CostumerUIReceiveEnergyValue(idConnection,value);
                     await SendEnergyValueToCostumer(idConnection, value);
                 }
 
@@ -171,17 +170,34 @@ namespace home_energy_iot_monitoring.Sockets
                     });
                 }
 
+                if(action == "addipdevice")
+                {
+                    string value = txtCommand.Split(">")[2];
+                    await Task.Run( async() =>
+                    {
+                        try
+                        {
+                            device.AddDeviceIp(value);
+                        }
+                        finally
+                        {
+                            await _panelHubControl.PanelUINotifyDeviceIpUpdated(deviceClient);
+                            
+                        }
+                    });
+                }
+
                 if (action == "confirmstop") {
                     await this.HandleChangeState(idConnection, "stopenergy");
                     await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "stop");
-                    await this._costumerHubControl.CostumerUIDisableButtonConfirmed(idConnection, "stop");
+                    await SendCostumerConfirmationAction(idConnection, "stop");
                 }
 
                 if (action == "confirmcontinue")
                 {
                     await this.HandleChangeState(idConnection, "continueenergy");
                     await this._panelHubControl.PanelUIDisableButtonConfirmed(idConnection, "continue");
-                    await this._costumerHubControl.CostumerUIDisableButtonConfirmed(idConnection, "continue");
+                    await SendCostumerConfirmationAction(idConnection, "continue");
                 }
             }
 
@@ -218,6 +234,23 @@ namespace home_energy_iot_monitoring.Sockets
                     }
                 }
             }               
+        }
+
+        private async Task SendCostumerConfirmationAction(string idConnection, string action)
+        {
+            ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
+            if (device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumerHubControl.CostumerUIDisableButtonConfirmed(costumer.conn_id, action);
+                    }
+                }
+            }
         }
 
         private List<ItemDeviceClient> GetDevicesClientList()

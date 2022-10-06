@@ -6,21 +6,6 @@
         this.makeConnection();
     }
 
-    makeConnectionCostumer() {
-        var ThisClass = this;
-        $(function () {
-            debugger;
-            var connect = new signalR.HubConnectionBuilder().withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub").withAutomaticReconnect().build();
-           
-            connect.start().then(function () {
-                console.log("Conectado ");
-            }).catch(function (err) {
-                console.log(err.toString());
-            });
-
-        })
-    }
-
     setEvents() {
         var Self = this;
 
@@ -85,6 +70,12 @@
                 debugger;
                 $("div[data-connid='" + idConnectionFrom + "'] .field-deviceid").text(deviceId)
             })
+
+            connection.on("updateDeviceIp", function (idConnectionFrom, deviceIp) {
+                debugger;
+                $("div[data-connid='" + idConnectionFrom + "'] .field-deviceip").text(deviceIp)
+            })
+
             connection.on("updatePanelsOn", function (qtdPanels) {
                 $("#qtd-painel-online").text(qtdPanels)
             })
@@ -98,7 +89,6 @@
                 ThisClass.setBtnContinueDevice();
                 list.map(x => ThisClass.HandleCurrentState(x.connectionid))
                 console.log(list)
-                //ThisClass.setBtnSuspenderDevice();
                 
             })
             connection.on("receiveEnergyValue", function (idConnectionFrom, valueEnergy) {
@@ -162,6 +152,7 @@
             let txtHtml = `<div data-connid="${dados.connectionid}" data-state="${dados.state}" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">`;
             txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
             txtHtml += `<p class="text-white">Device ID: <span class="field-deviceid">${dados.deviceid}</span></p>`;
+            txtHtml += `<p class="text-white">Device IP: <span class="field-deviceip"></span></p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
             txtHtml += `<p class="text-white">Consumo em tempo real: <span class="field-value"></span></p>`;
             txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;

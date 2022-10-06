@@ -137,7 +137,6 @@ class DeviceInterface {
 
     makeConnection() {
         var Self = this;
-        //var nomeConexao = prompt("Dê um nome para a conexão. ");
         var socket = new WebSocket(Self.urlSocket);
         var logArea = document.getElementById("log-server");
         var txtDeviceID = $("#txt-device-id").val();
@@ -147,9 +146,11 @@ class DeviceInterface {
             Self.idConnection = socket.idConnection;
             let log = "<p>[open] Connection established</p>";
             logArea.insertAdjacentHTML('afterend', log);
-
+            let ipDisp = (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255)) + "." + (Math.floor(Math.random() * 255)) + "." + (Math.floor(Math.random() * 255));
             if (Self.deviceId != null && Self.deviceId != undefined && Self.deviceId != "") {
                 Self.socketConnection.send("server>addiddevice>" + Self.deviceId);
+                Self.socketConnection.send("server>addipdevice>" + ipDisp);
+                
             }
             $("#btn-start").prop("disabled", true);
         };

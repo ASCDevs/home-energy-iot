@@ -36,5 +36,15 @@ namespace home_energy_iot_monitoring.Controllers
             
             return RedirectToAction("Index");
         }
+
+        public IActionResult Usuario()
+        {
+            if (!_flApiSaveValue)
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
