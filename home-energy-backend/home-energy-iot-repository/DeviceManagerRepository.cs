@@ -25,8 +25,13 @@ namespace home_energy_iot_repository
             await _dataBaseContext.SaveChangesAsync();
         }
 
-        public async Task Delete(Device device)
+        public async Task Delete(int id)
         {
+            var device = new Device
+            {
+                Id = id
+            };
+
             _dataBaseContext.Devices.Remove(device);
             await _dataBaseContext.SaveChangesAsync();
         }

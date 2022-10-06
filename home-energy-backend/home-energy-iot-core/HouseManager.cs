@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using home_energy_iot_core.Exceptions;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -56,17 +57,18 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Delete(House house)
+        public async Task Delete(int id)
         {
             try
             {
-                ValidateHouse(house);
+                if (id <= 0)
+                    throw new InvalidEntityNumericValueException("Id da Casa inválido.");
 
-                _logger.LogInformation($"Deletando Casa Id [{house.Id}].");
+                _logger.LogInformation($"Deletando Casa Id [{id}].");
 
-                await _houseManagerRepository.Delete(house);
+                await _houseManagerRepository.Delete(id);
 
-                _logger.LogInformation($"Casa Id [{house.Id}] deletada com sucesso.");
+                _logger.LogInformation($"Casa Id [{id}] deletada com sucesso.");
             }
             catch (Exception ex)
             {
@@ -79,7 +81,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id < 0)
+                if (id <= 0)
                     throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] da Casa inválido.");
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
@@ -134,7 +136,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id < 0)
+                if (id <= 0)
                     throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
@@ -157,8 +159,6 @@ namespace home_energy_iot_core
                 _logger.LogError(ex, $"Erro ao buscas as Casas do usuário com Id [{id}].");
                 throw;
             }
-
-
         }
 
         private void ValidateHouse(House house)

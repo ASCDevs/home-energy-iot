@@ -652,58 +652,35 @@ namespace home_energy_iot_tests
         #region Delete
 
         [Fact]
-        public async void DeleteDeviceNullDeviceTest()
+        public async void DeleteDeviceNegativeIdTest()
         {
-            Device device = null;
+            var id = -1;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Delete(device));
-        }
-
-        #region ValidateDeviceId 
-
-        [Fact]
-        public async void DeleteDeviceIdZeroTest()
-        {
-            var device = new Device
-            {
-                Id = 0
-            };
-
-            var instance = GetInstance();
-
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(device));
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(id));
         }
 
         [Fact]
-        public async void DeleteDeviceIdNegativeTest()
+        public async void DeleteDeviceZeroIdTest()
         {
-            var device = new Device
-            {
-                Id = -1
-            };
+            var id = 0;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(device));
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(id));
         }
-
-        #endregion
 
         [Fact]
         public async void DeleteDeviceSuccessTest()
         {
-            var device = new Device
-            {
-                Id = _deviceMock.Id
-            };
+            var id = 1;
 
-            _deviceManagerRepository.Setup(x => x.Delete(device)).Verifiable();
+            _deviceManagerRepository.Setup(x => x.Delete(id)).Verifiable();
 
             var instance = GetInstance();
 
-            await instance.Delete(device);
+            await instance.Delete(id);
 
             _deviceManagerRepository.Verify();
         }
@@ -772,7 +749,7 @@ namespace home_energy_iot_tests
 
             Task<List<Device>> devices = Task.FromResult(new List<Device>());
 
-            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices);
+            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
@@ -782,19 +759,22 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public async void GetAllDevicesSuccessTest()
+        public void GetAllDevicesSuccessTest()
         {
-            Task<List<Device>> devices = Task.FromResult(new List<Device>
+            var devices = new List<Device>
             {
                 _deviceMock,
                 _deviceMock
-            });
+            };
 
-            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices);
+            _deviceManagerRepository.Setup(x => x.GetAll())
+                .Returns(Task.FromResult(devices)).Verifiable();
 
             var instance = GetInstance();
 
-            await instance.GetAll();
+            var result = instance.GetAll().Result;
+
+            Assert.Equal(devices.Count, result.Count);
 
             _deviceManagerRepository.Verify();
         }
@@ -804,13 +784,63 @@ namespace home_energy_iot_tests
         #region GetByHouseId
 
         [Fact]
-        public async void GetDeviceByIdInvalidId()
+        public async void GetDeviceByIdNegativeIdTest()
         {
-            var deviceId = 0;
+            var id = -1;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(deviceId));
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
+        }
+
+        [Fact]
+        public async void GetDeviceByIdZeroIdTest()
+        {
+            var id = 0;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
+        }
+
+        [Fact]
+        public async void GetDeviceByIdDevicesNotFoundTest()
+        {
+            var id = 1;
+
+            var devices = new List<Device>();
+
+            _deviceManagerRepository.Setup(x => x.GetByHouseId(id))
+                .Returns(Task.FromResult(devices)).Verifiable();
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetByHouseId(id));
+
+            _deviceManagerRepository.Verify();
+        }
+
+        [Fact]
+        public void GetDeviceByIdDevicesSuccessTest()
+        {
+            var id = 1;
+
+            var devices = new List<Device>
+            {
+                _deviceMock,
+                _deviceMock
+            };
+
+            _deviceManagerRepository.Setup(x => x.GetByHouseId(id))
+                .Returns(Task.FromResult(devices)).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.GetByHouseId(id).Result;
+
+            Assert.Equal(devices.Count, result.Count);
+
+            _deviceManagerRepository.Verify();
         }
 
         #endregion

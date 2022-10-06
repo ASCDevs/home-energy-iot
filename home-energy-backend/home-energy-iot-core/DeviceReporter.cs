@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using home_energy_iot_core.Exceptions;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository;
@@ -18,26 +19,37 @@ namespace home_energy_iot_core
             _deviceReporterRepository = deviceReporterRepository;
         }
 
-        public async Task Report(DeviceReport device)
+        public async Task Report(DeviceReport report)
         {
             try
             {
-                if (device is null)
-                    throw new ArgumentNullException(nameof(device), "Dispositivo nulo.");
+                ValidateDeviceReport(report);
 
-                _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{device.IdentificationCode}].");
+                _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{report.IdentificationCode}].");
 
-                device.ReportDate = DateTime.Now;
+                report.ReportDate = DateTime.Now;
 
-                await _deviceReporterRepository.Report(device);
+                await _deviceReporterRepository.Report(report);
 
-                _logger.LogInformation($"Report do Dispositivo com Código de identificação [{device.IdentificationCode}] adicionado com sucesso.");
+                _logger.LogInformation($"Report do Dispositivo com Código de identificação [{report.IdentificationCode}] adicionado com sucesso.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao reportar o Dispositivo com Código de identificação [{device.IdentificationCode}].");
+                _logger.LogError(ex, $"Erro ao reportar o Dispositivo.");
                 throw;
             }
+        }
+
+        private void ValidateDeviceReport(DeviceReport report)
+        {
+            if (report is null)
+                throw new ArgumentNullException(nameof(report), "Dispositivo nulo.");
+
+            if (report.WattsUsage < 0)
+                throw new InvalidEntityNumericValueException($"Valor de consumo em potência(W) do report inválido. Valor recebido [{report.WattsUsage}].");
+
+            if (string.IsNullOrWhiteSpace(report.IdentificationCode))
+                throw new InvalidEntityTextValueException("Código de identificação do dispositivo nulo ou vazio.");
         }
     }
 }

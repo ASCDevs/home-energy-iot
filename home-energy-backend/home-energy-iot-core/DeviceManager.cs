@@ -64,20 +64,17 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Delete(Device device)
+        public async Task Delete(int id)
         {
             try
             {
-                if (device is null)
-                    throw new ArgumentNullException(nameof(device), "Objeto do Dispositivo Nulo.");
+                ValidateDeviceId(id);
 
-                ValidateDeviceId(device.Id);
+                _logger.LogInformation($"Deletando Dispositivo Id [{id}].");
 
-                _logger.LogInformation($"Deletando Dispositivo Id [{device.Id}].");
+                await _deviceManagerRepository.Delete(id);
 
-                await _deviceManagerRepository.Delete(device);
-
-                _logger.LogInformation($"Dispositivo Id [{device.Id}] deletado com sucesso.");
+                _logger.LogInformation($"Dispositivo Id [{id}] deletado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -144,8 +141,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id <= 0)
-                    throw new InvalidEntityNumericValueException("Id do dispositivo inválido.");
+                ValidateDeviceId(id);
 
                 _logger.LogInformation($"Buscando Dispositivos na base de dados da Casa Id [{id}].");
 

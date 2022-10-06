@@ -6,7 +6,7 @@ namespace home_energy_iot_repository.Interfaces
     {
         Task Create(Device device);
         Task Update(Device device);
-        Task Delete(Device device);
+        Task Delete(int id);
         Task<Device> Get(int id);
         Task<List<Device>> GetAll();
         Task<List<Device>> GetByHouseId(int id);

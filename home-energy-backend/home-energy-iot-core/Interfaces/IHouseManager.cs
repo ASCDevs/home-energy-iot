@@ -8,7 +8,7 @@ namespace home_energy_iot_core.Interfaces
 
         Task Update(House house);
 
-        Task Delete(House house);
+        Task Delete(int id);
 
         Task<House> Get(int id);
 

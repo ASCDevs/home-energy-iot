@@ -55,11 +55,11 @@ namespace home_energy_api.Controllers
         [HttpDelete]
         [Route("Delete")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromBody] House house)
+        public async Task<IActionResult> Delete([FromBody] int id)
         {
             try
             {
-                await _houseManager.Delete(house);
+                await _houseManager.Delete(id);
 
                 return Ok();
             }

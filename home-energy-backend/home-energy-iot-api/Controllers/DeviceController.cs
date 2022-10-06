@@ -57,11 +57,11 @@ namespace home_energy_iot_api.Controllers
         [HttpDelete]
         [Route("Delete")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromBody] Device device)
+        public async Task<IActionResult> Delete([FromBody] int id)
         {
             try
             {
-                await _deviceManager.Delete(device);
+                await _deviceManager.Delete(id);
 
                 return Ok();
             }
