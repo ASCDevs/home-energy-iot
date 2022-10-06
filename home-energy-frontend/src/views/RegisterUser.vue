@@ -1,45 +1,47 @@
 <template>
-    <div class="container border rounded mt-3">
-        <router-link to="/" class="text-left">
-            <i class="fas fa-long-arrow-alt-left"></i> Back to Login
-        </router-link>
-
-        <div class="container text-center">
-            <h1> Create an Account </h1>
+    <div class="container border rounded bg-white">
+        <div class="text-center">
+            <h2> Create an Account </h2>
         </div>
 
-        <div class="row align-items-center">                
-            <div class="col-lg-6 col-md-6 mb-md-0">
-                <img src="../assets/image/banner.jpg" class="img-fluid mb-3 d-none d-md-block">
+        <div class="row align-items-center mt-4">             
+            <div class="col-lg-6 col-md-12 mb-md-0">
+                <img src="../assets/image/banner.jpg" class="img-fluid mb-3 d-none d-lg-block">
             </div>
 
-            <div class="col-md-7 col-lg-6 ml-auto">
+            <div class="col-lg-6 col-md-12 ml-auto">
                 <form @submit.prevent="register" class="row">
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-6 col-md-6 mb-4">
                         <input v-model="user.name" id="name" type="text" name="name" placeholder="Name" class="form-control" required>
                     </div>
 
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-6 col-md-6 mb-4">
                         <input v-model="user.username" id="username" type="text" name="username" placeholder="Username" class="form-control" required>
                     </div>
 
-                    <div class="col-lg-8 mb-4">
+                    <div class="col-lg-8 col-md-4 mb-4">
                         <input v-model="user.cpf" id="cpf" type="text" name="cpf" placeholder="CPF" class="form-control" required>
                     </div>
 
-                    <div class="col-lg-12 mb-4">
+                    <div class="col-lg-12 col-md-8 mb-4">
                         <input v-model="user.email" id="email" type="email" name="email" placeholder="Email Address" class="form-control" required>
                     </div>
 
-                    <div class="col-lg-9 mb-4">
+                    <div class="col-lg-9 col-md-8 mb-4">
                         <input v-model="user.password" id="password" type="password" name="password" placeholder="Password" class="form-control" required>
                     </div>
 
                     <div v-if="status == 200" class="col-12 my-4">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong> Cadastro realizado com sucesso </strong> <br/>
+                            <div class="text-center"> 
+                                <b> Cadastro realizado com sucesso </b> 
+                            </div>
                             
-                            <span> Você será redirecionado para a tela de login em alguns instantes </span>
+                            <div class="text-center">
+                                <small> 
+                                    Você será redirecionado para a tela de login em alguns instantes 
+                                </small>
+                            </div>
                             
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true"> &times; </span>
@@ -99,11 +101,11 @@
 
         methods: {
             register() {
-                this.$http.post('/api/user/create', this.user)
+                this.$http.post("/api/user/create", this.user)
                     .then((response) => {
                         if(response.status == 200) {
                             setTimeout(() => {
-                                this.$router.push({name: 'login'});
+                                this.$router.push({name: "login"});
                             }, 3500);
 
                             this.status = 200;
@@ -120,5 +122,9 @@
 <style scoped>
     a:hover {
         text-decoration: none
+    }
+
+    #register {
+        padding-top: 500;
     }
 </style>
