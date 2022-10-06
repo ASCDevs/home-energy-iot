@@ -144,6 +144,9 @@ namespace home_energy_iot_core
         {
             try
             {
+                if (id <= 0)
+                    throw new InvalidEntityNumericValueException("Id do dispositivo inválido.");
+
                 _logger.LogInformation($"Buscando Dispositivos na base de dados da Casa Id [{id}].");
 
                 var devices = _deviceManagerRepository.GetByHouseId(id).Result.ToList();

@@ -38,10 +38,13 @@ namespace home_energy_iot_core
                     var initialDate = reports[0].ReportDate;
                     var finalDate = reports[reports.Count - 1].ReportDate;
 
+                    var kwhPrice =
+                        _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode);
+
                     var consumption = new DeviceConsumption
                     {
                         IdentificationCode = deviceIdentificationCode,
-                        ConsumptionInReal = CalculateWattsToReal(deviceIdentificationCode, wattsTotal, initialDate, finalDate, reports.Count),
+                        ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
                         ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                         InitialDate = initialDate,
@@ -77,17 +80,19 @@ namespace home_energy_iot_core
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
-
+                
                 if (reports.Count > 0)
                 {
                     _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
 
                     var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
+                    var kwhPrice = _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode);
+
                     var consumption = new DeviceConsumption
                     {
                         IdentificationCode = deviceIdentificationCode,
-                        ConsumptionInReal = CalculateWattsToReal(deviceIdentificationCode, wattsTotal, initialDate, finalDate, reports.Count),
+                        ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
                         ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                         InitialDate = initialDate,
@@ -108,11 +113,9 @@ namespace home_energy_iot_core
             }
         }
         
-        private double CalculateWattsToReal(string deviceIndetificationCode, double watts, DateTime initialDate, DateTime finalDate, double totalSecondsUsage)
+        private double CalculateWattsToReal(double kwhPrice, double watts, DateTime initialDate, DateTime finalDate, double totalSecondsUsage)
         {
             var totalHours = totalSecondsUsage / 3600;
-
-            var kwhPrice = _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIndetificationCode);
 
             var result =  (watts * totalHours / 1000) * kwhPrice;
 
