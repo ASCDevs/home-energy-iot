@@ -109,12 +109,14 @@ namespace home_energy_iot_tests
             var initialDate = reports[0].ReportDate;
             var finalDate = reports[reports.Count - 1].ReportDate;
 
+            var khwHour = 0.85;
+
             var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
             var consumption = new DeviceConsumption
             {
                 IdentificationCode = deviceIdentificationCode,
-                ConsumptionInReal = CalculateWatts(wattsTotal,reports.Count),
+                ConsumptionInReal = CalculateUsage(khwHour, wattsTotal, reports.Count),
                 ConsumptionInWatts = wattsTotal,
                 ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                 InitialDate = initialDate,
@@ -123,6 +125,9 @@ namespace home_energy_iot_tests
 
             _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumption(deviceIdentificationCode))
                 .Returns(reports).Verifiable();
+
+            _houseManagerRepository.Setup(x => x.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode))
+                .Returns(0.85).Verifiable();
 
             var instance = GetInstance();
 
@@ -136,6 +141,7 @@ namespace home_energy_iot_tests
             Assert.Equal(consumption.FinalDate, result.FinalDate);
 
             _deviceConsumptionReaderRepository.Verify();
+            _houseManagerRepository.Verify();
         }
 
         [Fact]
@@ -242,10 +248,12 @@ namespace home_energy_iot_tests
 
             var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
 
+            var khwPrice = 0.85;
+
             var consumption = new DeviceConsumption
             {
                 IdentificationCode = deviceIdentificationCode,
-                ConsumptionInReal = CalculateWatts(wattsTotal, reports.Count),
+                ConsumptionInReal = CalculateUsage(khwPrice, wattsTotal, reports.Count),
                 ConsumptionInWatts = wattsTotal,
                 ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
                 InitialDate = initialDate,
@@ -254,6 +262,9 @@ namespace home_energy_iot_tests
 
             _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate))
                 .Returns(reports).Verifiable();
+
+            _houseManagerRepository.Setup(x => x.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode))
+                .Returns(khwPrice).Verifiable();
 
             var instance = GetInstance();
 
@@ -267,13 +278,12 @@ namespace home_energy_iot_tests
             Assert.Equal(consumption.FinalDate, finalDate);
 
             _deviceConsumptionReaderRepository.Verify();
+            _houseManagerRepository.Verify();
         }
 
-        private double CalculateWatts(double watts, double totalSecondsUsage)
+        private double CalculateUsage(double kwhPrice, double watts, double totalSecondsUsage)
         {
             var totalHours = totalSecondsUsage / 3600;
-
-            var kwhPrice = 0.80;
 
             return (watts * totalHours / 1000) * kwhPrice;
         }

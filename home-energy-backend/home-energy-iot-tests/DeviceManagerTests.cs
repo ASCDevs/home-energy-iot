@@ -803,7 +803,15 @@ namespace home_energy_iot_tests
 
         #region GetByHouseId
 
-        
+        [Fact]
+        public async void GetDeviceByIdInvalidId()
+        {
+            var deviceId = 0;
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(deviceId));
+        }
 
         #endregion
 

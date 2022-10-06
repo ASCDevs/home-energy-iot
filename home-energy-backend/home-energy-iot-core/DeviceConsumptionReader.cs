@@ -38,7 +38,8 @@ namespace home_energy_iot_core
                     var initialDate = reports[0].ReportDate;
                     var finalDate = reports[reports.Count - 1].ReportDate;
 
-                    var kwhPrice = _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode);
+                    var kwhPrice =
+                        _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode);
 
                     var consumption = new DeviceConsumption
                     {
