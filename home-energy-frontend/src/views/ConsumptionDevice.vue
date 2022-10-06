@@ -170,22 +170,20 @@
                     });
 
                     this.connection.on("stopConfirmed", function() {
+                        console.log("stopConfirmed");
+
                         document.querySelector("#btnEnableConnection").disabled = false;
+
                         document.querySelector("#btnDisableConnection").disabled = true;
                     });
 
                     this.connection.on("continueConfirmed", function() {
+                        console.log("continueConfirmed");
+
                         document.querySelector("#btnEnableConnection").disabled = true;
+
                         document.querySelector("#btnDisableConnection").disabled = false;
                     });
-
-                    /*this.connection.onreconnecting(function(error) {
-                        
-                    });
-
-                    this.connection.onreconnected(function(connId) {
-                        
-                    });*/
 
                     this.connection.onclose(() => {
                         console.log("Fechou a conexão");

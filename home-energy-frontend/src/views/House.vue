@@ -18,7 +18,7 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                <button @click="clearFormHouse" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                     <i class="fas fa-plus"></i> Add house
                                                 </button>
                                             </div>
@@ -46,13 +46,17 @@
                                                             </div>
 
                                                             <div class="col-auto">
-                                                                <router-link to="/" title="Edit house">
+                                                                <a type="button" @click="editHouse(house.id)" title="Edit house">
                                                                     <i class="fas fa-pen"></i>
-                                                                </router-link>
+                                                                </a>
 
                                                                 <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-3" title="See all devices in this house">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
+
+                                                                <a type="button" @click="deleteHouse(house)" class="text-danger ml-3" title="Delete house">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -130,7 +134,7 @@
                                 </div>
 
                                 <div class="row mt-3">
-                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
+                                    <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12">
                                         <label for="periodDaysReport"> 
                                             Period Days Report: 
                                         </label>
@@ -147,6 +151,14 @@
                                             <option value="14"> 14 </option>
                                             <option value="30"> 30 </option>
                                         </select>
+                                    </div>
+
+                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
+                                        <label for="valueKWh"> 
+                                            Value KWh:
+                                        </label>
+
+                                        <input v-model="house.valuePerKWH" type="text" class="form-control form-control-sm" id="valueKWh" required>
                                     </div>
                                 </div>
                             </div>
@@ -195,28 +207,43 @@
                     typeAddress: '',
                     nameAddress: '',
                     numberAddress: 0,
-                    periodDaysReport: 1
+                    periodDaysReport: 1,
+                    valuePerKWH: 0.0
                 }
             }
         },
 
         methods: {
             register() {
-                this.$http.post('/api/house/create', this.house)
-                    .then((response) => {
-                        if(response.status == 200) {
-                            $('#exampleModal').modal('hide');
-                            this.getHousesUser();
-                            this.house.name = '';
-                            this.house.typeAddress = '';
-                            this.house.nameAddress = '';
-                            this.house.numberAddress = 0;
-                            this.house.periodDaysReport = 1;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
+                if(this.house.id == 0) { 
+                    this.$http.post("/api/house/create", this.house)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                $("#exampleModal").modal("hide");
+
+                                this.getHousesUser();
+
+                                this.clearFormHouse();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        })
+                } else {
+                    this.$http.put("/api/house/update", this.house)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                $("#exampleModal").modal("hide");
+
+                                this.getHousesUser();
+
+                                this.clearFormHouse();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        })
+                }
             },
 
             getHousesUser() {
@@ -229,6 +256,40 @@
                     .catch((error) => {
                         console.error(error);
                     })
+            },
+
+            editHouse(idHouse) {
+                this.$http.get(`/api/house/get/${idHouse}`)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.house = response.data;
+
+                            $("#exampleModal").modal("show");
+                        }
+                    })
+            },
+
+            deleteHouse(house) {
+                if(confirm(`Want to delete the house '${house.name}'?`)) {
+                    this.$http.delete("/api/house/delete", {data: {id: house.id}})
+                        .then((response) => {
+                            if(response.status == 200) {
+                                this.getHousesUser();
+                            }
+                        })
+                }
+            },
+
+            clearFormHouse() {
+                this.house.id = 0;
+                this.house.idUser = this.$store.state.user.id;
+                this.house.name = "";
+                this.house.typeAddress = "";
+                this.house.nameAddress = "";
+                this.house.numberAddress = "";
+                this.house.numberAddress = 0;
+                this.house.periodDaysReport = 1;
+                this.house.valuePerKWH = 0.0;
             }
         },
 
@@ -238,7 +299,7 @@
 
         created() {
             this.getHousesUser();
-        }
+        },
     }
 </script>
 
