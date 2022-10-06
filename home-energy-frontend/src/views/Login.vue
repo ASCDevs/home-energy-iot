@@ -54,7 +54,7 @@
                             <div class="text-center pt-4 text-muted">
                                 Don't have an account?
                                 
-                                <router-link to="/user/register" class="text-primary ml-2">
+                                <router-link to="/create/account" class="text-primary ml-2">
                                     Sign up
                                 </router-link>
                             </div>

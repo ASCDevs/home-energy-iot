@@ -46,7 +46,7 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/device/${device.id}/consumption`}" class="ml-3" title="View consumption this device">
+                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-3" title="View consumption this device">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 

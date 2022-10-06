@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gradient-primary">
+    <div class="bg-primary">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-10 col-lg-12 col-md-9">
@@ -7,7 +7,7 @@
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-lg-6 d-none d-lg-block">
-                                    <img src="https://st.depositphotos.com/37671494/53519/v/450/depositphotos_535192234-stock-illustration-forgot-password-login-unlock-screen.jpg" class="img-fluid">
+                                    <img src="../assets/image/forgot_password.jpg" class="img-fluid">
                                 </div>
 
                                 <div class="col-lg-6">
@@ -35,7 +35,7 @@
                                         <hr>
 
                                         <div class="text-center">
-                                            <router-link to="/user/register" class="text-primary small ml-2">
+                                            <router-link to="/create/account" class="text-primary small ml-2">
                                                 Create an Account!
                                             </router-link>
                                         </div>

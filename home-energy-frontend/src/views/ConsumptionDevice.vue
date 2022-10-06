@@ -35,11 +35,17 @@
                         </div>
 
                         <div class="row">
+                            <div v-show="this.ipDevice">
+                                <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP to configure device"> 
+                                    <i class="fas fa-cog"></i> {{ this.ipDevice }}
+                                </a>
+                            </div>
+
                             <div class="col-xl-12 col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
-                                            Consumption in RealTime
+                                            Consumption in RealTime  
                                         </h6>
 
                                         <div class="d-sm-flex align-items-center justify-content-end">
@@ -133,13 +139,15 @@
                     }
                 },
 
-                watts: 0,
+                watts: 0.00,
+
+                ipDevice: '',
 
                 connection: null,
 
                 idUser: this.$store.state.user.id,
 
-                idDevice: useRoute().params.id,
+                macAddress: useRoute().params.id,
             };
         },
 
@@ -148,25 +156,30 @@
                 var thisVue = this;
 
                 this.connection.start().then(() => {
+                    this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
 
-                    // idDeviceTest = 'HU:34:DS4:D1', idUser = '0'
-
-                    this.connection.invoke("CompleteInfo", "HU:34:DS4:D1", `${this.idUser}`);
+                    this.connection.invoke("getDeviceIP");
 
                     this.connection.on("receiveEnergyValue", function(valueEnergy) {
                         let chart = JSON.parse(JSON.stringify(thisVue.chart));
 
-                        thisVue.watts = valueEnergy;
+                        let energyFloat = parseFloat(valueEnergy).toFixed(2);
+
+                        thisVue.watts = energyFloat;
 
                         let list = chart.datasets[0].data;
 
-                        list.push(valueEnergy);
+                        list.push(energyFloat);
 
                         list.shift();
 
                         chart.datasets[0].data = list;
 
                         thisVue.chart = chart
+                    });
+
+                    this.connection.on("ReceiveDeviceIP", function(ip) {
+                        thisVue.ipDevice = ip;
                     });
 
                     this.connection.on("stopConfirmed", function() {
@@ -183,6 +196,10 @@
                         document.querySelector("#btnEnableConnection").disabled = true;
 
                         document.querySelector("#btnDisableConnection").disabled = false;
+                    });
+
+                    this.connection.on("DeviceIsDisconnected", function() {
+                        console.log("Offline");
                     });
 
                     this.connection.onclose(() => {
