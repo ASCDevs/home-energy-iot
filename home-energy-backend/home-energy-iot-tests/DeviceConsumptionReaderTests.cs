@@ -12,11 +12,13 @@ namespace home_energy_iot_tests
     {
         private readonly Mock<ILogger<DeviceConsumptionReader>> _logger;
         private readonly Mock<IDeviceConsumptionReaderRepository> _deviceConsumptionReaderRepository;
+        private readonly Mock<IHouseManagerRepository> _houseManagerRepository;
 
         public DeviceConsumptionReaderTests()
         {
             _logger = new Mock<ILogger<DeviceConsumptionReader>>(MockBehavior.Loose);
             _deviceConsumptionReaderRepository = new Mock<IDeviceConsumptionReaderRepository>();
+            _houseManagerRepository = new Mock<IHouseManagerRepository>();
         }
 
         [Fact]
@@ -278,7 +280,7 @@ namespace home_energy_iot_tests
 
         public DeviceConsumptionReader GetInstance()
         {
-            return new DeviceConsumptionReader(_logger.Object, _deviceConsumptionReaderRepository.Object);
+            return new DeviceConsumptionReader(_logger.Object, _deviceConsumptionReaderRepository.Object, _houseManagerRepository.Object);
         }
     }
 }
