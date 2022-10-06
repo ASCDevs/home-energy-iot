@@ -18,7 +18,7 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                     <i class="fas fa-plus"></i> Add Device
                                                 </button>
                                             </div>
@@ -42,13 +42,17 @@
                                                             </div>
 
                                                             <div class="col-auto">
-                                                                <router-link to="/" title="Edit house">
+                                                                <a @click="editDevice(device.id)" type="button" to="/" title="Edit house">
                                                                     <i class="fas fa-pen"></i>
-                                                                </router-link>
+                                                                </a>
 
                                                                 <router-link :to="{path: `/device/${device.id}/consumption`}" class="ml-3" title="View consumption this device">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
+
+                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Delete device">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -127,7 +131,7 @@
                                             Description:
                                         </label>
 
-                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações" required></textarea>
+                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -184,25 +188,37 @@
 
         methods: {
             register() {
-                this.$http.post(`/api/device/create`, this.device)
-                    .then((response) => {
-                        if(response.status == 200) {
-                            $('#exampleModal').modal('hide');
+                if(this.device.id == 0) {
+                    this.$http.post(`/api/device/create`, this.device)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                alert("Salvo com sucesso");
 
-                            this.getDevicesHouse();
+                                $("#exampleModal").modal("hide");
 
-                            this.device.name = '';
+                                this.getDevicesHouse();
 
-                            this.device.identificationCode = '';
+                                this.clearFormDevice();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        })
 
-                            this.device.description = '';
+                } else {
+                    this.$http.put("/api/device/update", this.device)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                alert("Atualizado com sucesso");
 
-                            this.device.watts = 0;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
+                                $("#exampleModal").modal("hide");
+
+                                this.getDevicesHouse();
+
+                                this.clearFormDevice();
+                            }
+                        })
+                }
             },
 
             getDevicesHouse() {
@@ -215,6 +231,39 @@
                     .catch((error) => {
                         console.error(error);
                     })
+            },
+
+            editDevice(idDevice) {
+                this.$http.get(`/api/device/get/${idDevice}`)
+                    .then((response) => {
+                        if(response.status == 200) {
+                            this.device = response.data;
+
+                            $("#exampleModal").modal("show");
+                        }
+                    })
+            },
+
+            deleteDevice(device) {
+                if(confirm(`Want to delete the device '${device.name}'?`)) {                    
+                    this.$http.delete(`/api/device/delete/${device.id}`)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                this.getDevicesHouse();
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+                }
+            },
+
+            clearFormDevice() {
+                this.device.id = 0;
+                this.device.name = "";
+                this.device.identificationCode = "";
+                this.device.description = "";
+                this.device.watts = 0;
             }
         },
 

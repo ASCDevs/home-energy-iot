@@ -41,3 +41,5 @@ https://vinceumo.github.io/devNotes/Dotnet/signalR/  # Importante
 https://apexcharts.com/javascript-chart-demos/line-charts/realtime/
 
 https://vue-chartjs.org/
+
+https://github.com/axios/axios

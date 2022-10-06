@@ -229,6 +229,7 @@
                         .catch((error) => {
                             console.error(error);
                         })
+                        
                 } else {
                     this.$http.put("/api/house/update", this.house)
                         .then((response) => {
@@ -270,12 +271,15 @@
             },
 
             deleteHouse(house) {
-                if(confirm(`Want to delete the house '${house.name}'?`)) {
-                    this.$http.delete("/api/house/delete", {data: {id: house.id}})
+                if(confirm(`Want to delete the house '${house.name}'?`)) {                    
+                    this.$http.delete(`/api/house/delete/${house.id}`)
                         .then((response) => {
                             if(response.status == 200) {
                                 this.getHousesUser();
                             }
+                        })
+                        .catch((error) => {
+                            console.log(error);
                         })
                 }
             },
