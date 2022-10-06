@@ -76,7 +76,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<House> Get(int id)
+        public async Task<House> Get(int id)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
-                var house = _houseManagerRepository.Get(id);
+                var house = _houseManagerRepository.Get(id).Result;
 
                 if (house != null)
                 {
@@ -95,7 +95,7 @@ namespace home_energy_iot_core
                 var errorMessage = $"Casa com Id [{id}] não encontrada.";
 
                 _logger.LogInformation(errorMessage);
-                throw new Exception(errorMessage);
+                throw new EntityNotFoundException(errorMessage);
             }
             catch (Exception ex)
             {
@@ -149,7 +149,7 @@ namespace home_energy_iot_core
                 var message = $"Nenhuma Casa encontrada para o usuário Id [{id}].";
 
                 _logger.LogInformation(message);
-                throw new Exception(message);
+                throw new EntityNotFoundException(message);
             }
             catch (Exception ex)
             {
