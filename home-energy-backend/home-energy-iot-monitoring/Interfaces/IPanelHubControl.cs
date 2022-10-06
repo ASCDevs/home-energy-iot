@@ -13,5 +13,6 @@ namespace home_energy_iot_monitoring.Interfaces
         Task PanelUIDisableButtonConfirmed(string IdConnDeviceFrom, string Button);
         Task PanelUINotifyDeviceClientsCount(int DevicesOnlineCount);
         Task PanelUINotifyDeviceIdUpdated(KeyValuePair<string, ClientDeviceConnection> DeviceClient);
+        Task PanelUINotifyDeviceIpUpdated(KeyValuePair<string, ClientDeviceConnection> DeviceClient);
     }
 }

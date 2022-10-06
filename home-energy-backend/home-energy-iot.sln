@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-core", "hom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-tests", "home-energy-iot-tests\home-energy-iot-tests.csproj", "{0B322738-A11E-4725-98D4-6583EFE2B9D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "home-energy-iot-repository", "home-energy-iot-repository\home-energy-iot-repository.csproj", "{7B9F7BF6-B67E-4CF7-9ED3-0D169E7BAA2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "home-energy-iot-repository", "home-energy-iot-repository\home-energy-iot-repository.csproj", "{7B9F7BF6-B67E-4CF7-9ED3-0D169E7BAA2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

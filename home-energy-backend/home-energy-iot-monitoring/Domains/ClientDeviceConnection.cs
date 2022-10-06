@@ -6,6 +6,7 @@ namespace home_energy_iot_monitoring.Domains
     {
         public WebSocket web_socket { get; set; }
         public string device_id { get; set; }
+        public string device_ip { get; set; }
         public string conn_id { get; set; }
         public string dateconn { get; set; }
         public bool current_sate { get; set; }
@@ -21,6 +22,11 @@ namespace home_energy_iot_monitoring.Domains
         public void AddDeviceId(string deviceID)
         {
             device_id = deviceID;
+        }
+
+        public void AddDeviceIp(string deviceIP)
+        {
+            device_ip = deviceIP;
         }
 
         public void ChangeCurrentState(string action)

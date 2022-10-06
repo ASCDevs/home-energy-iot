@@ -71,5 +71,10 @@ namespace home_energy_iot_monitoring.Domains
         {
             await _panelsHub.Clients.All.SendAsync("updateDeviceId", DeviceClient.Key, DeviceClient.Value.device_id);
         }
+
+        public async Task PanelUINotifyDeviceIpUpdated(KeyValuePair<string, ClientDeviceConnection> DeviceClient)
+        {
+            await _panelsHub.Clients.All.SendAsync("updateDeviceIp", DeviceClient.Key, DeviceClient.Value.device_ip);
+        }
     }
 }

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario - Dispositivos IOT</title>
+    
+    <link rel="stylesheet" href="~/css/Index.css" />
+</head>
+<body >
+    @*https://coolors.co/palette/e63946-f1faee-a8dadc-457b9d-1d3557*@
+    <div class="flex p-4 justify-center bg-teal-500">
+        <h1 class="text-white font-bold text-lg">Interface do Usuario [Simulação]</h1>
+    </div>
+    <div class="flex p-4 gap-x-1.5" >
+        <button id="btn-continue" class="rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Continuar</button>
+        <button id="btn-stop" class="rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Parar</button>
+    </div>
+    <div class="p-2 gap-4" style="max-width: 460px">
+        <h3>STATUS: <span id="device-status"></span></h3>
+        <p>ID Dispositivo: <span id="device-id"></span></p>
+        <p>IP Dispositivo: <span id="device-ip"></span></p>
+        <p>Nome dispositivo: <span id="device-name"></span></p>
+        <p>Status dispositivo: <span id="status-device"></span></p>
+        <p>Valor Watts: <span id="value-watts"></span></p>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/PageScript/Usuario.js"></script>
+    <script>
+        var user;
+        $(document).ready(() => {
+            user = new Usuario("TV:32:RT:23","1");
+        })
+    </script>
+
+</body>
+</html>

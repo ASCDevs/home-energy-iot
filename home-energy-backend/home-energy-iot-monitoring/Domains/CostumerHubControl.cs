@@ -14,15 +14,15 @@ namespace home_energy_iot_monitoring.Domains
         }
 
         public async Task CostumerUIDisableButtonConfirmed(string CostumerConnId, string Button)
-        {
+        {    
             if(Button == "stop")
             {
-                await _costumersHub.Clients.Client(CostumerConnId).SendAsync("stopConfirmed");
+                await _costumersHub.Clients.Client(CostumerConnId).SendAsync("ActionStopDevice");
             }
-
+            
             if(Button == "continue")
             {
-                await _costumersHub.Clients.Client(CostumerConnId).SendAsync("continueConfirmed");
+                await _costumersHub.Clients.Client(CostumerConnId).SendAsync("ActionContinueDevice");
             }
         }
 
