@@ -52,7 +52,6 @@ namespace home_energy_iot_tests
             await instance.Delete(id);
 
             _houseManagerRepository.Verify(x => x.Delete(id), Times.Exactly(1));
-            _logger.Verify();
         }
 
         #endregion
