@@ -20,7 +20,7 @@
             <li class="nav-item">
                 <router-link :to="{name: 'registerHouse'}" class="nav-link">
                     <i class="fas fa-laptop-house"></i> 
-                    <span> House </span>
+                    <span> Casas </span>
                 </router-link>
             </li>
 

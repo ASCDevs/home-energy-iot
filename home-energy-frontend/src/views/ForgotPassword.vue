@@ -14,21 +14,22 @@
                                     <div class="p-5">
                                         <div class="text-center">
                                             <h2 class="h4 text-gray-900 mb-2">
-                                                Forgot Your Password?
+                                                Esqueceu sua senha?
                                             </h2>
 
                                             <p class="mb-4">
-                                                Just enter your email address below and we'll send you a link to reset your password!
+                                                Basta digitar seu endereço de e-mail abaixo e enviaremos 
+                                                um link para redefinir sua senha!
                                             </p>
                                         </div>
 
                                         <form @submit.prevent="forgotPassword" class="user">
                                             <div class="form-group">
-                                                <input v-model="email" type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." required>
+                                                <input v-model="email" type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Digite seu endereço de e-mail..." required>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary btn-block">
-                                                Reset Password
+                                                Redefinir senha
                                             </button>
                                         </form>
                                         
@@ -36,13 +37,13 @@
 
                                         <div class="text-center">
                                             <router-link to="/create/account" class="text-primary small ml-2">
-                                                Create an Account!
+                                                Crie uma conta!
                                             </router-link>
                                         </div>
 
                                         <div class="text-center">
                                             <router-link to="/" class="text-primary small ml-2">
-                                                Already have an account? Login!
+                                                Já tem uma conta? Login!
                                             </router-link>
                                         </div>
                                     </div>

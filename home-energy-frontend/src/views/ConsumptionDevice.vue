@@ -22,7 +22,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Actual value device
+                                                    Medição em tempo real
                                                 </div>
 
                                                 <div class="row no-gutters align-items-center">
@@ -48,7 +48,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Consumption In Reais
+                                                    Consumo em Reais
                                                 </div>
 
                                                 <div class="row no-gutters align-items-center">
@@ -74,19 +74,13 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
-                                            Consumption in RealTime
+                                            Consumo em tempo real
                                         </h6>
-
-                                        <div class="d-sm-flex align-items-center justify-content-end">
-                                            <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                                            </button>
-                                        </div>
                                     </div>
 
                                     <div class="card-body">
                                         <span v-show="this.ipDevice">
-                                            <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP to configure device"> 
+                                            <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP para configuração do dispositivo"> 
                                                 <i class="fas fa-cog"></i> {{ this.ipDevice }}
                                             </a>
                                         </span>
@@ -107,11 +101,11 @@
                                                 <div class="card-body">
                                                     <div class="text-center">
                                                         <button @click="continueConnection" id="btnEnableConnection" class="btn btn-success btn-sm" title="Ligar o aparelho">
-                                                            <i class="fas fa-redo-alt"></i> Continuar
+                                                            <i class="fas fa-redo-alt"></i> Ligar dispositivo
                                                         </button>
 
                                                         <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm ml-5" title="Desligar o aparelho">
-                                                            <i class="fas fa-stop"></i> Parar
+                                                            <i class="fas fa-stop"></i> Desligar dispositivo
                                                         </button>
                                                     </div>
                                                 </div>
@@ -142,7 +136,7 @@
     Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement)
 
     export default {
-        name: "AboutView",
+        name: "ConsumptionDevice",
 
         components: {
             Sidebar,
@@ -155,7 +149,7 @@
                 chart: {
                     labels: ["Watts", "Watts", "Watts", "Watts", "Watts", "Watts"],
                     datasets: [{
-                        label: "Watts realtime",
+                        label: "Watts em tempo-real",
                         data: [0, 10, 20, 30, 40, 50],
                         backgroundColor: [
                             "rgba(255, 99, 132, 0.2)"

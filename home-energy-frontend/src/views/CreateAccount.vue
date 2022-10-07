@@ -4,9 +4,9 @@
             teste
         </div>
 
-        <div class="container border rounded bg-white mt-5">
+        <div class="container border rounded bg-white mt-5 py-3">
             <div class="text-center">
-                <h2> Create an Account </h2>
+                <h2> Criar conta </h2>
             </div>
 
             <div class="row align-items-center mt-4">             
@@ -17,11 +17,11 @@
                 <div class="col-lg-6 col-md-12 ml-auto">
                     <form @submit.prevent="register" class="row">
                         <div class="col-lg-6 col-md-6 mb-4">
-                            <input v-model="user.name" id="name" type="text" name="name" placeholder="Name" class="form-control" required>
+                            <input v-model="user.name" id="name" type="text" name="name" placeholder="Seu nome" class="form-control" required>
                         </div>
 
                         <div class="col-lg-6 col-md-6 mb-4">
-                            <input v-model="user.username" id="username" type="text" name="username" placeholder="Username" class="form-control" required>
+                            <input v-model="user.username" id="username" type="text" name="username" placeholder="Usuário" class="form-control" required>
                         </div>
 
                         <div class="col-lg-8 col-md-4 mb-4">
@@ -29,11 +29,11 @@
                         </div>
 
                         <div class="col-lg-12 col-md-8 mb-4">
-                            <input v-model="user.email" id="email" type="email" name="email" placeholder="Email Address" class="form-control" required>
+                            <input v-model="user.email" id="email" type="email" name="email" placeholder="Endereço de e-mail" class="form-control" required>
                         </div>
 
                         <div class="col-lg-9 col-md-8 mb-4">
-                            <input v-model="user.password" id="password" type="password" name="password" placeholder="Password" class="form-control" required>
+                            <input v-model="user.password" id="password" type="password" name="password" placeholder="Senha" class="form-control" required>
                         </div>
 
                         <div v-if="status == 200" class="col-12 my-4">
@@ -44,7 +44,7 @@
                                 
                                 <div class="text-center">
                                     <small> 
-                                        Você será redirecionado para a tela de login em alguns instantes 
+                                        Você será redirecionado para página de login em alguns instantes
                                     </small>
                                 </div>
                                 
@@ -56,7 +56,7 @@
 
                         <div class="form-group col-lg-12 mx-auto mb-0">
                             <button type="submit" class="btn btn-primary btn-block py-2">
-                                Create your account
+                                Criar conta
                             </button>
                         </div>
 
@@ -64,7 +64,7 @@
                             <div class="border-bottom w-100 ml-5"></div>
 
                             <span class="px-2 small text-muted font-weight-bold text-muted">
-                                OR
+                                OU
                             </span>
 
                             <div class="border-bottom w-100 mr-5"></div>
@@ -72,7 +72,7 @@
 
                         <div class="text-center w-100">
                             <p class="text-muted">
-                                Already Registered? 
+                                Já está registrado?
                                 
                                 <router-link to="/" class="text-primary ml-2">
                                     Login
