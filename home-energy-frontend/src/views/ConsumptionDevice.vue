@@ -8,26 +8,61 @@
                     <NavBarUser/>
                     
                     <div class="container-fluid">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Actual value device
-                                            </div>
+                        <div class="alert alert-danger text-center" role="alert" id="statusConexaoWebSocket" hidden>
+                            <small>
+                                Aplicação fora do ar...
+                                Aguarde alguns instantes
+                            </small>
+                        </div>
 
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                        {{ this.watts }}W 
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Actual value device
+                                                </div>
+
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                            {{ this.watts }}W 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-auto">
-                                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                                            <div class="col-auto">
+                                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Consumption In Reais
+                                                </div>
+
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                            R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(2) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <i class="fas fa-money-bill fa-2x text-gray-300"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -35,27 +70,27 @@
                         </div>
 
                         <div class="row">
-                            <div v-show="this.ipDevice">
-                                <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP to configure device"> 
-                                    <i class="fas fa-cog"></i> {{ this.ipDevice }}
-                                </a>
-                            </div>
-
                             <div class="col-xl-12 col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
-                                            Consumption in RealTime  
+                                            Consumption in RealTime
                                         </h6>
 
                                         <div class="d-sm-flex align-items-center justify-content-end">
-                                            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                            <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                                 <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                                             </button>
                                         </div>
                                     </div>
 
                                     <div class="card-body">
+                                        <span v-show="this.ipDevice">
+                                            <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP to configure device"> 
+                                                <i class="fas fa-cog"></i> {{ this.ipDevice }}
+                                            </a>
+                                        </span>
+
                                         <div class="row mt-3">
                                             <div class="col-xl-12">
                                                 <Line 
@@ -148,12 +183,19 @@
                 idUser: this.$store.state.user.id,
 
                 macAddress: useRoute().params.id,
+
+                deviceConsumption: {
+                    consumptionInReal: 0.00,
+                    consumptionInWatts: 0.00,
+                }
             };
         },
 
         methods: {
             connect() {
                 var thisVue = this;
+
+                $("#statusConexaoWebSocket").prop("hidden", "true");
 
                 this.connection.start().then(() => {
                     this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
@@ -201,13 +243,11 @@
                     this.connection.on("DeviceIsDisconnected", function() {
                         console.log("Offline");
                     });
-
-                    this.connection.onclose(() => {
-                        console.log("Fechou a conexão");
-                    })
                 })
                 .catch((error) => {
                     console.log(error);
+
+                    $("#statusConexaoWebSocket").prop("hidden", "false");
 
                     setTimeout(() => {
                         this.connect();
@@ -227,12 +267,24 @@
                 this.connection = new signalR.HubConnectionBuilder()
                     .withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub")
                     .build();
+            },
+
+            getValuesOfConsumption() {
+                setInterval(() => {
+                    this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
+                        .then((response) => {
+                            if(response.status == 200) {
+                                this.deviceConsumption = response.data;
+                            }
+                        })
+                }, 5000)
             }
         },
 
         mounted() {
             this.configureSignalR();
             this.connect();
+            this.getValuesOfConsumption();
         }
     }
 </script>
