@@ -83,7 +83,6 @@
                 ThisClass.IdConnection = connection.connectionId;
                 connection.invoke("CompleteInfo", ThisClass.DeviceId, ThisClass.UserId);
                 connection.invoke("GetDeviceIP");
-                connection.invoke("GetCurrentState");
 
                 console.log("> Hub Costumer conectado!");
             }).catch(function (err) {

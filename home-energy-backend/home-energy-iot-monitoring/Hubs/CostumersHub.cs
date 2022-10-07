@@ -74,6 +74,7 @@ namespace home_energy_iot_monitoring.Hubs
             }
             else
             {
+                await Clients.Client(connectionId).SendAsync("DeviceConnected");
                 if (deviceInfo.device_ip != null)
                 {
                     await Clients.Client(connectionId).SendAsync("ReceiveDeviceIP", deviceInfo.device_ip);

@@ -50,8 +50,7 @@ namespace home_energy_iot_monitoring.Sockets
                 var deviceClient = this.GetClientBySocket(webSocket);
                 Console.WriteLine("[disconnected] ("+deviceClient.Value.device_id+") id-connection: " + deviceClient.Key);
                 await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
-                await this.NotifyCostumerDisconnection(deviceClient.Key);
-                await this.CostumerRemoveDeviceIP(deviceClient.Key);
+                await this.OnDeviceDisconnect(deviceClient.Key);
                 clients.TryRemove(deviceClient);
                 await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                 
@@ -111,8 +110,7 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     var deviceClient = clients.First(x => x.Value.web_socket == webSocket);
-                    await this.NotifyCostumerDisconnection(deviceClient.Key);
-                    await this.CostumerRemoveDeviceIP(deviceClient.Key);
+                    await this.OnDeviceDisconnect(deviceClient.Key);
                     if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                     {
                         Console.WriteLine("[disconnected] (" + deviceClient.Value.device_id + ") id-connection: " + deviceClient.Key);
@@ -329,6 +327,14 @@ namespace home_energy_iot_monitoring.Sockets
                 }
             }
 
+        }
+
+        private async Task OnDeviceDisconnect(string idConnection)
+        {
+            await this.NotifyCostumerDisconnection(idConnection);
+            await this.CostumerRemoveDeviceIP(idConnection);
+            await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, "0");
+            await SendEnergyValueToCostumer(idConnection, "0");
         }
 
         private List<ItemDeviceClient> GetDevicesClientList()
