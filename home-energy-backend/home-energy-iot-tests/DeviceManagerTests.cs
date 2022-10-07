@@ -710,12 +710,13 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public async void GetDeviceNullTest()
+        public async void GetDeviceReturnCountZeroTest()
         {
             int id = 1;
-            Task<Device> device = Task.FromResult(new Device());
 
-            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
+            var device = new Device();
+
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(Task.FromResult(device));
 
             var instance = GetInstance();
 
@@ -728,13 +729,16 @@ namespace home_energy_iot_tests
         public async void GetDeviceSuccessTest()
         {
             int id = 1;
-            Task<Device> device = Task.FromResult(_deviceMock);
 
-            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
+            var device = _deviceMock;
+
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(Task.FromResult(device));
 
             var instance = GetInstance();
 
-            await instance.Get(id);
+            var result = await instance.Get(id);
+
+            Assert.Equal(device, result);
 
             _deviceManagerRepository.Verify();
         }
@@ -747,9 +751,10 @@ namespace home_energy_iot_tests
         public async void GetAllDevicesEmptyTest()
         {
 
-            Task<List<Device>> devices = Task.FromResult(new List<Device>());
+            var devices = new List<Device>();
 
-            _deviceManagerRepository.Setup(x => x.GetAll()).Returns(devices).Verifiable();
+            _deviceManagerRepository.Setup(x => x.GetAll())
+                .Returns(Task.FromResult(devices)).Verifiable();
 
             var instance = GetInstance();
 

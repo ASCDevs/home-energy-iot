@@ -41,12 +41,12 @@ namespace home_energy_iot_repository
             return _dataBaseContext.Houses.Find(id);
         }
 
-        public async Task<IEnumerable<House>> GetAll()
+        public async Task<List<House>> GetAll()
         {
             return _dataBaseContext.Houses.ToList();
         }
 
-        public async Task<IEnumerable<House>> GetByUserId(int id)
+        public async Task<List<House>> GetByUserId(int id)
         {
             return _dataBaseContext.Houses.Where(x => x.IdUser == id).ToList();
         }

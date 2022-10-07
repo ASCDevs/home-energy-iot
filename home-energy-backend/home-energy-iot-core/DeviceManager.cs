@@ -91,7 +91,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
-                var device = _deviceManagerRepository.Get(id).Result;
+                var device = await _deviceManagerRepository.Get(id);
 
                 if (device.Id > 0)
                 {
@@ -117,9 +117,9 @@ namespace home_energy_iot_core
             {
                 _logger.LogInformation("Buscando Dispositivos na base de dados.");
 
-                var devices = _deviceManagerRepository.GetAll().Result.ToList();
+                var devices = await _deviceManagerRepository.GetAll();
 
-                if (devices.Count > 0)
+                if (devices?.Count > 0)
                 {
                     _logger.LogInformation("Retornando os dispositivos encontrados.");
                     return devices;
@@ -145,9 +145,9 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando Dispositivos na base de dados da Casa Id [{id}].");
 
-                var devices = _deviceManagerRepository.GetByHouseId(id).Result.ToList();
+                var devices = await _deviceManagerRepository.GetByHouseId(id);
 
-                if (devices.Count > 0)
+                if (devices?.Count > 0)
                 {
                     _logger.LogInformation($"Retornando os dispositivos encontrados para a Casa Id [{id}].");
                     return devices;

@@ -12,11 +12,24 @@ namespace home_energy_iot_tests
     {
         private readonly Mock<ILogger<HouseManager>> _logger;
         private readonly Mock<IHouseManagerRepository> _houseManagerRepository;
+        private readonly House _housesMock;
 
         public HouseManagerTests()
         {
             _logger = new Mock<ILogger<HouseManager>>();
             _houseManagerRepository = new Mock<IHouseManagerRepository>();
+            _housesMock = new House
+                {
+                    Id = 1,
+                    IdUser = 1,
+                    Name = "House2",
+                    NameAddress = "NameAddress2",
+                    NumberAddress = 2,
+                    PeriodDaysReport = 1,
+                    RegisterDate = DateTime.Now,
+                    TypeAddress = "House",
+                    ValuePerKWH = 0.80
+                };
         }
 
         #region Delete
@@ -100,18 +113,7 @@ namespace home_energy_iot_tests
         {
             var id = 1;
 
-            House house = new House
-            {
-                Id = 1,
-                IdUser = 1,
-                Name = "Device",
-                NameAddress = "House 1",
-                NumberAddress = 152,
-                PeriodDaysReport = 1,
-                RegisterDate = DateTime.Now,
-                TypeAddress = "House",
-                ValuePerKWH = 0.85
-            };
+            House house = _housesMock;
 
             var instance = GetInstance();
 
@@ -120,6 +122,46 @@ namespace home_energy_iot_tests
             var result = await instance.Get(id);
 
             Assert.NotNull(result);
+
+            _houseManagerRepository.Verify();
+        }
+
+        #endregion
+
+        #region GetAll
+
+        [Fact]
+        public async void GetAllHousesNotFoundTest()
+        {
+            var houses = new List<House>();
+
+            _houseManagerRepository.Setup(x => x.GetAll())
+                .Returns(Task.FromResult(houses)).Verifiable();
+
+            var instance = GetInstance();
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetAll());
+
+            _houseManagerRepository.Verify();
+        }
+
+        [Fact]
+        public void GetAllHousesSuccessTest()
+        {
+            var houses = new List<House>()
+            {
+                _housesMock,
+                _housesMock
+            };
+
+            _houseManagerRepository.Setup(x => x.GetAll())
+                .Returns(Task.FromResult(houses)).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.GetAll().Result;
+            
+            Assert.Equal(houses.Count, result.Count);
 
             _houseManagerRepository.Verify();
         }

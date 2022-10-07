@@ -84,9 +84,9 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
-                var house = _houseManagerRepository.Get(id).Result;
+                var house = await _houseManagerRepository.Get(id);
 
-                if (house != null)
+                if (house?.Id > 0)
                 {
                     _logger.LogInformation($"Casa Id [{id}] encontrada. Retornando resultado.");
                     return house;
@@ -104,24 +104,24 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<House>> GetAll()
+        public async Task<List<House>> GetAll()
         {
             try
             {
                 _logger.LogInformation("Buscando Casas na base de dados.");
 
-                var houses = _houseManagerRepository.GetAll().Result.ToList();
+                var houses = await _houseManagerRepository.GetAll();
 
-                if (houses.Count > 0)
+                if (houses?.Count > 0)
                 {
                     _logger.LogInformation("Retornando as Casas encontradas.");
-                    return Task.FromResult<IEnumerable<House>>(houses);
+                    return houses;
                 }
 
                 var message = "Nenhuma Casa encontrada.";
 
                 _logger.LogInformation(message);
-                throw new Exception(message);
+                throw new EntityNotFoundException(message);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<House>> GetByUserId(int id)
+        public async Task<List<House>> GetByUserId(int id)
         {
             try
             {
@@ -138,12 +138,12 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
-                var houses = _houseManagerRepository.GetByUserId(id).Result.ToList();
+                var houses = await _houseManagerRepository.GetByUserId(id);
 
-                if (houses.Count > 0)
+                if (houses?.Count > 0)
                 {
                     _logger.LogInformation("Retornando as Casas encontradas.");
-                    return Task.FromResult<IEnumerable<House>>(houses);
+                    return houses;
                 }
 
                 var message = $"Nenhuma Casa encontrada para o usuário Id [{id}].";
