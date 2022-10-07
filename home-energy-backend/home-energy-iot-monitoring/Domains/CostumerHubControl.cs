@@ -30,5 +30,25 @@ namespace home_energy_iot_monitoring.Domains
         {
             await _costumersHub.Clients.Client(CostumerConnId).SendAsync("receiveEnergyValue", ValueEnergy);
         }
+
+        public async Task CostumerUINotifyDisconnection(string CostumerConnId)
+        {
+            await _costumersHub.Clients.Client(CostumerConnId).SendAsync("DeviceIsDisconnected");
+        }
+
+        public async Task CostumerUINotifyConnection(string CostumerConnId)
+        {
+            await _costumersHub.Clients.Client(CostumerConnId).SendAsync("DeviceConnected");
+        }
+
+        public async Task CostumerUIReceiveIP(string CostumerConnId, string DeviceIP)
+        {
+            await _costumersHub.Clients.Client(CostumerConnId).SendAsync("ReceiveDeviceIP", DeviceIP);
+        }
+
+        public async Task CostumerUIRemoveIP(string CostumerConnId)
+        {
+            await _costumersHub.Clients.Client(CostumerConnId).SendAsync("RemoveDeviceIP");
+        }
     }
 }
