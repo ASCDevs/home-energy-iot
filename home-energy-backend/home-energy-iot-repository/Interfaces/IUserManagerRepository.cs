@@ -9,14 +9,12 @@ namespace home_energy_iot_repository.Interfaces
 {
     public interface IUserManagerRepository
     {
-        Task Create(User user);
+        void Create(User user);
 
-        Task Update(User user);
+        void Update(User user);
 
-        Task ChangePassword(User user);
+        User Get(int id);
 
-        Task<User> Get(int id);
-
-        Task<IEnumerable<User>> GetAll();
+        List<User> GetAll();
     }
 }

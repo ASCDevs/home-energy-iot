@@ -4,18 +4,18 @@ namespace home_energy_iot_core.Interfaces
 {
     public interface IDeviceManager
     {
-        Task Create(Device device);
+        void Create(Device device);
 
-        Task Update(Device device);
+        void Update(Device device);
 
-        Task Delete(int id);
+        void Delete(int id);
 
-        Task<Device> Get(int id);
+        Device Get(int id);
 
-        Task<List<Device>> GetAll();
+        List<Device> GetAll();
 
-        Task<List<Device>> GetByHouseId(int id);
+        List<Device> GetByHouseId(int id);
 
-        Task<bool> Exists(string deviceIdentificationCode);
+        bool Exists(string deviceIdentificationCode);
     }
 }

@@ -13,16 +13,16 @@ namespace home_energy_iot_repository
             _dataBaseContext = dataBaseContext;
         }
 
-        public async Task Create(User user)
+        public void Create(User user)
         {
-            await _dataBaseContext.Users.AddAsync(user);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.Users.Add(user);
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task Update(User user)
+        public void Update(User user)
         {
             _dataBaseContext.Users.Update(user);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.SaveChanges();
         }
 
         public async Task ChangePassword(User user)
@@ -30,12 +30,14 @@ namespace home_energy_iot_repository
             throw new NotImplementedException();
         }
 
-        public async Task<User> Get(int id)
+        public User Get(int id)
         {
-            return _dataBaseContext.Users.Find(id);
+            var user = _dataBaseContext.Users.Find(id);
+
+            return user ?? new User();
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public List<User> GetAll()
         {
             return _dataBaseContext.Users.ToList();
         }

@@ -13,19 +13,19 @@ namespace home_energy_iot_repository
             _dataBaseContext = dataBaseContext;
         }
 
-        public async Task Create(Device device)
+        public void Create(Device device)
         {
-            await _dataBaseContext.Devices.AddAsync(device);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.Devices.Add(device);
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task Update(Device device)
+        public void Update(Device device)
         {
             _dataBaseContext.Devices.Update(device);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task Delete(int id)
+        public void Delete(int id)
         {
             var device = new Device
             {
@@ -33,27 +33,27 @@ namespace home_energy_iot_repository
             };
 
             _dataBaseContext.Devices.Remove(device);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task<Device> Get(int id)
+        public Device Get(int id)
         {
-             var result = await _dataBaseContext.Devices.FindAsync(id);
+             var result = _dataBaseContext.Devices.Find(id);
 
              return result ?? new Device();
         }
 
-        public async Task<List<Device>> GetAll()
+        public List<Device> GetAll()
         {
             return _dataBaseContext.Devices.ToList();
         }
 
-        public async Task<List<Device>> GetByHouseId(int id)
+        public List<Device> GetByHouseId(int id)
         {
             return _dataBaseContext.Devices.Where(x => x.IdHouse == id).ToList();
         }
 
-        public async Task<bool> Exists(string deviceIdentificationCode)
+        public bool Exists(string deviceIdentificationCode)
         {
             return _dataBaseContext.Devices.FirstOrDefault(x => x.IdentificationCode == deviceIdentificationCode) != null;
         }

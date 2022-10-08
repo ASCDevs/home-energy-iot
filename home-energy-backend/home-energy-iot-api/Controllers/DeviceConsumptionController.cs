@@ -20,7 +20,7 @@ namespace home_energy_iot_api.Controllers
         [HttpGet]
         [Route("GetDeviceConsumptionTotalValue/{deviceIdentificationCode}")]
         [Authorize]
-        public async Task<IActionResult> GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
+        public IActionResult GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace home_energy_iot_api.Controllers
         [HttpPost]
         [Route("GetConsumptionBetweenDates")]
         [Authorize]
-        public async Task<IActionResult> GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilterModel reportFilter)
+        public IActionResult GetDeviceConsumptionValueBetweenDates([FromBody] ReportFilterModel reportFilter)
         {
             try
             {

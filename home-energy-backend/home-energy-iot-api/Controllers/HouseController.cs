@@ -21,11 +21,11 @@ namespace home_energy_api.Controllers
         [HttpPost]
         [Route("Create")]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] House house)
+        public IActionResult Create([FromBody] House house)
         {
             try
             {
-                await _houseManager.Create(house);
+                _houseManager.Create(house);
 
                 return Ok();
             }
@@ -38,11 +38,11 @@ namespace home_energy_api.Controllers
         [HttpPut]
         [Route("Update")]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] House house)
+        public IActionResult Update([FromBody] House house)
         {
             try
             {
-                await _houseManager.Update(house);
+                _houseManager.Update(house);
 
                 return Ok();
             }
@@ -55,11 +55,11 @@ namespace home_energy_api.Controllers
         [HttpDelete]
         [Route("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                await _houseManager.Delete(id);
+                _houseManager.Delete(id);
 
                 return Ok();
             }
@@ -72,11 +72,11 @@ namespace home_energy_api.Controllers
         [HttpGet]
         [Route("Get/{id}")]
         [Authorize]
-        public async Task<IActionResult> Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
-                var house = await _houseManager.Get(id);
+                var house = _houseManager.Get(id);
 
                 return Ok(house);
             }
@@ -89,11 +89,11 @@ namespace home_energy_api.Controllers
         [HttpGet]
         [Route("GetAll")]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
             try
             {
-                var houses = await _houseManager.GetAll();
+                var houses = _houseManager.GetAll();
 
                 return Ok(houses);
             }
@@ -106,11 +106,11 @@ namespace home_energy_api.Controllers
         [HttpGet]
         [Route("GetByUserId/{id}")]
         [Authorize]
-        public async Task<IActionResult> GetByUserId(int id)
+        public IActionResult GetByUserId(int id)
         {
             try
             {
-                var houses = await _houseManager.GetByUserId(id);
+                var houses = _houseManager.GetByUserId(id);
 
                 return Ok(houses);
             }

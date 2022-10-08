@@ -5,6 +5,6 @@ namespace home_energy_iot_repository.Interfaces
     public interface IDeviceConsumptionReaderRepository
     {
         List<DeviceReport> GetDeviceConsumption(string deviceIdentificationCode);
-        List<DeviceReport> GetDeviceConsumptionBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
+        List<DeviceReport> GetDeviceConsumptionValueBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate);
     }
 }
