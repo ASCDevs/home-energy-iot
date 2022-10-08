@@ -779,7 +779,7 @@ namespace home_energy_iot_tests
 
             var result = instance.GetAll();
 
-            Assert.Equal(devices.Count, result.Count);
+            Assert.Equal(devices, result);
 
             _deviceManagerRepository.Verify();
         }
@@ -843,7 +843,7 @@ namespace home_energy_iot_tests
 
             var result = instance.GetByHouseId(id);
 
-            Assert.Equal(devices.Count, result.Count);
+            Assert.Equal(devices, result);
 
             _deviceManagerRepository.Verify();
         }

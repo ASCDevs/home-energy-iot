@@ -161,12 +161,78 @@ namespace home_energy_iot_tests
 
             var result = instance.GetAll();
 
-            Assert.Equal(houses.Count, result.Count);
+            Assert.Equal(houses, result);
 
             _houseManagerRepository.Verify();
         }
 
         #endregion
+
+        #region GetByUserId
+
+        [Fact]
+        public void GetByUserIdNegativeIdTest()
+        {
+            var id = -1;
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.GetByUserId(id));
+        }
+
+        [Fact]
+        public void GetByUserIdZeroIdTest()
+        {
+            var id = 0;
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.GetByUserId(id));
+        }
+
+        [Fact]
+        public void GetByUserIdNotFoundHousesTest()
+        {
+            var id = 1;
+
+            var houses = new List<House>();
+
+            _houseManagerRepository.Setup(x => x.GetByUserId(id))
+                .Returns(houses).Verifiable();
+
+            var instance = GetInstance();
+
+            Assert.Throws<EntityNotFoundException>(() => instance.GetByUserId(id));
+
+            _houseManagerRepository.Verify();
+        }
+
+        [Fact]
+        public void GetByUserIdSuccessTest()
+        {
+            var id = 1;
+
+            var houses = new List<House>()
+            {
+                _housesMock,
+                _housesMock
+            };
+
+            _houseManagerRepository.Setup(x => x.GetByUserId(id))
+                .Returns(houses).Verifiable();
+
+            var instance = GetInstance();
+
+            var result = instance.GetByUserId(id);
+
+            Assert.Equal(houses, result);
+
+            _houseManagerRepository.Verify();
+        }
+
+        #endregion
+
+
 
         public HouseManager GetInstance()
         {

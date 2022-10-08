@@ -134,7 +134,8 @@ namespace home_energy_iot_core
         {
             try
             {
-                ValidateDeviceId(id);
+                if (id <= 0)
+                    throw new InvalidEntityNumericValueException($"Id do usuário [{id}] inválido.");
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
