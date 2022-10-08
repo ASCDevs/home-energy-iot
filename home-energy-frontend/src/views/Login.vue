@@ -23,7 +23,7 @@
                                 <div class="input-field"> 
                                     <span class="far fa-user px-2"></span> 
                                     
-                                    <input v-model="loginModel.username" class="form form-control" type="text" placeholder="Username" required> 
+                                    <input v-model="loginModel.username" class="form form-control" type="text" placeholder="Usuário" required> 
                                 </div>
                             </div>
                             
@@ -31,7 +31,7 @@
                                 <div class="input-field">
                                     <span class="fas fa-lock px-2"></span> 
                                     
-                                    <input v-model="loginModel.password" class="form form-control" type="password" placeholder="Enter your Password" required>
+                                    <input v-model="loginModel.password" class="form form-control" type="password" placeholder="Senha" required>
                                 </div>
                             </div>
 
@@ -43,7 +43,7 @@
                             
                             <div class="form-inline justify-content-end"> 
                                 <router-link to="/forgot/password" class="btn btn-link btn-sm">
-                                    Forgot password?
+                                    Esqueceu a senha?
                                 </router-link>
                             </div>
                             
@@ -52,10 +52,10 @@
                             </button>
                             
                             <div class="text-center pt-4 text-muted">
-                                Don't have an account?
+                                Não tem uma conta?
                                 
-                                <router-link to="/user/register" class="text-primary ml-2">
-                                    Sign up
+                                <router-link to="/create/account" class="text-primary ml-2">
+                                    Cadastrar-se
                                 </router-link>
                             </div>
                         </form>

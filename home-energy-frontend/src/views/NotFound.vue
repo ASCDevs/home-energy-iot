@@ -14,11 +14,11 @@
                             </div>
 
                             <p class="lead text-gray-800 mb-5"> 
-                                Page Not Found
+                                Página não encontrada
                             </p>
                             
                             <router-link to="/house/register">
-                                &larr; Back to View Houses
+                                &larr; Voltar para homepage
                             </router-link>
                         </div>
                     </div>

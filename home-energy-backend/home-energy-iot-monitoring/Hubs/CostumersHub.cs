@@ -74,7 +74,34 @@ namespace home_energy_iot_monitoring.Hubs
             }
             else
             {
-                await Clients.Client(connectionId).SendAsync("ReceiveDeviceIP", deviceInfo.device_ip);
+                await Clients.Client(connectionId).SendAsync("DeviceConnected");
+                if (deviceInfo.device_ip != null)
+                {
+                    await Clients.Client(connectionId).SendAsync("ReceiveDeviceIP", deviceInfo.device_ip);
+                }
+            }
+        }
+
+        public async Task GetCurrentState()
+        {
+            string connectionId = Context.ConnectionId;
+            CostumerConnection costumerFrom = CostumersHandler.GetCostumerByConnection(connectionId);
+            ClientDeviceConnection deviceInfo = _webSocket.GetDeviceOnlineInfo(costumerFrom.device_id);
+            if(deviceInfo == null)
+            {
+                await Clients.Client(connectionId).SendAsync("DeviceIsDisconnected");
+            }
+            else
+            {
+                if (deviceInfo.current_sate)
+                {
+                    await Clients.Client(connectionId).SendAsync("ReceiveCurrentState","ligado");
+                }
+
+                if (!deviceInfo.current_sate)
+                {
+                    await Clients.Client(connectionId).SendAsync("ReceiveCurrentState", "interrompido");
+                }
             }
         }
 

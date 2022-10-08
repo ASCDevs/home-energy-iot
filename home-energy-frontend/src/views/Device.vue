@@ -13,13 +13,13 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
-                                            My Devices
+                                            Meus dispositivos
                                         </h6>
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
                                                 <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                    <i class="fas fa-plus"></i> Add Device
+                                                    <i class="fas fa-plus"></i> Add dispositivo
                                                 </button>
                                             </div>
                                         </div>
@@ -42,15 +42,15 @@
                                                             </div>
 
                                                             <div class="col-auto">
-                                                                <a @click="editDevice(device.id)" type="button" to="/" title="Edit house">
+                                                                <a @click="editDevice(device.id)" type="button" to="/" title="Editar alguma informação do dispositivo">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/device/${device.id}/consumption`}" class="ml-3" title="View consumption this device">
+                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-3" title="Visualizar em tempo real o consumo deste dispositivo">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 
-                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Delete device">
+                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Excluir dispositivo">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </a>
                                                             </div>
@@ -62,7 +62,7 @@
 
                                         <div v-else class="row">
                                             <div class="col-12 alert alert-info text-center" role="alert">
-                                                You don't own any registered device
+                                                Você não possuí nenhum dispositivo cadastrado
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
                         <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
-                                    Register device
+                                    Cadastrar dispositivo
                                 </h5>
                                 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,7 +92,7 @@
                                 <div class="row">
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="deviceName"> 
-                                            Device name: 
+                                            Nome:
                                         </label>
 
                                         <input v-model="device.name" type="text" class="form-control form-control-sm" id="deviceName" placeholder="Nome/Apelido do dispositivo" required>
@@ -105,7 +105,7 @@
                                             MAC Address:
                                         </label>
 
-                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress" placeholder="MAC Address, encontra-se no aparelho" required>
+                                        <input v-model="device.identificationCode" type="text" class="form-control form-control-sm" id="macAddress" placeholder="MAC Address, encontra-se na tomada inteligente" required>
                                     </div>
                                 </div>
 
@@ -120,7 +120,7 @@
 
                                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-0">
                                         <small class="text-muted">
-                                            Amount of Watts (W) that the product consumes
+                                            Quantidade de Watts(W) que o produto conectado a tomada inteligente consome
                                         </small>
                                     </div>
                                 </div>
@@ -128,21 +128,21 @@
                                 <div class="row mt-3">
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="descriptionDevice"> 
-                                            Description:
+                                            Observações:
                                         </label>
 
-                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Observações"></textarea>
+                                        <textarea v-model="device.description" rows="7" class="form-control form-control-sm" id="descriptionDevice" placeholder="Aqui você pode escrever informações como dispositivo está no quarto/sala"></textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary btn-sm"> 
-                                    Register 
+                                    Cadastrar 
                                 </button>
 
                                 <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
-                                    Close
+                                    Fechar
                                 </button>
                             </div>
                         </form>
@@ -245,7 +245,7 @@
             },
 
             deleteDevice(device) {
-                if(confirm(`Want to delete the device '${device.name}'?`)) {                    
+                if(confirm(`Deseja excluir o dispositivo com nome '${device.name}'?`)) {                    
                     this.$http.delete(`/api/device/delete/${device.id}`)
                         .then((response) => {
                             if(response.status == 200) {

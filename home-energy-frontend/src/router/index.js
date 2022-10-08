@@ -24,7 +24,7 @@ const routes = [
             public: true
         },
 
-        component: () => import(/* webpackChunkName: "registerHouse" */ "../views/ForgotPassword.vue")
+        component: () => import(/* webpackChunkName: "forgotPassword" */ "../views/ForgotPassword.vue")
     },
     
     {
@@ -54,15 +54,15 @@ const routes = [
     },
 
     {
-        path: "/user/register",
+        path: "/create/account",
 
-        name: "registerUser",
+        name: "createAccount",
 
         meta: {
             public: true
         },
 
-        component: () => import(/* webpackChunkName: "registerUser" */ "../views/RegisterUser.vue")
+        component: () => import(/* webpackChunkName: "createAccount" */ "../views/CreateAccount.vue")
     },
 
     {

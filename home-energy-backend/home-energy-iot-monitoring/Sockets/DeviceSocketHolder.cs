@@ -40,6 +40,7 @@ namespace home_energy_iot_monitoring.Sockets
                     
                     await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                     await _panelHubControl.PanelUIAddNewDeviceCard(this.GetClientByIdConn(idConnection));
+                    await this.NotifyCostumerConnection(idConnection);
 
                     await EchoAsycn(webSocket);
                 }
@@ -49,6 +50,7 @@ namespace home_energy_iot_monitoring.Sockets
                 var deviceClient = this.GetClientBySocket(webSocket);
                 Console.WriteLine("[disconnected] ("+deviceClient.Value.device_id+") id-connection: " + deviceClient.Key);
                 await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
+                await this.OnDeviceDisconnect(deviceClient.Key);
                 clients.TryRemove(deviceClient);
                 await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                 
@@ -108,6 +110,7 @@ namespace home_energy_iot_monitoring.Sockets
                 {
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     var deviceClient = clients.First(x => x.Value.web_socket == webSocket);
+                    await this.OnDeviceDisconnect(deviceClient.Key);
                     if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                     {
                         Console.WriteLine("[disconnected] (" + deviceClient.Value.device_id + ") id-connection: " + deviceClient.Key);
@@ -166,6 +169,7 @@ namespace home_energy_iot_monitoring.Sockets
                         finally
                         {
                             await _panelHubControl.PanelUINotifyDeviceIdUpdated(deviceClient);
+                            await this.NotifyCostumerConnection(idConnection);
                         }
                     });
                 }
@@ -182,7 +186,9 @@ namespace home_energy_iot_monitoring.Sockets
                         finally
                         {
                             await _panelHubControl.PanelUINotifyDeviceIpUpdated(deviceClient);
-                            
+                            await this.NotifyCostumerConnection(idConnection);
+                            await this.NotifyCostumerDeviceIP(idConnection);
+
                         }
                     });
                 }
@@ -253,6 +259,84 @@ namespace home_energy_iot_monitoring.Sockets
             }
         }
 
+        private async Task NotifyCostumerConnection(string idConnection)
+        {
+            ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
+            if (device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumerHubControl.CostumerUINotifyConnection(costumer.conn_id);
+                    }
+                }
+            }
+        }
+
+        private async Task NotifyCostumerDisconnection(string idConnection)
+        {
+            ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
+            if (device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumerHubControl.CostumerUINotifyDisconnection(costumer.conn_id);
+                    }
+                }
+            }
+
+        }
+
+        private async Task NotifyCostumerDeviceIP(string idConnection)
+        {
+            ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
+            if (device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumerHubControl.CostumerUIReceiveIP(costumer.conn_id,device.device_ip);
+                    }
+                }
+            }
+        }
+
+        private async Task CostumerRemoveDeviceIP(string idConnection)
+        {
+            ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
+            if (device != null)
+            {
+                List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+
+                if (costumersConn.Count > 0)
+                {
+                    foreach (var costumer in costumersConn)
+                    {
+                        await _costumerHubControl.CostumerUIRemoveIP(costumer.conn_id);
+                    }
+                }
+            }
+
+        }
+
+        private async Task OnDeviceDisconnect(string idConnection)
+        {
+            await this.NotifyCostumerDisconnection(idConnection);
+            await this.CostumerRemoveDeviceIP(idConnection);
+            await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, "0");
+            await SendEnergyValueToCostumer(idConnection, "0");
+        }
+
         private List<ItemDeviceClient> GetDevicesClientList()
         {
             return clients.Select(c => new ItemDeviceClient { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
@@ -260,7 +344,7 @@ namespace home_energy_iot_monitoring.Sockets
 
         private KeyValuePair<string, ClientDeviceConnection> GetClientByIdConn(string IdConn)
         {
-            return clients.First(x => x.Key == IdConn);
+            return clients.FirstOrDefault(x => x.Key == IdConn);
         }
 
         private KeyValuePair<string, ClientDeviceConnection> GetClientBySocket(WebSocket webSocket)
