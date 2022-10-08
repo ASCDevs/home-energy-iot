@@ -9,22 +9,32 @@ namespace home_energy_iot_monitoring.Infrasctructure
 {
     public class ReportAPI : IReportAPI
     {
+        private readonly ILogger<ReportAPI> _logger;
         private string urlAPISaveValue { get; set; }
         private bool useAPI { get; set; }
         private string tokenAPI { get; set; }
 
-        public ReportAPI(IConfiguration configuration)
+        public ReportAPI(IConfiguration configuration, ILogger<ReportAPI> logger)
         {
-            if (configuration["Environment"] == "prod") {
-                urlAPISaveValue = configuration["APISaveValueProd"];
-            }
-            else
+            _logger = logger;
+
+            try
             {
-                urlAPISaveValue = configuration["APISaveValueDev"];
+                if (configuration["Environment"] == "prod")
+                {
+                    urlAPISaveValue = configuration["APISaveValueProd"];
+                }
+                else
+                {
+                    urlAPISaveValue = configuration["APISaveValueDev"];
+                }
+                tokenAPI = configuration["TokenApi"];
+                useAPI = Convert.ToBoolean(configuration["flAPISaveValue"]);
             }
-            tokenAPI = configuration["TokenApi"];
-            useAPI = Convert.ToBoolean(configuration["flAPISaveValue"]);
-            
+            catch (Exception ex)
+            {
+                _logger.LogCritical("[Erro Critico ReportAPI] > Erro no construtor ("+DateTime.Now+"), Erro: "+ex.Message);
+            }
         }
         public async Task SaveEnergyValue(string energyValue, string deviceId)
         {
@@ -56,13 +66,13 @@ namespace home_energy_iot_monitoring.Infrasctructure
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[Erro API SaveEnergy] - "+ex.Message+" - ["+ex.StackTrace+"]");
+                _logger.LogCritical("[Erro Critico ReportAPI] > Erro ao salvar valor de energia ("+energyValue+") lido no dispositivo ("+deviceId+"), ("+DateTime.Now+"), Erro: "+ex.Message);
             }
         }
 
         private StringContent ToRequest(object obj)
         {
-            var json = JsonConvert.SerializeObject(obj);    
+            var json = JsonConvert.SerializeObject(obj);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             return data;
         }

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>home_energy_iot_monitoring</RootNamespace>
+    <UserSecretsId>a0035076-c708-446c-bd06-d120eafe2564</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/1c1e7411-1d1c-4ad2-b0cf-1b54b5c3c32b/resourceGroups/myResourceGroup/providers/microsoft.insights/components/insights-home-iot</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
