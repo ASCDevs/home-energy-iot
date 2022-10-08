@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Interfaces;
+﻿using home_energy_iot_core.Exceptions;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_core.Models;
 using home_energy_iot_repository.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -54,9 +55,10 @@ namespace home_energy_iot_core
                     return consumption;
                 }
 
-                _logger.LogInformation($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
+                var notFoundMessage = $"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].";
 
-                return new DeviceConsumption();
+                _logger.LogInformation(notFoundMessage);
+                throw new EntityNotFoundException(notFoundMessage);
             }
             catch (Exception ex)
             {
@@ -79,7 +81,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Iniciando busca dos reports entre {initialDate} - {finalDate} de Dispositivos com o Código de identificação [{deviceIdentificationCode}].");
 
-                var reports = _deviceReportReaderRepository.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate);
+                var reports = _deviceReportReaderRepository.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate);
                 
                 if (reports.Count > 0)
                 {
@@ -102,9 +104,10 @@ namespace home_energy_iot_core
                     return consumption;
                 }
 
-                _logger.LogInformation($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
+                var notFoundMessage = $"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].";
 
-                return new DeviceConsumption();
+                _logger.LogInformation(notFoundMessage);
+                throw new EntityNotFoundException(notFoundMessage);
             }
             catch (Exception ex)
             {

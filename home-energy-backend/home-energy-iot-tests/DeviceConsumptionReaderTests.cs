@@ -1,4 +1,5 @@
 ﻿using home_energy_iot_core;
+using home_energy_iot_core.Exceptions;
 using home_energy_iot_core.Models;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
@@ -61,7 +62,8 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            Assert.Null(instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode).IdentificationCode);
+            Assert.Throws<EntityNotFoundException>(() =>
+                instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode));
 
             _deviceConsumptionReaderRepository.Verify();
         }
@@ -78,7 +80,8 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            Assert.Null(instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode).IdentificationCode);
+            Assert.Throws<EntityNotFoundException>(() =>
+                instance.GetDeviceConsumptionTotalValue(deviceIdentificationCode));
 
             _deviceConsumptionReaderRepository.Verify();
         }
@@ -210,12 +213,12 @@ namespace home_energy_iot_tests
 
             var reports = new List<DeviceReport>();
 
-            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate)).
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate)).
                 Returns(reports).Verifiable();
 
             var instance = GetInstance();
 
-            Assert.Null(instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate).IdentificationCode);
+            Assert.Throws<EntityNotFoundException>(() => instance.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate));
 
             _deviceConsumptionReaderRepository.Verify();
         }
@@ -260,7 +263,7 @@ namespace home_energy_iot_tests
                 FinalDate = finalDate
             };
 
-            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionBetweenDates(deviceIdentificationCode, initialDate, finalDate))
+            _deviceConsumptionReaderRepository.Setup(x => x.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate))
                 .Returns(reports).Verifiable();
 
             _houseManagerRepository.Setup(x => x.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode))

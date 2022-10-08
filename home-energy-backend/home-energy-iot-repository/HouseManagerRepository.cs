@@ -13,19 +13,19 @@ namespace home_energy_iot_repository
             _dataBaseContext = dataBaseContext;
         }
 
-        public async Task Create(House house)
+        public void Create(House house)
         {
-            await _dataBaseContext.Houses.AddAsync(house);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.Houses.Add(house);
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task Update(House house)
+        public void Update(House house)
         {
             _dataBaseContext.Houses.Update(house);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task Delete(int id)
+        public void Delete(int id)
         {
             var house = new House
             {
@@ -33,20 +33,22 @@ namespace home_energy_iot_repository
             };
 
             _dataBaseContext.Houses.Remove(house);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.SaveChanges();
         }
 
-        public async Task<House> Get(int id)
+        public House Get(int id)
         {
-            return _dataBaseContext.Houses.Find(id);
+            var house = _dataBaseContext.Houses.Find(id);
+
+            return house ?? new House();
         }
 
-        public async Task<List<House>> GetAll()
+        public List<House> GetAll()
         {
             return _dataBaseContext.Houses.ToList();
         }
 
-        public async Task<List<House>> GetByUserId(int id)
+        public List<House> GetByUserId(int id)
         {
             return _dataBaseContext.Houses.Where(x => x.IdUser == id).ToList();
         }

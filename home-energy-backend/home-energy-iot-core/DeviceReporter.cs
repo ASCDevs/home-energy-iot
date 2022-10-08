@@ -19,7 +19,7 @@ namespace home_energy_iot_core
             _deviceReporterRepository = deviceReporterRepository;
         }
 
-        public async Task Report(DeviceReport report)
+        public void Report(DeviceReport report)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace home_energy_iot_core
 
                 report.ReportDate = DateTime.Now;
 
-                await _deviceReporterRepository.Report(report);
+                _deviceReporterRepository.Report(report);
 
                 _logger.LogInformation($"Report do Dispositivo com Código de identificação [{report.IdentificationCode}] adicionado com sucesso.");
             }

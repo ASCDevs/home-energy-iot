@@ -17,7 +17,7 @@ namespace home_energy_iot_core
             _houseManagerRepository = houseManagerRepository;
         }
 
-        public async Task Create(House house)
+        public void Create(House house)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace home_energy_iot_core
 
                 house.RegisterDate = DateTime.Now;
 
-                await _houseManagerRepository.Create(house);
+                _houseManagerRepository.Create(house);
 
                 _logger.LogInformation($"Casa [{house.Name}] criada com sucesso.");
             }
@@ -38,7 +38,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Update(House house)
+        public void Update(House house)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando Casa Id [{house.Id}].");
 
-                await _houseManagerRepository.Update(house);
+                _houseManagerRepository.Update(house);
 
                 _logger.LogInformation($"Casa Id [{house.Id}] atualizada com sucesso.");
             }
@@ -57,7 +57,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Delete(int id)
+        public void Delete(int id)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Deletando Casa Id [{id}].");
 
-                await _houseManagerRepository.Delete(id);
+                _houseManagerRepository.Delete(id);
 
                 _logger.LogInformation($"Casa Id [{id}] deletada com sucesso.");
             }
@@ -76,7 +76,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<House> Get(int id)
+        public House Get(int id)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando a Casa com Id [{id}].");
 
-                var house = await _houseManagerRepository.Get(id);
+                var house = _houseManagerRepository.Get(id);
 
                 if (house?.Id > 0)
                 {
@@ -104,13 +104,13 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<List<House>> GetAll()
+        public List<House> GetAll()
         {
             try
             {
                 _logger.LogInformation("Buscando Casas na base de dados.");
 
-                var houses = await _houseManagerRepository.GetAll();
+                var houses = _houseManagerRepository.GetAll();
 
                 if (houses?.Count > 0)
                 {
@@ -130,7 +130,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<List<House>> GetByUserId(int id)
+        public List<House> GetByUserId(int id)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
-                var houses = await _houseManagerRepository.GetByUserId(id);
+                var houses = _houseManagerRepository.GetByUserId(id);
 
                 if (houses?.Count > 0)
                 {

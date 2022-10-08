@@ -17,7 +17,7 @@ namespace home_energy_iot_core
             _deviceManagerRepository = deviceManagerRepository;
         }
 
-        public async Task Create(Device device)
+        public void Create(Device device)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace home_energy_iot_core
 
                 device.RegisterDate = DateTime.Now;
 
-                await _deviceManagerRepository.Create(device);
+                _deviceManagerRepository.Create(device);
 
                 _logger.LogInformation($"Dispositivo [{device.Name}] criado com sucesso.");
             }
@@ -41,7 +41,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Update(Device device)
+        public void Update(Device device)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando Dispositivo Id [{device.Id}].");
 
-                await _deviceManagerRepository.Update(device);
+                _deviceManagerRepository.Update(device);
 
                 _logger.LogInformation($"Dispositivo Id [{device.Id}] atualizado com sucesso.");
             }
@@ -64,7 +64,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Delete(int id)
+        public void Delete(int id)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Deletando Dispositivo Id [{id}].");
 
-                await _deviceManagerRepository.Delete(id);
+                _deviceManagerRepository.Delete(id);
 
                 _logger.LogInformation($"Dispositivo Id [{id}] deletado com sucesso.");
             }
@@ -83,7 +83,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<Device> Get(int id)
+        public Device Get(int id)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando o Dispositivo com Id [{id}].");
 
-                var device = await _deviceManagerRepository.Get(id);
+                var device = _deviceManagerRepository.Get(id);
 
                 if (device.Id > 0)
                 {
@@ -101,7 +101,7 @@ namespace home_energy_iot_core
 
                 var notFoundMessage = $"Dispositivo Id [{id}] não encontrado.";
                  
-                _logger.LogError(notFoundMessage);
+                _logger.LogInformation(notFoundMessage);
                 throw new EntityNotFoundException(notFoundMessage);
             }
             catch (Exception ex)
@@ -111,13 +111,13 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<List<Device>> GetAll()
+        public List<Device> GetAll()
         {
             try
             {
                 _logger.LogInformation("Buscando Dispositivos na base de dados.");
 
-                var devices = await _deviceManagerRepository.GetAll();
+                var devices = _deviceManagerRepository.GetAll();
 
                 if (devices?.Count > 0)
                 {
@@ -137,7 +137,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task<List<Device>> GetByHouseId(int id)
+        public List<Device> GetByHouseId(int id)
         {
             try
             {
@@ -145,9 +145,9 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Buscando Dispositivos na base de dados da Casa Id [{id}].");
 
-                var devices = await _deviceManagerRepository.GetByHouseId(id);
+                var devices = _deviceManagerRepository.GetByHouseId(id);
 
-                if (devices?.Count > 0)
+                if (devices.Count > 0)
                 {
                     _logger.LogInformation($"Retornando os dispositivos encontrados para a Casa Id [{id}].");
                     return devices;
@@ -165,7 +165,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<bool> Exists(string deviceIdentificationCode)
+        public bool Exists(string deviceIdentificationCode)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace home_energy_iot_core
 
                 var result = _deviceManagerRepository.Exists(deviceIdentificationCode);
 
-                if (result.Result)
+                if (result)
                 {
                     _logger.LogInformation($"Dispositivo com código de identificação [{deviceIdentificationCode}] encontrado.");
                     return result;

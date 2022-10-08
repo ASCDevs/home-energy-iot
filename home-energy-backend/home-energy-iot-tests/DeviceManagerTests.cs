@@ -34,19 +34,19 @@ namespace home_energy_iot_tests
         #region Create
 
         [Fact]
-        public async void CreateDeviceNullDeviceTest()
+        public void CreateDeviceNullDeviceTest()
         {
             Device device = null;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Create(device));
+            Assert.Throws<ArgumentNullException>(() => instance.Create(device));
         }
 
         #region ValidateDeviceHouseId
 
         [Fact]
-        public async void CreateDeviceIdHouseZeroTest()
+        public void CreateDeviceIdHouseZeroTest()
         {
             var device = new Device
             {
@@ -60,11 +60,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceIdHouseNegativeTest()
+        public void CreateDeviceIdHouseNegativeTest()
         {
             var device = new Device
             {
@@ -78,7 +78,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Create(device));
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceName
 
         [Fact]
-        public async void CreateDeviceNullNameTest()
+        public void CreateDeviceNullNameTest()
         {
             var device = new Device
             {
@@ -100,11 +100,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceEmptyNameTest()
+        public void CreateDeviceEmptyNameTest()
         {
             var device = new Device
             {
@@ -118,11 +118,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceEmptySpaceNameTest()
+        public void CreateDeviceEmptySpaceNameTest()
         {
             var device = new Device
             {
@@ -136,7 +136,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         #endregion
@@ -144,7 +144,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceIdentificationCode
 
         [Fact]
-        public async void CreateDeviceNullIdentificationCodeTest()
+        public void CreateDeviceNullIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -158,11 +158,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceEmptyIdentificationCodeTest()
+        public void CreateDeviceEmptyIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -176,11 +176,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceWhiteSpaceIdentificationCodeTest()
+        public void CreateDeviceWhiteSpaceIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -194,7 +194,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         #endregion
@@ -202,7 +202,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceDescription
 
         [Fact]
-        public async void CreateDeviceNullDescriptionTest()
+        public void CreateDeviceNullDescriptionTest()
         {
             var device = new Device
             {
@@ -216,11 +216,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceEmptyDescriptionTest()
+        public void CreateDeviceEmptyDescriptionTest()
         {
             var device = new Device
             {
@@ -234,11 +234,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceWhiteSpaceDescriptionTest()
+        public void CreateDeviceWhiteSpaceDescriptionTest()
         {
             var device = new Device
             {
@@ -252,7 +252,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Create(device));
         }
 
         #endregion
@@ -260,7 +260,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceWatts
 
         [Fact]
-        public async void CreateDeviceZeroWattsTest()
+        public void CreateDeviceZeroWattsTest()
         {
             var device = new Device
             {
@@ -274,11 +274,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Create(device));
         }
 
         [Fact]
-        public async void CreateDeviceNegativeWattsTest()
+        public void CreateDeviceNegativeWattsTest()
         {
             var device = new Device
             {
@@ -292,13 +292,13 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Create(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Create(device));
         }
 
         #endregion
 
         [Fact]
-        public async void CreateDeviceSuccessTest()
+        public void CreateDeviceSuccessTest()
         {
             var device = _deviceMock;
 
@@ -306,7 +306,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await instance.Create(device);
+            instance.Create(device);
 
             _deviceManagerRepository.Verify();
         }
@@ -317,19 +317,19 @@ namespace home_energy_iot_tests
 
 
         [Fact]
-        public async void UpdateDeviceNullTest()
+        public void UpdateDeviceNullTest()
         {
             Device device = null;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Update(device));
+            Assert.Throws<ArgumentNullException>(() => instance.Update(device));
         }
 
         #region ValidaveDeviceId
 
         [Fact]
-        public async void UpdateDeviceIdZeroTest()
+        public void UpdateDeviceIdZeroTest()
         {
             var device = new Device
             {
@@ -338,11 +338,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceIdNegativeTest()
+        public void UpdateDeviceIdNegativeTest()
         {
             var device = new Device
             {
@@ -351,7 +351,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         #endregion
@@ -359,7 +359,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceHouseId
 
         [Fact]
-        public async void UpdateDeviceIdHouseZeroTest()
+        public void UpdateDeviceIdHouseZeroTest()
         {
             var device = new Device
             {
@@ -374,11 +374,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceIdHouseNegativeTest()
+        public void UpdateDeviceIdHouseNegativeTest()
         {
             var device = new Device
             {
@@ -393,7 +393,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         #endregion
@@ -401,7 +401,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceName
 
         [Fact]
-        public async void UpdateDeviceNullNameTest()
+        public void UpdateDeviceNullNameTest()
         {
             var device = new Device
             {
@@ -416,11 +416,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceEmptyNameTest()
+        public void UpdateDeviceEmptyNameTest()
         {
             var device = new Device
             {
@@ -435,11 +435,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceEmptySpaceNameTest()
+        public void UpdateDeviceEmptySpaceNameTest()
         {
             var device = new Device
             {
@@ -454,7 +454,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         #endregion
@@ -462,7 +462,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceIdentificationCode
 
         [Fact]
-        public async void UpdateDeviceNullIdentificationCodeTest()
+        public void UpdateDeviceNullIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -477,11 +477,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceEmptyIdentificationCodeTest()
+        public void UpdateDeviceEmptyIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -496,11 +496,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceWhiteSpaceIdentificationCodeTest()
+        public void UpdateDeviceWhiteSpaceIdentificationCodeTest()
         {
             var device = new Device
             {
@@ -515,7 +515,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         #endregion
@@ -523,7 +523,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceDescription
 
         [Fact]
-        public async void UpdateDeviceNullDescriptionTest()
+        public void UpdateDeviceNullDescriptionTest()
         {
             var device = new Device
             {
@@ -538,11 +538,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceEmptyDescriptionTest()
+        public void UpdateDeviceEmptyDescriptionTest()
         {
             var device = new Device
             {
@@ -557,11 +557,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceWhiteSpaceDescriptionTest()
+        public void UpdateDeviceWhiteSpaceDescriptionTest()
         {
             var device = new Device
             {
@@ -576,7 +576,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(device));
         }
 
         #endregion
@@ -584,7 +584,7 @@ namespace home_energy_iot_tests
         #region ValidateDeviceWatts
 
         [Fact]
-        public async void UpdateDeviceZeroWattsTest()
+        public void UpdateDeviceZeroWattsTest()
         {
             var device = new Device
             {
@@ -599,11 +599,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         [Fact]
-        public async void UpdateDeviceNegativeWattsTest()
+        public void UpdateDeviceNegativeWattsTest()
         {
             var device = new Device
             {
@@ -618,14 +618,14 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Update(device));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(device));
         }
 
         #endregion
 
 
         [Fact]
-        public async void UpdateDeviceSuccessTest()
+        public void UpdateDeviceSuccessTest()
         {
             var device = new Device
             {
@@ -642,7 +642,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await instance.Update(device);
+             instance.Update(device);
 
             _deviceManagerRepository.Verify();
         }
@@ -652,27 +652,27 @@ namespace home_energy_iot_tests
         #region Delete
 
         [Fact]
-        public async void DeleteDeviceNegativeIdTest()
+        public void DeleteDeviceNegativeIdTest()
         {
             var id = -1;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Delete(id));
         }
 
         [Fact]
-        public async void DeleteDeviceZeroIdTest()
+        public void DeleteDeviceZeroIdTest()
         {
             var id = 0;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Delete(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Delete(id));
         }
 
         [Fact]
-        public async void DeleteDeviceSuccessTest()
+        public void DeleteDeviceSuccessTest()
         {
             var id = 1;
 
@@ -680,7 +680,7 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await instance.Delete(id);
+             instance.Delete(id);
 
             _deviceManagerRepository.Verify();
         }
@@ -690,53 +690,53 @@ namespace home_energy_iot_tests
         #region Get
 
         [Fact]
-        public async void GetDeviceZeroIdTest()
+        public void GetDeviceZeroIdTest()
         {
             var id = 0;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Get(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Get(id));
         }
 
         [Fact]
-        public async void GetDeviceNegativeIdTest()
+        public void GetDeviceNegativeIdTest()
         {
             var id = -1;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Get(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Get(id));
         }
 
         [Fact]
-        public async void GetDeviceReturnCountZeroTest()
+        public void GetDeviceReturnCountZeroTest()
         {
             int id = 1;
 
             var device = new Device();
 
-            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(Task.FromResult(device));
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.Get(id));
+            Assert.Throws<EntityNotFoundException>(() => instance.Get(id));
 
             _deviceManagerRepository.Verify();
         }
 
         [Fact]
-        public async void GetDeviceSuccessTest()
+        public void GetDeviceSuccessTest()
         {
             int id = 1;
 
             var device = _deviceMock;
 
-            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(Task.FromResult(device));
+            _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
 
             var instance = GetInstance();
 
-            var result = await instance.Get(id);
+            var result =  instance.Get(id);
 
             Assert.Equal(device, result);
 
@@ -748,17 +748,17 @@ namespace home_energy_iot_tests
         #region GetAll
 
         [Fact]
-        public async void GetAllDevicesEmptyTest()
+        public void GetAllDevicesEmptyTest()
         {
 
             var devices = new List<Device>();
 
             _deviceManagerRepository.Setup(x => x.GetAll())
-                .Returns(Task.FromResult(devices)).Verifiable();
+                .Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetAll());
+            Assert.Throws<EntityNotFoundException>(() => instance.GetAll());
 
             _deviceManagerRepository.Verify();
         }
@@ -773,11 +773,11 @@ namespace home_energy_iot_tests
             };
 
             _deviceManagerRepository.Setup(x => x.GetAll())
-                .Returns(Task.FromResult(devices)).Verifiable();
+                .Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
-            var result = instance.GetAll().Result;
+            var result = instance.GetAll();
 
             Assert.Equal(devices.Count, result.Count);
 
@@ -789,38 +789,38 @@ namespace home_energy_iot_tests
         #region GetByHouseId
 
         [Fact]
-        public async void GetDeviceByIdNegativeIdTest()
+        public void GetDeviceByIdNegativeIdTest()
         {
             var id = -1;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
         }
 
         [Fact]
-        public async void GetDeviceByIdZeroIdTest()
+        public void GetDeviceByIdZeroIdTest()
         {
             var id = 0;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.GetByHouseId(id));
         }
 
         [Fact]
-        public async void GetDeviceByIdDevicesNotFoundTest()
+        public void GetDeviceByIdDevicesNotFoundTest()
         {
             var id = 1;
 
             var devices = new List<Device>();
 
             _deviceManagerRepository.Setup(x => x.GetByHouseId(id))
-                .Returns(Task.FromResult(devices)).Verifiable();
+                .Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => instance.GetByHouseId(id));
+            Assert.Throws<EntityNotFoundException>(() => instance.GetByHouseId(id));
 
             _deviceManagerRepository.Verify();
         }
@@ -837,11 +837,11 @@ namespace home_energy_iot_tests
             };
 
             _deviceManagerRepository.Setup(x => x.GetByHouseId(id))
-                .Returns(Task.FromResult(devices)).Verifiable();
+                .Returns(devices).Verifiable();
 
             var instance = GetInstance();
 
-            var result = instance.GetByHouseId(id).Result;
+            var result = instance.GetByHouseId(id);
 
             Assert.Equal(devices.Count, result.Count);
 
@@ -853,33 +853,33 @@ namespace home_energy_iot_tests
         #region Exists
 
         [Fact]
-        public async void DeviceExistsNullIdentificationCodeTest()
+        public void DeviceExistsNullIdentificationCodeTest()
         {
             string deviceIdentificationCode = null;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
         }
 
         [Fact]
-        public async void DeviceExistsEmptyIdentificationCodeTest()
+        public void DeviceExistsEmptyIdentificationCodeTest()
         {
             string deviceIdentificationCode = "";
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
         }
 
         [Fact]
-        public async void DeviceExistsWhiteSpaceIdentificationCodeTest()
+        public void DeviceExistsWhiteSpaceIdentificationCodeTest()
         {
             string deviceIdentificationCode = " ";
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Exists(deviceIdentificationCode));
         }
 
         [Fact]
@@ -888,11 +888,11 @@ namespace home_energy_iot_tests
             string deviceIdentificationCode = "ABC123";
 
             _deviceManagerRepository.Setup(x => x.Exists(deviceIdentificationCode))
-                .Returns(Task.FromResult(true)).Verifiable();
+                .Returns(true).Verifiable();
 
             var instance = GetInstance();
 
-            var result = instance.Exists(deviceIdentificationCode).Result;
+            var result = instance.Exists(deviceIdentificationCode);
 
             Assert.True(result);
 
@@ -905,11 +905,11 @@ namespace home_energy_iot_tests
             string deviceIdentificationCode = "ABC123";
 
             _deviceManagerRepository.Setup(x => x.Exists(deviceIdentificationCode))
-                .Returns(Task.FromResult(false)).Verifiable();
+                .Returns(false).Verifiable();
 
             var instance = GetInstance();
 
-            var result = instance.Exists(deviceIdentificationCode).Result;
+            var result = instance.Exists(deviceIdentificationCode);
 
             Assert.False(result);
 

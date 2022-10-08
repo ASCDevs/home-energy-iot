@@ -20,17 +20,17 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public async void ReportDeviceNullDeviceTest()
+        public void ReportDeviceNullDeviceTest()
         {
             DeviceReport report = null;
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => instance.Report(report));
+            Assert.Throws<ArgumentNullException>(() => instance.Report(report));
         }
 
         [Fact]
-        public async void ReportDeviceInvalidWattsUsageTest()
+        public void ReportDeviceInvalidWattsUsageTest()
         {
             var report = new DeviceReport
             {
@@ -40,11 +40,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityNumericValueException>(() => instance.Report(report));
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Report(report));
         }
 
         [Fact]
-        public async void ReportDeviceNullDeviceIdentificationCodeTest()
+        public void ReportDeviceNullDeviceIdentificationCodeTest()
         {
             var report = new DeviceReport
             {
@@ -54,11 +54,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Report(report));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Report(report));
         }
 
         [Fact]
-        public async void ReportDeviceEmptyDeviceIdentificationCodeTest()
+        public void ReportDeviceEmptyDeviceIdentificationCodeTest()
         {
             var report = new DeviceReport
             {
@@ -68,11 +68,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Report(report));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Report(report));
         }
 
         [Fact]
-        public async void ReportDeviceWhiteSpaceDeviceIdentificationCodeTest()
+        public void ReportDeviceWhiteSpaceDeviceIdentificationCodeTest()
         {
             var report = new DeviceReport
             {
@@ -82,11 +82,11 @@ namespace home_energy_iot_tests
 
             var instance = GetInstance();
 
-            await Assert.ThrowsAsync<InvalidEntityTextValueException>(() => instance.Report(report));
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Report(report));
         }
 
         [Fact]
-        public async void ReportDeviceSuccessTest()
+        public void ReportDeviceSuccessTest()
         {
             var report = new DeviceReport
             {
@@ -98,7 +98,7 @@ namespace home_energy_iot_tests
             
             _deviceReporterRepository.Setup(x => x.Report(report)).Verifiable();
 
-            await instance.Report(report);
+             instance.Report(report);
 
             _deviceReporterRepository.Verify(x => x.Report(report), Times.Exactly(1));
         }

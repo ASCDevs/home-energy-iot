@@ -20,11 +20,11 @@ namespace home_energy_api.Controllers
         [HttpPost]
         [Route("Report")]
         [Authorize]
-        public async Task<IActionResult> ReportDevice([FromBody] DeviceReport device)
+        public IActionResult ReportDevice([FromBody] DeviceReport device)
         {
             try
             {
-                await _deviceReporter.Report(device);
+                _deviceReporter.Report(device);
 
                 return Ok();
             }

@@ -13,10 +13,10 @@ namespace home_energy_iot_repository
             _dataBaseContext = dataBaseContext;
         }
 
-        public async Task Report(DeviceReport device)
+        public void Report(DeviceReport device)
         {
-            await _dataBaseContext.AddAsync(device);
-            await _dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.Add(device);
+            _dataBaseContext.SaveChanges();
         }
     }
 }

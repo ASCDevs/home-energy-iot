@@ -1,4 +1,5 @@
-﻿using home_energy_iot_core.Helpers.Interfaces;
+﻿using home_energy_iot_core.Exceptions;
+using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
@@ -20,7 +21,7 @@ namespace home_energy_iot_core
             _userManagerRepository = userManagerRepository;
         }
 
-        public async Task Create(User user)
+        public void Create(User user)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace home_energy_iot_core
 
                 user.RegisterDate = DateTime.Now;
 
-                await _userManagerRepository.Create(user);
+                _userManagerRepository.Create(user);
 
                 _logger.LogInformation($"Usuário [{user.Username}] criado com sucesso.");
             }
@@ -45,7 +46,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public async Task Update(User user)
+        public void Update(User user)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Atualizando o Usuário Id [{user.Id}].");
 
-                await _userManagerRepository.Update(user);
+                _userManagerRepository.Update(user);
 
                 _logger.LogInformation($"Usuário Id [{user.Id}] atualizado com sucesso.");
             }
@@ -64,12 +65,7 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task ChangePassword(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> Get(int id)
+        public User Get(int id)
         {
             try
             {
@@ -78,18 +74,18 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Consultando dados do usuário Id [{id}] na base de dados.");
 
-                var result = _userManagerRepository.Get(id).Result;
+                var user = _userManagerRepository.Get(id);
 
-                if (result != null)
+                if (user.Id > 0)
                 {
                     _logger.LogInformation($"Usuário Id [{id}] encontrado. Retornando resultado.");
-                    return Task.FromResult(result);
+                    return user;
                 }
 
                 var errorMessage = $"Usuário com Id [{id}] não encontrado.";
 
                 _logger.LogInformation(errorMessage);
-                throw new Exception(errorMessage);
+                throw new EntityNotFoundException(errorMessage);
             }
             catch (Exception ex)
             {
@@ -98,24 +94,24 @@ namespace home_energy_iot_core
             }
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public List<User> GetAll()
         {
             try
             {
                 _logger.LogInformation($"Buscando os usuários na base de dados.");
 
-                var result = _userManagerRepository.GetAll().Result.ToList();
+                var result = _userManagerRepository.GetAll().ToList();
 
                 if (result.Count > 0)
                 {
                     _logger.LogInformation("Retornando os usuários encontrados.");
-                    return Task.FromResult<IEnumerable<User>>(result);
+                    return result;
                 }
 
                 var errorMessage = "Nenhum Usuário encontrado.";
 
                 _logger.LogInformation(errorMessage);
-                throw new Exception(errorMessage);
+                throw new EntityNotFoundException(errorMessage);
             }
             catch (Exception ex)
             {
