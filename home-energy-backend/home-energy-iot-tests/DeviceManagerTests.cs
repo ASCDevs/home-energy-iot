@@ -122,7 +122,7 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public void CreateDeviceEmptySpaceNameTest()
+        public void CreateDeviceWhiteSpaceNameTest()
         {
             var device = new Device
             {
@@ -439,7 +439,7 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public void UpdateDeviceEmptySpaceNameTest()
+        public void UpdateDeviceWhiteSpaceNameTest()
         {
             var device = new Device
             {
