@@ -1,6 +1,7 @@
 ﻿using home_energy_api.Authentication;
 using home_energy_api.Models;
 using home_energy_iot_api.Models;
+using home_energy_iot_core.Interfaces;
 using home_energy_iot_core.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,14 @@ namespace home_energy_api.Controllers
     {
         private ILoginService _loginService;
         private ITokenService _tokenService;
+        private IUserManager _userManager;
         private ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService, ITokenService tokenService, ILogger<LoginController> logger)
+        public LoginController(ILoginService loginService, ITokenService tokenService, IUserManager userManager, ILogger<LoginController> logger)
         {
             _loginService = loginService;
             _tokenService = tokenService;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -31,7 +34,7 @@ namespace home_energy_api.Controllers
             {
                 _logger.LogInformation($"Buscando o usuário [{login.Username}].");
 
-                var userReturned = _loginService.GetUser(login.Username);
+                var userReturned = _userManager.GetByUsername(login.Username);
 
                 if (userReturned != null && _loginService.ValidPassword(login.Password, userReturned))
                 {

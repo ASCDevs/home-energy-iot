@@ -8,7 +8,6 @@ namespace home_energy_iot_entities.Entities
     {
         [Key]
         public int Id { get; set; }
-
         public int IdUser { get; set; }
         public string? Name { get; set; }
         public string? TypeAddress { get; set; }

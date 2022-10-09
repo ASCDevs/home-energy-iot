@@ -1,6 +1,7 @@
 ﻿using home_energy_iot_entities;
 using home_energy_iot_entities.Entities;
 using home_energy_iot_repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace home_energy_iot_repository
 {
@@ -19,17 +20,6 @@ namespace home_energy_iot_repository
             _dataBaseContext.SaveChanges();
         }
 
-        public void Update(User user)
-        {
-            _dataBaseContext.Users.Update(user);
-            _dataBaseContext.SaveChanges();
-        }
-
-        public async Task ChangePassword(User user)
-        {
-            throw new NotImplementedException();
-        }
-
         public User Get(int id)
         {
             var user = _dataBaseContext.Users.Find(id);
@@ -37,9 +27,11 @@ namespace home_energy_iot_repository
             return user ?? new User();
         }
 
-        public List<User> GetAll()
+        public User GetByUsername(string username)
         {
-            return _dataBaseContext.Users.ToList();
+            var user = _dataBaseContext.Users.FirstOrDefault(u => u.Username == username);
+
+            return user ?? new User();
         }
     }
 }

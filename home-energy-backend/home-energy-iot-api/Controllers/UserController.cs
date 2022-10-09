@@ -35,23 +35,6 @@ namespace home_energy_iot_api.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("Update")]
-        [Authorize]
-        public IActionResult Update([FromBody] User user)
-        {
-            try
-            {
-                _userManager.Update(user);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro ao atualizar o usuário: " + ex.Message);
-            }
-        }
-
         [HttpGet]
         [Route("Get/{id}")]
         [Authorize]
@@ -68,28 +51,6 @@ namespace home_energy_iot_api.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Erro ao buscar o usuário: " + ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetAll")]
-        [Authorize]
-        public IActionResult GetAll()
-        {
-            try
-            {
-                var users = _userManager.GetAll();
-
-                var usersFiltered = new List<UserModel>();
-
-                foreach (var user in users)
-                    usersFiltered.Add(FilterUserResult(user));
-
-                return Ok(usersFiltered);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro ao buscar os usuários: " + ex.Message);
             }
         }
 

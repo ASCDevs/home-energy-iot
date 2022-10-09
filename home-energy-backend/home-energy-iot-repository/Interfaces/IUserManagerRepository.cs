@@ -10,11 +10,7 @@ namespace home_energy_iot_repository.Interfaces
     public interface IUserManagerRepository
     {
         void Create(User user);
-
-        void Update(User user);
-
         User Get(int id);
-
-        List<User> GetAll();
+        User GetByUsername(string username);
     }
 }

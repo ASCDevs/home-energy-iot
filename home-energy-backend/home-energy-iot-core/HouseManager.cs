@@ -44,6 +44,8 @@ namespace home_energy_iot_core
             {
                 ValidateHouse(house);
 
+                ValidateDeviceId(house.Id);
+
                 _logger.LogInformation($"Atualizando Casa Id [{house.Id}].");
 
                 _houseManagerRepository.Update(house);
@@ -134,7 +136,8 @@ namespace home_energy_iot_core
         {
             try
             {
-                ValidateDeviceId(id);
+                if (id <= 0)
+                    throw new InvalidEntityNumericValueException($"Id do usuário [{id}] inválido.");
 
                 _logger.LogInformation($"Buscando as Casas do usuário Id [{id}].");
 
@@ -161,13 +164,34 @@ namespace home_energy_iot_core
         private void ValidateHouse(House house)
         {
             if (house is null)
-                throw new ArgumentNullException(nameof(house), "Casa nula.");
+                throw new ArgumentNullException(nameof(house), "Objeto da Casa Nulo.");
+
+            if (house.IdUser <= 0)
+                throw new InvalidEntityNumericValueException($"Id de referência ao usuário inválido: [{house.IdUser}]");
+
+            if (string.IsNullOrWhiteSpace(house.Name))
+                throw new InvalidEntityTextValueException("Nome da Casa nulo ou vazio.");
+
+            if(string.IsNullOrWhiteSpace(house.TypeAddress))
+                throw new InvalidEntityTextValueException("Tipo do endereço nulo ou vazio.");
+
+            if (string.IsNullOrWhiteSpace(house.NameAddress))
+                throw new InvalidEntityTextValueException("Nome do endereço nulo ou vazio.");
+
+            if(house.NumberAddress <= 0)
+                throw new InvalidEntityNumericValueException($"Número do endereço inválido [{house.NumberAddress}].");
+
+            if (house.PeriodDaysReport <= 0)
+                throw new InvalidEntityNumericValueException($"Período de report inválido [{house.PeriodDaysReport}].");
+
+            if (house.ValuePerKWH <= 0)
+                throw new InvalidEntityNumericValueException($"Valor do KWH inválido [{house.ValuePerKWH}].");
         }
 
         private void ValidateDeviceId(int id)
         {
             if (id <= 0)
-                throw new InvalidEntityNumericValueException($"Id da casa inválido: [{id}].");
+                throw new InvalidEntityNumericValueException($"Id da Casa inválido: [{id}].");
         }
     }
 }
