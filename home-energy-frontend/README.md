@@ -18,7 +18,7 @@ npm run build
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-<hr/>
+<br/> <hr/>
 
 ### Links auxiliares
 
@@ -43,3 +43,9 @@ https://apexcharts.com/javascript-chart-demos/line-charts/realtime/
 https://vue-chartjs.org/
 
 https://github.com/axios/axios
+
+https://learn.microsoft.com/pt-br/dotnet/architecture/porting-existing-aspnet-apps/signalr-differences
+
+https://learn.microsoft.com/pt-br/aspnet/core/signalr/dotnet-client?view=aspnetcore-6.0&tabs=visual-studio
+
+https://learn.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-6.0&tabs=visual-studio-code
