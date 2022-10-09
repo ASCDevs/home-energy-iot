@@ -51,6 +51,7 @@ namespace home_energy_iot_core
             try
             {
                 ValidateUser(user);
+                ValidateUserId(user.Id);
 
                 _logger.LogInformation($"Atualizando o Usuário Id [{user.Id}].");
 
@@ -69,8 +70,7 @@ namespace home_energy_iot_core
         {
             try
             {
-                if (id < 0)
-                    throw new ArgumentOutOfRangeException(nameof(id), $"Id [{id}] do usuário inválido.");
+                ValidateUserId(id);
 
                 _logger.LogInformation($"Consultando dados do usuário Id [{id}] na base de dados.");
 
@@ -120,10 +120,31 @@ namespace home_energy_iot_core
             }
         }
 
+        private void ValidateUserId(int id)
+        {
+            if (id <= 0)
+                throw new InvalidEntityNumericValueException($"Id [{id}] do usuário inválido.");
+        }
+
         private void ValidateUser(User user)
         {
             if (user is null)
                 throw new ArgumentNullException(nameof(user), "Usuário nulo.");
+
+            if (string.IsNullOrWhiteSpace(user.Name))
+                throw new InvalidEntityTextValueException("Nome do usuário vazio ou nulo.");
+
+            if (string.IsNullOrWhiteSpace(user.Username))
+                throw new InvalidEntityTextValueException("Username do usuário vazio ou nulo.");
+
+            if (string.IsNullOrWhiteSpace(user.Password))
+                throw new InvalidEntityTextValueException("Senha do usuário vazia ou nula.");
+
+            if (string.IsNullOrWhiteSpace(user.CPF))
+                throw new InvalidEntityTextValueException("CPF do usuário vazio ou nulo.");
+
+            if (string.IsNullOrWhiteSpace(user.Email))
+                throw new InvalidEntityTextValueException("CPF do usuário vazio ou nulo.");
         }
     }
 }
