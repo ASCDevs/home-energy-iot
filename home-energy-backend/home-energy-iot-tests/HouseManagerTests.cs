@@ -433,7 +433,451 @@ namespace home_energy_iot_tests
 
         #region Update
 
-        
+        [Fact]
+        public void UpdateHouseNullTest()
+        {
+            House house = null;
+
+            var instance = GetInstance();
+
+            Assert.Throws<ArgumentNullException>(() => instance.Update(house));
+        }
+
+        #region ValidateUserIdReference
+
+        [Fact]
+        public void UpdateHouseIdUserNegativeTest()
+        {
+            var house = new House
+            {
+                IdUser = -1
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseIdUserZeroTest()
+        {
+            var house = new House
+            {
+                IdUser = 0
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidateHouseName
+
+        [Fact]
+        public void UpdateHouseNameNullTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = null,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseNameEmptyTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = "",
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseNameWhiteSpaceTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = " ",
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidateHouseTypeAddress
+
+        [Fact]
+        public void UpdateHouseTypeAddressNullTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = null,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseTypeAddressEmptyTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = "",
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseTypeAddressWhiteSpaceTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = " ",
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidateNameAddress
+
+        [Fact]
+        public void UpdateHouseNameAddressNullTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = null,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseNameAddressEmptyTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = "",
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseNameAddressWhiteSpaceTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = " ",
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityTextValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidateNumberAddress
+
+        [Fact]
+        public void UpdateHouseNumberAddressNegativeTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = -1,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseNumberAddressZeroTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = 0,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidatePeriodDaysReport
+
+        [Fact]
+        public void UpdateHousePeriodDaysReportNegativeTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = -1,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHousePeriodDaysReportZeroTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = 0,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        #region ValidateValuePerKWH
+
+        [Fact]
+        public void UpdateHouseValuePerKWHNegativeTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = -1
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseValuePerKWHZeroTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = 0
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        #endregion
+
+        [Fact]
+        public void UpdateIdHouseNegativeTest()
+        {
+            var house = new House
+            {
+                Id = -1,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateIdHouseZeroTest()
+        {
+            var house = new House
+            {
+                Id = 0,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            var instance = GetInstance();
+
+            Assert.Throws<InvalidEntityNumericValueException>(() => instance.Update(house));
+        }
+
+        [Fact]
+        public void UpdateHouseSuccessTest()
+        {
+            var house = new House
+            {
+                Id = _housesMock.Id,
+                IdUser = _housesMock.IdUser,
+                Name = _housesMock.Name,
+                TypeAddress = _housesMock.TypeAddress,
+                NameAddress = _housesMock.NameAddress,
+                NumberAddress = _housesMock.NumberAddress,
+                RegisterDate = DateTime.Now,
+                PeriodDaysReport = _housesMock.PeriodDaysReport,
+                ValuePerKWH = _housesMock.ValuePerKWH
+            };
+
+            _houseManagerRepository.Setup(x => x.Update(house)).Verifiable();
+
+            var instance = GetInstance();
+
+            instance.Update(house);
+
+            _houseManagerRepository.Verify();
+        }
 
         #endregion
 

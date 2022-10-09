@@ -21,9 +21,6 @@ namespace home_energy_iot_core
         {
             try
             {
-                if(house is null)
-                    throw new ArgumentNullException(nameof(house), "Objeto da Casa Nulo.");
-
                 ValidateHouse(house);
 
                 _logger.LogInformation($"Criando Casa: [{house.Name}].");
@@ -166,6 +163,9 @@ namespace home_energy_iot_core
 
         private void ValidateHouse(House house)
         {
+            if (house is null)
+                throw new ArgumentNullException(nameof(house), "Objeto da Casa Nulo.");
+
             if (house.IdUser <= 0)
                 throw new InvalidEntityNumericValueException($"Id de referência ao usuário inválido: [{house.IdUser}]");
 
@@ -182,7 +182,7 @@ namespace home_energy_iot_core
                 throw new InvalidEntityNumericValueException($"Número do endereço inválido [{house.NumberAddress}].");
 
             if (house.PeriodDaysReport <= 0)
-                throw new InvalidEntityNumericValueException($"Período de report inválido [{house.NumberAddress}].");
+                throw new InvalidEntityNumericValueException($"Período de report inválido [{house.PeriodDaysReport}].");
 
             if (house.ValuePerKWH <= 0)
                 throw new InvalidEntityNumericValueException($"Valor do KWH inválido [{house.ValuePerKWH}].");
