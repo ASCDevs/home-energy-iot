@@ -1010,7 +1010,7 @@ namespace home_energy_iot_tests
 
             var result = instance.GetAll();
 
-            Assert.Equal(houses, result);
+            Assert.Equal(2, result.Count);
 
             _houseManagerRepository.Verify();
         }

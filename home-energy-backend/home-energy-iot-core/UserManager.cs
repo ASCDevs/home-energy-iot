@@ -46,26 +46,6 @@ namespace home_energy_iot_core
             }
         }
 
-        public void Update(User user)
-        {
-            try
-            {
-                ValidateUser(user);
-                ValidateUserId(user.Id);
-
-                _logger.LogInformation($"Atualizando o Usuário Id [{user.Id}].");
-
-                _userManagerRepository.Update(user);
-
-                _logger.LogInformation($"Usuário Id [{user.Id}] atualizado com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao atualizar o usuário.");
-                throw;
-            }
-        }
-
         public User Get(int id)
         {
             try
@@ -94,28 +74,28 @@ namespace home_energy_iot_core
             }
         }
 
-        public List<User> GetAll()
+        public User GetByUsername(string username)
         {
             try
             {
-                _logger.LogInformation($"Buscando os usuários na base de dados.");
+                if (string.IsNullOrWhiteSpace(username))
+                    throw new ArgumentNullException(nameof(username), "Nome do usuário nulo ou vazio.");
 
-                var result = _userManagerRepository.GetAll().ToList();
+                _logger.LogInformation($"Buscando o usuário com Username [{username}].");
 
-                if (result.Count > 0)
-                {
-                    _logger.LogInformation("Retornando os usuários encontrados.");
-                    return result;
-                }
+                var user = _userManagerRepository.GetByUsername(username);
 
-                var errorMessage = "Nenhum Usuário encontrado.";
+                if (user.Id > 0)
+                    return user;
+
+                var errorMessage = $"Usuário com Username [{username}] não encontrado.";
 
                 _logger.LogInformation(errorMessage);
                 throw new EntityNotFoundException(errorMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, "Erro ao buscar os Usuários.");
+                _logger.LogInformation(ex, $"Erro ao logar o usuário [{username}].");
                 throw;
             }
         }
@@ -144,7 +124,7 @@ namespace home_energy_iot_core
                 throw new InvalidEntityTextValueException("CPF do usuário vazio ou nulo.");
 
             if (string.IsNullOrWhiteSpace(user.Email))
-                throw new InvalidEntityTextValueException("CPF do usuário vazio ou nulo.");
+                throw new InvalidEntityTextValueException("Email do usuário vazio ou nulo.");
         }
     }
 }
