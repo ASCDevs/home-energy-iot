@@ -27,7 +27,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{report.IdentificationCode}] com [{report.WattsUsage}] Watts de uso.");
 
-                report.ReportDate = DateTime.Now.AddHours(-3);
+                report.ReportDate = DateTime.UtcNow.AddHours(-3);
 
                 report.WattsUsage = WattsUsage(report.WattsUsage);
 
