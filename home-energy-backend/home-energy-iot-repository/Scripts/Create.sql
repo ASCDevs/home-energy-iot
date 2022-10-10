@@ -58,9 +58,9 @@ CREATE TABLE [DeviceReport](
 );
 
 --------------------Inserts padr�es para testes--------------------
-INSERT INTO [User] VALUES ('admin', 'admin', 'xFD4zcBV834YYjkXDXIF4HCgHKbOcezOGoUuNcJD0+Y=', 'oB8sB0NhEuvfSgUzK7d+Yg0jHk8=', '000.000.000-00', 'admin@admin.com', '2022-07-07 01:12:37.530')
+INSERT INTO [User] VALUES ('admin', 'admin', 'xFD4zcBV834YYjkXDXIF4HCgHKbOcezOGoUuNcJD0+Y=', 'oB8sB0NhEuvfSgUzK7d+Yg0jHk8=', '000.000.000-00', 'admin@admin.com', GETDATE())
 
-INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, '2022-08-29 12:00:00.000', 1, 0.85, 1)
+INSERT INTO [House] VALUES('Minha Casa', 'Rua', 'Nome Rua', 100, GETDATE(), 1, 0.85, 1)
 
 INSERT INTO [Device] VALUES('HU:34:DS4:D1', 'Computador', 'Computador da sala', '2022-08-29 12:00:00.000', 500, 1)
 
