@@ -39,7 +39,7 @@ CREATE TABLE [Device](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
 	[IdentificationCode] VARCHAR(255) NOT NULL UNIQUE,
 	[Name] VARCHAR(255) NOT NULL,
-	[Description] VARCHAR(255) NOT NULL,
+	[Description] VARCHAR(255) NULL,
 	[RegisterDate] DATETIME NOT NULL,
 	[Watts] DECIMAL(5,2) NOT NULL,
 
