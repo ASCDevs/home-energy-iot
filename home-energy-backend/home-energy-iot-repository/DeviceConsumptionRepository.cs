@@ -24,9 +24,9 @@ namespace home_energy_iot_repository
         public List<DeviceReport> GetDeviceConsumptionValueBetweenDates(string deviceIdentificationCode, DateTime initialDate, DateTime finalDate)
         {
             var reports = _databaseContext.DevicesReports.Where(
-                x => x.IdentificationCode == deviceIdentificationCode && 
-                x.ReportDate >= initialDate && 
-                x.ReportDate <= finalDate).ToList();
+                x => x.IdentificationCode == deviceIdentificationCode &&
+                     x.ReportDate >= initialDate &&
+                     x.ReportDate <= finalDate).ToList();
 
             return reports;
         }

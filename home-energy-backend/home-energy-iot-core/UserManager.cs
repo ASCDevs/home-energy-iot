@@ -33,7 +33,7 @@ namespace home_energy_iot_core
                 user.SaltPassword = _hasher.CreateSalt(20);
                 user.Password = _hasher.GenerateHash(user.Password, user.SaltPassword);
 
-                user.RegisterDate = DateTime.Now;
+                user.RegisterDate = DateTime.UtcNow.AddHours(-3);
 
                 _userManagerRepository.Create(user);
 
