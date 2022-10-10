@@ -28,7 +28,7 @@ namespace home_energy_iot_core
 
                 _logger.LogInformation($"Criando Dispositivo: [{device.Name}].");
 
-                device.RegisterDate = DateTime.Now;
+                device.RegisterDate = DateTime.Now.AddHours(-3);
 
                 _deviceManagerRepository.Create(device);
 
