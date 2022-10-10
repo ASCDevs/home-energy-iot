@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 
-import jQuery from 'jquery';
+import jQuery from "jquery";
 global.$ = jQuery
 
 import App from "./App.vue";

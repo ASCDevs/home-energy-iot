@@ -6,7 +6,7 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a type="button" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user text-dark-200 "></i>
 
                     <span class="mr-2 text-gray-600 small ml-2 mt-1">

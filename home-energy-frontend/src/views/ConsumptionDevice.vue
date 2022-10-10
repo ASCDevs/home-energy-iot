@@ -9,10 +9,7 @@
                     
                     <div class="container-fluid">
                         <div class="alert alert-danger text-center" role="alert" id="statusConexaoWebSocket" hidden>
-                            <small>
-                                Aplicação fora do ar...
-                                Aguarde alguns instantes
-                            </small>
+                            <small></small>
                         </div>
 
                         <div class="row">
@@ -123,12 +120,12 @@
 </template>
 
 <script>
-    let signalR = require("@aspnet/signalr");
+    let signalR = require("@microsoft/signalr");
 
     import { useRoute } from "vue-router";
 
     import { Line } from "vue-chartjs";
-    import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js'
+    import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement } from "chart.js";
 
     import Sidebar from "../shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
@@ -168,9 +165,11 @@
                     }
                 },
 
+                isOnline: false,
+
                 watts: 0.00,
 
-                ipDevice: '',
+                ipDevice: "",
 
                 connection: null,
 
@@ -186,10 +185,12 @@
         },
 
         methods: {
-            connect() {
-                var thisVue = this;
+            /* Colocar no beforeUpdate() ou updated() */
 
-                $("#statusConexaoWebSocket").prop("hidden", "true");
+            connect() {
+                var self = this;
+
+                $("#statusConexaoWebSocket").prop("hidden", true);
 
                 this.connection.start().then(() => {
                     this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
@@ -197,11 +198,11 @@
                     this.connection.invoke("getDeviceIP");
 
                     this.connection.on("receiveEnergyValue", function(valueEnergy) {
-                        let chart = JSON.parse(JSON.stringify(thisVue.chart));
+                        let chart = JSON.parse(JSON.stringify(self.chart));
 
                         let energyFloat = parseFloat(valueEnergy).toFixed(2);
 
-                        thisVue.watts = energyFloat;
+                        self.watts = energyFloat;
 
                         let list = chart.datasets[0].data;
 
@@ -211,41 +212,71 @@
 
                         chart.datasets[0].data = list;
 
-                        thisVue.chart = chart
+                        self.chart = chart
                     });
 
                     this.connection.on("ReceiveDeviceIP", function(ip) {
-                        thisVue.ipDevice = ip;
-                    });
-
-                    this.connection.on("stopConfirmed", function() {
-                        console.log("stopConfirmed");
-
-                        document.querySelector("#btnEnableConnection").disabled = false;
-
-                        document.querySelector("#btnDisableConnection").disabled = true;
-                    });
-
-                    this.connection.on("continueConfirmed", function() {
-                        console.log("continueConfirmed");
-
-                        document.querySelector("#btnEnableConnection").disabled = true;
-
-                        document.querySelector("#btnDisableConnection").disabled = false;
+                        self.ipDevice = ip;
                     });
 
                     this.connection.on("DeviceIsDisconnected", function() {
+                        self.isOnline = false;
+
+                        $("#btnDisableConnection").prop("disabled", true);
+
+                        $("#btnEnableConnection").prop("disabled", false);
+
+                        $("#statusConexaoWebSocket small").text("Aparelho está Offline");
+
+                        $("#statusConexaoWebSocket").prop("hidden", false);
+
                         console.log("Offline");
                     });
+
+                    this.connection.on("DeviceConnected", function() {
+                        self.isOnline = true;
+
+                        $("#btnEnableConnection").prop("disabled", true);
+
+                        $("#btnDisableConnection").prop("disabled", false);
+
+                        self.connection.invoke("GetCurrentState");
+
+                        console.log("Online");
+                    });
+
+                    this.connection.on("ReceiveCurrentState", function(state) {
+                        console.log(state);
+                        
+                        if(state == "ligado") {
+                            $("#btnEnableConnection").prop("disabled", true);
+                            $("#btnDisableConnection").prop("disabled", false);
+                            self.isOnline = true;
+                        }
+
+                        if(state == "interrompido") {
+                            $("#btnEnableConnection").prop("disabled", false);
+                            $("#btnDisableConnection").prop("disabled", true);
+                            self.isOnline = false;
+                        }
+                    });
+
+                    this.connection.onreconnecting(function(error) {
+                        $("#statusConexaoWebSocket").prop("hidden", false);
+                        $("#statusConexaoWebSocket").text(error);
+                    })
+
+                    this.connection.onreconnected(function(connId) {
+                        $("#statusConexaoWebSocket").prop("hidden", false);
+                        $("#statusConexaoWebSocket").text(connId);
+                    })
                 })
                 .catch((error) => {
                     console.log(error);
 
-                    $("#statusConexaoWebSocket").prop("hidden", "false");
+                    $("#statusConexaoWebSocket").prop("hidden", false);
 
-                    setTimeout(() => {
-                        this.connect();
-                    }, 5000)
+                    $("#statusConexaoWebSocket small").text(error);
                 })
             },
 
@@ -260,25 +291,30 @@
             configureSignalR() {
                 this.connection = new signalR.HubConnectionBuilder()
                     .withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub")
+                    .configureLogging(signalR.LogLevel.Information)
+                    .withAutomaticReconnect()
                     .build();
-            },
-
-            getValuesOfConsumption() {
-                setInterval(() => {
-                    this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
-                        .then((response) => {
-                            if(response.status == 200) {
-                                this.deviceConsumption = response.data;
-                            }
-                        })
-                }, 5000)
             }
         },
 
         mounted() {
             this.configureSignalR();
             this.connect();
-            this.getValuesOfConsumption();
+        },
+
+        watch: {
+            isOnline(newValue) {
+                setInterval(() => {
+                    if(newValue) {
+                        this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
+                            .then((response) => {
+                                if(response.status == 200) {
+                                    this.deviceConsumption = response.data;
+                                }
+                            })
+                    }
+                }, 5000)
+            }
         }
     }
 </script>
