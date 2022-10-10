@@ -25,7 +25,7 @@ namespace home_energy_iot_core
             {
                 ValidateDeviceReport(report);
 
-                _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{report.IdentificationCode}].");
+                _logger.LogInformation($"Adicionando Report do Dispositivo com Código de identificação [{report.IdentificationCode}] com [{report.WattsUsage}] Watts de uso.");
 
                 report.ReportDate = DateTime.Now;
 

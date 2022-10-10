@@ -114,7 +114,7 @@ namespace home_energy_iot_tests
 
             var khwHour = 0.85;
 
-            var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+            var wattsTotal = Convert.ToDouble(reports.Average(x => x.WattsUsage));
 
             var consumption = new DeviceConsumption
             {
@@ -249,7 +249,7 @@ namespace home_energy_iot_tests
                 }
             };
 
-            var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+            var wattsTotal = Convert.ToDouble(reports.Average(x => x.WattsUsage));
 
             var khwPrice = 0.85;
 

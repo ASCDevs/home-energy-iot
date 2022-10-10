@@ -34,7 +34,7 @@ namespace home_energy_iot_core
                 {
                     _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
 
-                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+                    var wattsTotal = Convert.ToDouble(reports.Average(x => x.WattsUsage));
 
                     var initialDate = reports[0].ReportDate;
                     var finalDate = reports[reports.Count - 1].ReportDate;
@@ -87,7 +87,7 @@ namespace home_energy_iot_core
                 {
                     _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
 
-                    var wattsTotal = Convert.ToDouble(reports.Sum(x => x.WattsUsage));
+                    var wattsTotal = Convert.ToDouble(reports.Average(x => x.WattsUsage));
 
                     var kwhPrice = _houseManagerRepository.GetHouseBaseKwhByDeviceIdentificationCode(deviceIdentificationCode);
 

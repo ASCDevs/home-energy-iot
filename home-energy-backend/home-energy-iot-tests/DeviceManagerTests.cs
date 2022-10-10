@@ -361,16 +361,9 @@ namespace home_energy_iot_tests
         [Fact]
         public void UpdateDeviceIdHouseZeroTest()
         {
-            var device = new Device
-            {
-                Id = _deviceMock.Id,
-                IdHouse = 0,
-                Name = _deviceMock.Name,
-                IdentificationCode = _deviceMock.IdentificationCode,
-                Description = _deviceMock.Description,
-                RegisterDate = _deviceMock.RegisterDate,
-                Watts = _deviceMock.Watts
-            };
+            var device = _deviceMock;
+
+            device.Id = 0;
 
             var instance = GetInstance();
 
@@ -380,16 +373,9 @@ namespace home_energy_iot_tests
         [Fact]
         public void UpdateDeviceIdHouseNegativeTest()
         {
-            var device = new Device
-            {
-                Id = _deviceMock.Id,
-                IdHouse = -1,
-                Name = _deviceMock.Name,
-                IdentificationCode = _deviceMock.IdentificationCode,
-                Description = _deviceMock.Description,
-                RegisterDate = _deviceMock.RegisterDate,
-                Watts = _deviceMock.Watts
-            };
+            var device = _deviceMock;
+
+            device.Id = -1;
 
             var instance = GetInstance();
 
