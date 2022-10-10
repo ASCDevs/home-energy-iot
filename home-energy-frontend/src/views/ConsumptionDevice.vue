@@ -51,7 +51,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                            R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(2) }}
+                                                            R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(4) }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -73,6 +73,10 @@
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             Consumo em tempo real
                                         </h6>
+
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}"> 
+                                            Report
+                                        </router-link>
                                     </div>
 
                                     <div class="card-body">
@@ -190,94 +194,106 @@
             connect() {
                 var self = this;
 
-                $("#statusConexaoWebSocket").prop("hidden", true);
+                let stateConnection = this.connection.connection._connectionState;
 
-                this.connection.start().then(() => {
-                    this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
+                if(stateConnection == "Disconnected") {
+                    this.connection.start().then(() => {
+                        console.log(this.connection.connectionId);
 
-                    this.connection.invoke("getDeviceIP");
+                        this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
 
-                    this.connection.on("receiveEnergyValue", function(valueEnergy) {
-                        let chart = JSON.parse(JSON.stringify(self.chart));
+                        this.connection.invoke("getDeviceIP");
 
-                        let energyFloat = parseFloat(valueEnergy).toFixed(2);
+                        this.connection.on("receiveEnergyValue", function(valueEnergy) {
+                            let chart = JSON.parse(JSON.stringify(self.chart));
 
-                        self.watts = energyFloat;
+                            let energyFloat = parseFloat(valueEnergy).toFixed(2);
 
-                        let list = chart.datasets[0].data;
+                            self.watts = energyFloat;
 
-                        list.push(energyFloat);
+                            let list = chart.datasets[0].data;
 
-                        list.shift();
+                            list.push(energyFloat);
 
-                        chart.datasets[0].data = list;
+                            list.shift();
 
-                        self.chart = chart
-                    });
+                            chart.datasets[0].data = list;
 
-                    this.connection.on("ReceiveDeviceIP", function(ip) {
-                        self.ipDevice = ip;
-                    });
+                            self.chart = chart
+                        });
 
-                    this.connection.on("DeviceIsDisconnected", function() {
-                        self.isOnline = false;
+                        this.connection.on("ReceiveDeviceIP", function(ip) {
+                            self.ipDevice = ip;
 
-                        $("#btnDisableConnection").prop("disabled", true);
+                            $("#statusConexaoWebSocket").prop("hidden", true);
+                        });
 
-                        $("#btnEnableConnection").prop("disabled", false);
-
-                        $("#statusConexaoWebSocket small").text("Aparelho está Offline");
-
-                        $("#statusConexaoWebSocket").prop("hidden", false);
-
-                        console.log("Offline");
-                    });
-
-                    this.connection.on("DeviceConnected", function() {
-                        self.isOnline = true;
-
-                        $("#btnEnableConnection").prop("disabled", true);
-
-                        $("#btnDisableConnection").prop("disabled", false);
-
-                        self.connection.invoke("GetCurrentState");
-
-                        console.log("Online");
-                    });
-
-                    this.connection.on("ReceiveCurrentState", function(state) {
-                        console.log(state);
-                        
-                        if(state == "ligado") {
-                            $("#btnEnableConnection").prop("disabled", true);
-                            $("#btnDisableConnection").prop("disabled", false);
-                            self.isOnline = true;
-                        }
-
-                        if(state == "interrompido") {
-                            $("#btnEnableConnection").prop("disabled", false);
-                            $("#btnDisableConnection").prop("disabled", true);
+                        this.connection.on("DeviceIsDisconnected", function() {
                             self.isOnline = false;
-                        }
-                    });
 
-                    this.connection.onreconnecting(function(error) {
-                        $("#statusConexaoWebSocket").prop("hidden", false);
-                        $("#statusConexaoWebSocket").text(error);
+                            $("#btnDisableConnection").prop("disabled", true);
+
+                            $("#btnEnableConnection").prop("disabled", false);
+
+                            $("#statusConexaoWebSocket small").text("Aparelho está Offline");
+
+                            $("#statusConexaoWebSocket").prop("hidden", false);
+
+                            console.log("Offline");
+                        });
+
+                        this.connection.on("DeviceConnected", function() {
+                            self.isOnline = true;
+
+                            $("#btnEnableConnection").prop("disabled", true);
+
+                            $("#btnDisableConnection").prop("disabled", false);
+
+                            self.connection.invoke("GetCurrentState");
+
+                            console.log("Online");
+                        });
+
+                        this.connection.on("ReceiveCurrentState", function(state) {
+                            console.log(state);
+                            
+                            if(state == "ligado") {
+                                self.isOnline = true;
+
+                                $("#btnEnableConnection").prop("disabled", true);
+
+                                $("#btnDisableConnection").prop("disabled", false);
+                            }
+
+                            if(state == "interrompido") {
+                                self.isOnline = false;
+
+                                $("#btnEnableConnection").prop("disabled", false);
+
+                                $("#btnDisableConnection").prop("disabled", true);
+                            }
+                        });
+
+                        this.connection.onreconnecting(function(error) {
+                            $("#statusConexaoWebSocket").prop("hidden", false);
+
+                            $("#statusConexaoWebSocket small").text(error);
+                        })
+
+                        this.connection.onreconnected(function(connId) {
+                            $("#statusConexaoWebSocket").prop("hidden", false);
+
+                            $("#statusConexaoWebSocket small").text(connId);
+                        })
                     })
+                    .catch((error) => {
+                        console.log(error);
 
-                    this.connection.onreconnected(function(connId) {
                         $("#statusConexaoWebSocket").prop("hidden", false);
-                        $("#statusConexaoWebSocket").text(connId);
+
+                        $("#statusConexaoWebSocket small").text(error);
                     })
-                })
-                .catch((error) => {
-                    console.log(error);
-
-                    $("#statusConexaoWebSocket").prop("hidden", false);
-
-                    $("#statusConexaoWebSocket small").text(error);
-                })
+                }
             },
 
             stopConnection() {
@@ -302,13 +318,21 @@
             this.connect();
         },
 
+        beforeDestroy() {
+            this.connection.stop();
+        },
+
         watch: {
-            isOnline(newValue) {
+            isOnline(isConnected) {
                 setInterval(() => {
-                    if(newValue) {
+                    if(isConnected) {
+                        console.log("Request...");
+
                         this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
                             .then((response) => {
                                 if(response.status == 200) {
+                                    console.log(response.data);
+
                                     this.deviceConsumption = response.data;
                                 }
                             })

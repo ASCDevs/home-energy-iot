@@ -90,6 +90,18 @@ const routes = [
     },
 
     {
+        path: "/report/device/:id",
+
+        name: "reportDevice",
+
+        meta: {
+            public: false
+        },
+
+        component: () => import(/* webpackChunkName: "reportDevice" */ "../views/ReportDevice.vue")
+    },
+
+    {
         path: "/:pathMatch(.*)*",
 
         name: "notFound",
