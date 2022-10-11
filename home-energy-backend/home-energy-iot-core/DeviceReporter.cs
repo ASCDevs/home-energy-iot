@@ -27,8 +27,6 @@ namespace home_energy_iot_core
 
                 report.ReportDate = DateTime.UtcNow.AddHours(-3);
 
-                report.WattsUsage = WattsUsage(report.WattsUsage);
-
                 _deviceReporterRepository.Report(report);
 
                 _logger.LogInformation($"Report do Dispositivo com Código de identificação [{report.IdentificationCode}] adicionado com sucesso.");
@@ -38,13 +36,6 @@ namespace home_energy_iot_core
                 _logger.LogError(ex, $"Erro ao reportar o Dispositivo.");
                 throw;
             }
-        }
-
-        private decimal WattsUsage(decimal wattsUsage)
-        {
-            var toString = String.Format("{0:00.00}", wattsUsage);
-            var conversionResult = Convert.ToDecimal(toString);
-            return conversionResult;
         }
 
         private void ValidateDeviceReport(DeviceReport report)
