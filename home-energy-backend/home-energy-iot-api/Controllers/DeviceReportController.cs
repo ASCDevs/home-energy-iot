@@ -20,11 +20,13 @@ namespace home_energy_api.Controllers
         [HttpPost]
         [Route("Report")]
         [Authorize]
-        public IActionResult ReportDevice([FromBody] DeviceReport device)
+        public IActionResult ReportDevice([FromBody] DeviceReportModel reportModel)
         {
             try
             {
-                _deviceReporter.Report(device);
+                var report = ReportApiModelToReport(reportModel);
+
+                _deviceReporter.Report(report);
 
                 return Ok();
             }
@@ -32,6 +34,15 @@ namespace home_energy_api.Controllers
             {
                 return BadRequest("Erro reportar o dispositivo: " + ex.Message);
             }
+        }
+
+        private DeviceReport ReportApiModelToReport(DeviceReportModel report)
+        {
+            return new DeviceReport
+            {
+                IdentificationCode = report.IdentificationCode,
+                WattsUsage = Convert.ToDecimal(String.Format("{0:0.##}", report.WattsUsage))
+            };
         }
     }
 }
