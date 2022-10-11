@@ -98,17 +98,17 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-xl-12 col-md-12 mt-4">
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <button @click="continueConnection" id="btnEnableConnection" class="btn btn-success btn-sm" title="Ligar o aparelho">
-                                                            <i class="fas fa-redo-alt"></i> Ligar dispositivo
-                                                        </button>
+                                            <div class="card-body">
+                                                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mt-4">
+                                                    <button @click="continueConnection" id="btnEnableConnection" class="btn btn-success btn-sm" title="Ligar o aparelho">
+                                                        <i class="fas fa-redo-alt"></i> Ligar dispositivo
+                                                    </button>
+                                                </div>
 
-                                                        <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm ml-5" title="Desligar o aparelho">
-                                                            <i class="fas fa-stop"></i> Desligar dispositivo
-                                                        </button>
-                                                    </div>
+                                                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mt-4">
+                                                    <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm ml-5" title="Desligar o aparelho">
+                                                        <i class="fas fa-stop"></i> Desligar dispositivo
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -189,8 +189,6 @@
         },
 
         methods: {
-            /* Colocar no beforeUpdate() ou updated() */
-
             connect() {
                 var self = this;
 
@@ -205,6 +203,8 @@
                         this.connection.invoke("getDeviceIP");
 
                         this.connection.on("receiveEnergyValue", function(valueEnergy) {
+                            console.log(valueEnergy);
+
                             let chart = JSON.parse(JSON.stringify(self.chart));
 
                             let energyFloat = parseFloat(valueEnergy).toFixed(2);
@@ -225,11 +225,15 @@
                         this.connection.on("ReceiveDeviceIP", function(ip) {
                             self.ipDevice = ip;
 
+                            console.log(`IP: ${ip}`);
+
                             $("#statusConexaoWebSocket").prop("hidden", true);
                         });
 
                         this.connection.on("DeviceIsDisconnected", function() {
                             self.isOnline = false;
+
+                            self.ipDevice = "";
 
                             $("#btnDisableConnection").prop("disabled", true);
 
@@ -245,6 +249,8 @@
                         this.connection.on("DeviceConnected", function() {
                             self.isOnline = true;
 
+                            console.log("DeviceConnected");
+
                             $("#btnEnableConnection").prop("disabled", true);
 
                             $("#btnDisableConnection").prop("disabled", false);
@@ -254,22 +260,34 @@
                             console.log("Online");
                         });
 
+                        this.connection.on("ActionStopDevice", function() {
+                            self.isOnline = false;
+
+                            console.log("ActionStopDevice");
+                            
+                            $("#btnEnableConnection").prop("disabled", false);
+
+                            $("#btnDisableConnection").prop("disabled", true);
+                        });
+
+                        this.connection.on("ActionContinueDevice", function() {
+                            $("#btnEnableConnection").prop("disabled", true);
+
+                            $("#btnDisableConnection").prop("disabled", false);
+                        });
+
                         this.connection.on("ReceiveCurrentState", function(state) {
                             console.log(state);
                             
                             if(state == "ligado") {
                                 self.isOnline = true;
-
                                 $("#btnEnableConnection").prop("disabled", true);
-
                                 $("#btnDisableConnection").prop("disabled", false);
                             }
 
                             if(state == "interrompido") {
                                 self.isOnline = false;
-
                                 $("#btnEnableConnection").prop("disabled", false);
-
                                 $("#btnDisableConnection").prop("disabled", true);
                             }
                         });
@@ -277,21 +295,21 @@
                         this.connection.onreconnecting(function(error) {
                             $("#statusConexaoWebSocket").prop("hidden", false);
 
+                            console.log("onreconnecting");
+
                             $("#statusConexaoWebSocket small").text(error);
                         })
 
                         this.connection.onreconnected(function(connId) {
                             $("#statusConexaoWebSocket").prop("hidden", false);
 
+                            console.log("onreconnected");
+
                             $("#statusConexaoWebSocket small").text(connId);
                         })
                     })
                     .catch((error) => {
-                        console.log(error);
-
-                        $("#statusConexaoWebSocket").prop("hidden", false);
-
-                        $("#statusConexaoWebSocket small").text(error);
+                        console.error(error);
                     })
                 }
             },
@@ -319,7 +337,9 @@
         },
 
         beforeDestroy() {
-            this.connection.stop();
+            delete this.connection;
+            delete this.isOnline;
+            console.log("beforeDestroy");
         },
 
         watch: {
