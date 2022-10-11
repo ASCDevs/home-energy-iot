@@ -41,7 +41,7 @@ CREATE TABLE [Device](
 	[Name] VARCHAR(255) NOT NULL,
 	[Description] VARCHAR(255) NULL,
 	[RegisterDate] DATETIME NOT NULL,
-	[Watts] DECIMAL(5,2) NOT NULL,
+	[Watts] DECIMAL(6,2) NOT NULL,
 
 	[IdHouse] INT,
 
@@ -52,7 +52,7 @@ CREATE TABLE [DeviceReport](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY,
 	[IdentificationCode] VARCHAR(255),
 	[ReportDate] DATETIME NOT NULL,
-	[WattsUsage] DECIMAL(5,2) NOT NULL,
+	[WattsUsage] DECIMAL(6,2) NOT NULL,
 
 	FOREIGN KEY ([IdentificationCode]) REFERENCES [Device]([IdentificationCode])
 );
