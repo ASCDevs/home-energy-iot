@@ -94,6 +94,8 @@
         },
 
         beforeCreate() {
+            $("#overlay").css("display", "none");
+
             $(".modal-backdrop").remove();
         }
     }

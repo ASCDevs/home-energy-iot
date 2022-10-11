@@ -65,7 +65,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="col-xl-6 col-md-12 col-sm-12 mb-4">
                                 <div class="card border-left-info shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
@@ -100,7 +100,7 @@
                                             Consumo em tempo real
                                         </h6>
 
-                                        <router-link :to="{path: `/report/device/${this.macAddress}`}"> 
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm"> 
                                             Report
                                         </router-link>
                                     </div>
@@ -228,10 +228,6 @@
                         this.connection.invoke("getDeviceIP");
 
                         this.connection.on("receiveEnergyValue", function(valueEnergy) {
-                            console.log(valueEnergy);
-
-                            console.log(valueEnergy == "");
-
                             if(valueEnergy == "") {
                                 self.watts = 0.00;
                             }
@@ -361,8 +357,13 @@
             this.connect();
         },
 
-        beforeDestroy() {
+        async beforeUnmount() {
+            await this.connection.stop();
+               
+            console.log("Fechou o hub connection");
+
             delete this.connection;
+
             delete this.isOnline;
         },
 

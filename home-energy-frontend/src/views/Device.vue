@@ -178,9 +178,9 @@
                 device: {
                     id: 0,
                     idHouse: useRoute().params.id,
-                    identificationCode: '', // macAddress
-                    name: '',
-                    description: '',
+                    identificationCode: "", // macAddress
+                    name: "",
+                    description: "",
                     watts: 0
                 }
             }
@@ -189,7 +189,7 @@
         methods: {
             register() {
                 if(this.device.id == 0) {
-                    this.$http.post(`/api/device/create`, this.device)
+                    this.$http.post("/api/device/create", this.device)
                         .then((response) => {
                             if(response.status == 200) {
                                 alert("Salvo com sucesso");
@@ -268,6 +268,8 @@
         },
 
         beforeCreate() {
+            $("#overlay").css("display", "none");
+
             $(".modal-backdrop").remove();
         },
 

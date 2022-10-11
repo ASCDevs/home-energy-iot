@@ -18,7 +18,16 @@ npm run build
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-<br/> <hr/>
+
+<hr/> <br/> </br>
+
+
+### Link do Front-End
+
+https://energy-iot.netlify.app/
+
+
+<hr/> <br/> </br>
 
 
 ### Links auxiliares
@@ -31,6 +40,7 @@ https://www.youtube.com/watch?v=golo0kXY-w0  ----> SignalR in ASP.NET Core Proje
 
 https://www.youtube.com/watch?v=cbLl4b3oIz4  ----> Vuejs .netCore SignalR Real Time Mesaj Gönderme
 
+https://stackoverflow.com/questions/37096367/how-to-convert-seconds-to-minutes-and-hours-in-javascript
 
 
 ### Links do projeto
@@ -41,7 +51,6 @@ https://home-energy-iot-api.azurewebsites.net/swagger/index.html
 https://servicehomeiotmonitoring.azurewebsites.net/
 
 https://www.w3schools.com/icons/icons_reference.asp
-
 
 
 
@@ -61,8 +70,6 @@ https://learn.microsoft.com/en-us/aspnet/signalr/overview/guide-to-the-api/handl
 https://learn.microsoft.com/en-us/javascript/api/%40aspnet/signalr/hubconnection?view=signalr-js-latest#stop
 
 
-
-
 ### Link para calculo consumo
 https://adrianoaoli.com/eletronica/calculadora-consumo-eletrico.html#!
 
@@ -79,5 +86,7 @@ https://vue-chartjs.org/
 https://www.digitalocean.com/community/tutorials/vuejs-component-lifecycle
 
 https://apexcharts.com/javascript-chart-demos/line-charts/realtime/
+
+https://stackoverflow.com/questions/62743811/lifecycle-hook-beforedestroy-is-not-emitted-in-vue3
 
 https://github.com/axios/axios
