@@ -1,4 +1,4 @@
-﻿using home_energy_iot_api.Models;
+﻿using home_energy_iot_api.Core.Models;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_entities.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -13,9 +13,8 @@ namespace home_energy_iot_api.Controllers
         private readonly ILogger _logger;
         private readonly IUserManager _userManager;
 
-        public UserController(ILogger<UserController> logger, IUserManager userManager)
+        public UserController(IUserManager userManager)
         {
-            _logger = logger;
             _userManager = userManager;
         }
 

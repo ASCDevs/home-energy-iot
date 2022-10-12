@@ -1,4 +1,4 @@
-﻿namespace home_energy_iot_api.Models
+﻿namespace home_energy_iot_api.Core.Models
 {
     public class UserModel
     {

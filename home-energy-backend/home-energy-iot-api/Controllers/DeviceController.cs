@@ -12,12 +12,10 @@ namespace home_energy_iot_api.Controllers
     public class DeviceController : ControllerBase
     {
         private IDeviceManager _deviceManager;
-        private ILogger<DeviceController> _logger;
 
-        public DeviceController(IDeviceManager deviceManager, ILogger<DeviceController> logger)
+        public DeviceController(IDeviceManager deviceManager)
         {
             _deviceManager = deviceManager;
-            _logger = logger;
         }
 
         [HttpPost]
