@@ -1,7 +1,4 @@
-﻿using home_energy_api.Authentication;
-using home_energy_api.Models;
-using home_energy_iot_api.Models;
-using home_energy_iot_core.Interfaces;
+﻿using home_energy_api.Core.Models;
 using home_energy_iot_core.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +10,10 @@ namespace home_energy_api.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginService _loginService;
-        private ITokenService _tokenService;
-        private IUserManager _userManager;
-        private ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService, ITokenService tokenService, IUserManager userManager, ILogger<LoginController> logger)
+        public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
-            _tokenService = tokenService;
-            _userManager = userManager;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -32,31 +23,9 @@ namespace home_energy_api.Controllers
         {
             try
             {
-                _logger.LogInformation($"Buscando o usuário [{login.Username}].");
+                var loginInfo = _loginService.Login(login);
 
-                var userReturned = _userManager.GetByUsername(login.Username);
-
-                if (userReturned != null && _loginService.ValidPassword(login.Password, userReturned))
-                {
-                    _logger.LogInformation($"Usuário [{login.Username}] encontrado e gerando token de autenticação.");
-
-                    var token = _tokenService.GenerateToken(userReturned);
-
-                    return new
-                    {
-                        user = new UserModel
-                        {
-                            Id = userReturned.Id,
-                            Name = userReturned.Name
-                        },
-                        userToken = token
-                    };
-                }
-
-                var message = $"Usuário ou senha inválidos.";
-
-                _logger.LogError(message);
-                throw new Exception(message);
+                return loginInfo;
             }
             catch (Exception ex)
             {

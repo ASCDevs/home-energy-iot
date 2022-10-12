@@ -11,10 +11,12 @@ namespace home_energy_api.Controllers
     public class DeviceReportController : ControllerBase
     {
         private IDeviceReporter _deviceReporter;
+        private ILogger<DeviceReportController> _logger;
 
-        public DeviceReportController(IDeviceReporter deviceReporter)
+        public DeviceReportController(IDeviceReporter deviceReporter, ILogger<DeviceReportController> logger)
         {
             _deviceReporter = deviceReporter;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -38,6 +40,8 @@ namespace home_energy_api.Controllers
 
         private DeviceReport ReportApiModelToReport(DeviceReportModel report)
         {
+            _logger.LogInformation($"Formatando Report do Dispositivo com Código de identificação [{report.IdentificationCode}] com [{report.WattsUsage}] Watts de uso.");
+
             return new DeviceReport
             {
                 IdentificationCode = report.IdentificationCode,

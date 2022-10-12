@@ -1,4 +1,4 @@
-﻿namespace home_energy_api.Models
+﻿namespace home_energy_api.Core.Models
 {
     public class LoginModel
     {

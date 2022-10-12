@@ -10,12 +10,10 @@ namespace home_energy_api.Controllers
     public class HouseController : ControllerBase
     {
         private IHouseManager _houseManager;
-        private ILogger<HouseController> _logger;
 
-        public HouseController(IHouseManager houseManager, ILogger<HouseController> logger)
+        public HouseController(IHouseManager houseManager)
         {
             _houseManager = houseManager;
-            _logger = logger;
         }
 
         [HttpPost]

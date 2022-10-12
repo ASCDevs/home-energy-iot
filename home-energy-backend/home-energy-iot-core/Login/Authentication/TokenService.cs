@@ -3,8 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
-namespace home_energy_api.Authentication
+namespace home_energy_iot_core.Login.Authentication
 {
     public class TokenService : ITokenService
     {
