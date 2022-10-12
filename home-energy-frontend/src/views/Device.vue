@@ -18,8 +18,12 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                    <i class="fas fa-plus"></i> Add dispositivo
+                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal">
+                                                    <i class="d-sm-block d-md-none fas fa-plus"></i>
+
+                                                    <span class="d-none d-md-block">
+                                                        Add dispositivo
+                                                    </span>
                                                 </button>
                                             </div>
                                         </div>
@@ -32,11 +36,11 @@
                                                     <div class="card-body">
                                                         <div class="row no-gutters align-items-center">
                                                             <div class="col-auto">
-                                                                <i class="fas fa-microchip fa-2x text-gray-300"></i>
+                                                                <i class="fas fa-microchip  text-gray-300"></i>
                                                             </div>
 
                                                             <div class="col ml-3 mr-2">
-                                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                                <div class=" mb-0 font-weight-bold text-gray-800">
                                                                     {{ device.name }}
                                                                 </div>
                                                             </div>
@@ -46,11 +50,11 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-3" title="Visualizar em tempo real o consumo deste dispositivo">
+                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-4" title="Visualizar em tempo real o consumo deste dispositivo">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 
-                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Excluir dispositivo">
+                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-4" title="Excluir dispositivo">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </a>
                                                             </div>
@@ -269,7 +273,6 @@
 
         beforeCreate() {
             $("#overlay").css("display", "none");
-
             $(".modal-backdrop").remove();
         },
 

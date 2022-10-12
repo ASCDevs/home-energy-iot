@@ -18,8 +18,12 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button @click="clearFormHouse" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                    <i class="fas fa-plus"></i> Add casa
+                                                <button @click="clearFormHouse" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal" title="Adicionar uma nova casa">
+                                                    <i class="d-sm-block d-md-none fas fa-plus"></i>
+
+                                                    <span class="d-none d-md-block">
+                                                        Add casa
+                                                    </span>
                                                 </button>
                                             </div>
                                         </div>
@@ -30,8 +34,8 @@
                                             <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
-                                                        <div class="row no-gutters align-items-center">
-                                                            <div class="col-auto">
+                                                        <div class="row align-items-center">
+                                                            <div class="d-none d-sm-block col-auto">
                                                                 <i class="fas fa-house-user fa-2x text-gray-300"></i>
                                                             </div>
 
@@ -40,8 +44,10 @@
                                                                     {{ house.name }}
                                                                 </div>
 
-                                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                                    {{ house.nameAddress }}, {{house.numberAddress}}
+                                                                <div class="mb-0">
+                                                                    <h5 class="font-weight-bold text-gray-800">
+                                                                        {{ house.nameAddress }}, {{house.numberAddress}}
+                                                                    </h5>
                                                                 </div>
                                                             </div>
 
@@ -50,11 +56,11 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-3" title="Ver todos os dispositivos desta casa">
+                                                                <router-link :to="{path: `/house/${house.id}/devices`}" class="ml-4" title="Ver todos os dispositivos desta casa">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 
-                                                                <a type="button" @click="deleteHouse(house)" class="text-danger ml-3" title="Excluir casa">
+                                                                <a type="button" @click="deleteHouse(house)" class="text-danger ml-4" title="Excluir casa">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </a>
                                                             </div>
@@ -102,7 +108,7 @@
                                         <input v-model="house.name" type="text" class="form-control form-control-sm" id="houseName" placeholder="Nome/Apelido da casa" required>
                                     </div>
 
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-sm-3 mt-md-0 mt-lg-0 mt-xl-0">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-md-0 mt-3">
                                         <label for="typeAddress"> 
                                             Logradouro:
                                         </label>
@@ -124,7 +130,7 @@
                                         <input v-model="house.nameAddress" type="text" class="form-control form-control-sm" id="nameAddress" placeholder="Rua/Avenida ..." required>
                                     </div>
 
-                                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mt-md-0 mt-3">
                                         <label for="numberAddress"> 
                                             Numero: 
                                         </label>
@@ -140,7 +146,6 @@
                                         </label>
 
                                         <select v-model="house.periodDaysReport" class="form-control form-control-sm" id="periodDaysReport" required>
-                                            <option value="" disabled> Selecione um número </option>
                                             <option value="1"> 1 </option>
                                             <option value="2"> 2 </option>
                                             <option value="3"> 3 </option>
@@ -153,7 +158,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
+                                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 mt-md-0 mt-3">
                                         <label for="valueKWh"> 
                                             Valor em KWh:
                                         </label>
@@ -299,13 +304,12 @@
 
         beforeCreate() {
             $("#overlay").css("display", "none");
-
             $(".modal-backdrop").remove();
         },
 
         created() {
             this.getHousesUser();
-        },
+        }
     }
 </script>
 

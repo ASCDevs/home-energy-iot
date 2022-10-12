@@ -6,4 +6,8 @@
     #app {
         background-color: #4e73df;
     }
+
+    a:hover {
+        text-decoration: none;
+    }
 </style>

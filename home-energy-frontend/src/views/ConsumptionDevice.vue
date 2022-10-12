@@ -24,8 +24,10 @@
 
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                            {{ this.watts }}W 
+                                                        <div class="mb-0 mr-3">
+                                                            <h5 class="font-weight-bold text-gray-800">
+                                                                {{ this.watts }}W 
+                                                            </h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -50,8 +52,10 @@
 
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                            R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(4) }}
+                                                        <div class="mb-0 mr-3">
+                                                            <h5 class="font-weight-bold text-gray-800">
+                                                                R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(4) }}
+                                                            </h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -76,8 +80,10 @@
 
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                            {{ this.timeUse }}
+                                                        <div class="mb-0 mr-3">
+                                                            <h5 class="font-weight-bold text-gray-800">
+                                                                {{ this.timeUse }}
+                                                            </h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -101,16 +107,14 @@
                                         </h6>
 
                                         <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm"> 
-                                            Report
+                                            Relatório
                                         </router-link>
                                     </div>
 
                                     <div class="card-body">
-                                        <span v-show="this.ipDevice">
-                                            <a :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP para configuração do dispositivo"> 
-                                                <i class="fas fa-cog"></i> {{ this.ipDevice }}
-                                            </a>
-                                        </span>
+                                        <a v-show="this.ipDevice" :href="`http://${this.ipDevice}/autenticado`" target="_blank" class="text-success" title="IP para acessar as configurações da tomada inteligente"> 
+                                            <i class="fas fa-cog"></i> {{ this.ipDevice }}
+                                        </a>
 
                                         <div class="row mt-3">
                                             <div class="col-xl-12">
@@ -129,6 +133,10 @@
                                                     <i class="fas fa-play"></i> Ligar dispositivo
                                                 </button>
                                             </div>
+
+                                            <button @click="this.isOnline = false"> TTTTTT </button>
+
+                                            <button @click="this.isOnline = true"> HAAAAAAA </button>
 
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-4">
                                                 <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm" title="Desligar o aparelho">
@@ -211,27 +219,31 @@
                     consumptionInReal: 0.00,
                     consumptionInWatts: 0.00,
                     consumptionDates: []
-                }
+                },
+
+                interval: null
             };
         },
 
         methods: {
+            configureSignalR() {
+                this.connection = new signalR.HubConnectionBuilder()
+                    .withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub")
+                    .configureLogging(signalR.LogLevel.Information)
+                    .withAutomaticReconnect()
+                    .build();
+            },
+
             connect() {
                 var self = this;
 
-                let stateConnection = this.connection.connection._connectionState;
-
-                if(stateConnection == "Disconnected") {
+                if(this.connection.state == "Disconnected") {
                     this.connection.start().then(() => {
                         this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
 
                         this.connection.invoke("getDeviceIP");
 
                         this.connection.on("receiveEnergyValue", function(valueEnergy) {
-                            if(valueEnergy == "") {
-                                self.watts = 0.00;
-                            }
-
                             let chart = JSON.parse(JSON.stringify(self.chart));
 
                             let energyFloat = parseFloat(valueEnergy).toFixed(2);
@@ -259,6 +271,8 @@
                             self.isOnline = false;
 
                             self.ipDevice = "";
+
+                            self.watts = 0.00;
 
                             $("#btnDisableConnection").prop("disabled", true);
 
@@ -292,14 +306,14 @@
                         });
 
                         this.connection.on("ActionContinueDevice", function() {
+                            self.isOnline = true;
+
                             $("#btnEnableConnection").prop("disabled", true);
 
                             $("#btnDisableConnection").prop("disabled", false);
                         });
 
-                        this.connection.on("ReceiveCurrentState", function(state) {
-                            console.log(state);
-                            
+                        this.connection.on("ReceiveCurrentState", function(state) {                            
                             if(state == "ligado") {
                                 self.isOnline = true;
 
@@ -317,16 +331,13 @@
                             }
                         });
 
-                        this.connection.onreconnecting(function(error) {
-                            $("#statusConexaoWebSocket").prop("hidden", false);
-
-                            $("#statusConexaoWebSocket small").text(error);
-                        })
+                        this.connection.onclose(function() {
+                            self.isOnline = false;
+                            console.log("Close");
+                        });
 
                         this.connection.onreconnected(function(connId) {
-                            $("#statusConexaoWebSocket").prop("hidden", false);
-
-                            $("#statusConexaoWebSocket small").text(connId);
+                            console.log(connId);
                         })
                     })
                     .catch((error) => {
@@ -343,34 +354,11 @@
                 this.connection.invoke("ActionContinueDevice"); // continuar a conexao
             },
 
-            configureSignalR() {
-                this.connection = new signalR.HubConnectionBuilder()
-                    .withUrl("https://servicehomeiotmonitoring.azurewebsites.net/costumerhub")
-                    .configureLogging(signalR.LogLevel.Information)
-                    .withAutomaticReconnect()
-                    .build();
-            }
-        },
+            getDeviceConsumption() {
+                this.interval = setInterval(() => {
+                    console.log(`Is connected: ${this.isOnline}`);
 
-        mounted() {
-            this.configureSignalR();
-            this.connect();
-        },
-
-        async beforeUnmount() {
-            await this.connection.stop();
-               
-            console.log("Fechou o hub connection");
-
-            delete this.connection;
-
-            delete this.isOnline;
-        },
-
-        watch: {
-            isOnline(isConnected) {
-                setInterval(() => {
-                    if(isConnected) {
+                    if(this.isOnline) {
                         this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
                             .then((response) => {
                                 if(response.status == 200) {
@@ -390,6 +378,22 @@
                     }
                 }, 5000)
             }
+        },
+
+        mounted() {
+            this.configureSignalR();
+
+            this.connect();
+
+            this.getDeviceConsumption();
+        },
+
+        async beforeUnmount() {
+            await this.connection.stop();
+               
+            clearInterval(this.interval);
+
+            console.log("Fechou o hub connection");
         }
     }
 </script>

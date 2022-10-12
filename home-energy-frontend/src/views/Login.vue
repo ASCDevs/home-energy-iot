@@ -66,11 +66,11 @@
 
         data() {
             return {
-                errorAuth: '',
+                errorAuth: "",
 
                 loginModel: {
-                    username: '',
-                    password: ''
+                    username: "",
+                    password: ""
                 }
             }
         },
@@ -79,9 +79,9 @@
             auth() {
                 $("#overlay").css("display", "block");
 
-                this.$store.dispatch('login', this.loginModel)
+                this.$store.dispatch("login", this.loginModel)
                     .then(() => {
-                        this.$router.push({name: 'registerHouse'});
+                        this.$router.push({name: "registerHouse"});
                     })
                     .catch((error) => {
                         $("#overlay").css("display", "none");
@@ -95,8 +95,12 @@
 
         beforeCreate() {
             $("#overlay").css("display", "none");
-
             $(".modal-backdrop").remove();
+        },
+
+        beforeUnmount() {
+            console.log("beforeUnmount");
+            $("#overlay").css("display", "none");
         }
     }
 </script>
