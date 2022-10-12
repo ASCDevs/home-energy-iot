@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using home_energy_api.Core.Models;
-using home_energy_iot_api.Core.Models;
+﻿using home_energy_api.Core.Models;
 using home_energy_iot_core.Exceptions;
 using home_energy_iot_core.Helpers.Interfaces;
 using home_energy_iot_core.Interfaces;
 using home_energy_iot_core.Login;
 using home_energy_iot_core.Login.Authentication;
 using home_energy_iot_entities.Entities;
-using home_energy_iot_repository.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace home_energy_iot_tests
@@ -186,10 +177,6 @@ namespace home_energy_iot_tests
             var result = instance.Login(loginModel);
 
             Assert.NotNull(result);
-            Assert.NotNull(result.User);
-            Assert.NotEqual(0,result.User.Id);
-            Assert.NotNull(result.User.Name);
-            Assert.NotNull(result.UserToken);
 
             _userManager.Verify();
             _hasher.Verify();
