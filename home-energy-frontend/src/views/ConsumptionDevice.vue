@@ -14,11 +14,11 @@
 
                         <div class="row">
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card border-left-primary shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     Medição em tempo real
                                                 </div>
 
@@ -40,11 +40,11 @@
                             </div>
 
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card border-left-success shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                     Consumo em Reais
                                                 </div>
 
@@ -58,7 +58,33 @@
                                             </div>
 
                                             <div class="col-auto">
-                                                <i class="fas fa-money-bill fa-2x text-gray-300"></i>
+                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-12 col-sm-12 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Tempo de utilização
+                                                </div>
+
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                            {{ this.timeUse }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <i class="fas fa-clock fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -74,7 +100,7 @@
                                             Consumo em tempo real
                                         </h6>
 
-                                        <router-link :to="{path: `/report/device/${this.macAddress}`}"> 
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm"> 
                                             Report
                                         </router-link>
                                     </div>
@@ -97,19 +123,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-xl-12 col-md-12 mt-4">
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <button @click="continueConnection" id="btnEnableConnection" class="btn btn-success btn-sm" title="Ligar o aparelho">
-                                                            <i class="fas fa-redo-alt"></i> Ligar dispositivo
-                                                        </button>
+                                        <div class="row text-center">
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-4">
+                                                <button @click="continueConnection" id="btnEnableConnection" class="btn btn-success btn-sm" title="Ligar o aparelho">
+                                                    <i class="fas fa-play"></i> Ligar dispositivo
+                                                </button>
+                                            </div>
 
-                                                        <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm ml-5" title="Desligar o aparelho">
-                                                            <i class="fas fa-stop"></i> Desligar dispositivo
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-4">
+                                                <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm" title="Desligar o aparelho">
+                                                    <i class="fas fa-stop"></i> Desligar dispositivo
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +172,7 @@
         data() {
             return {
                 chart: {
-                    labels: ["Watts", "Watts", "Watts", "Watts", "Watts", "Watts"],
+                    labels: ["", "", "", "", "", ""],
                     datasets: [{
                         label: "Watts em tempo-real",
                         data: [0, 10, 20, 30, 40, 50],
@@ -181,16 +205,17 @@
 
                 macAddress: useRoute().params.id,
 
+                timeUse: "00 hora(s), 00 minuto(s), 00 segundo(s)",
+
                 deviceConsumption: {
                     consumptionInReal: 0.00,
                     consumptionInWatts: 0.00,
+                    consumptionDates: []
                 }
             };
         },
 
         methods: {
-            /* Colocar no beforeUpdate() ou updated() */
-
             connect() {
                 var self = this;
 
@@ -198,13 +223,15 @@
 
                 if(stateConnection == "Disconnected") {
                     this.connection.start().then(() => {
-                        console.log(this.connection.connectionId);
-
                         this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
 
                         this.connection.invoke("getDeviceIP");
 
                         this.connection.on("receiveEnergyValue", function(valueEnergy) {
+                            if(valueEnergy == "") {
+                                self.watts = 0.00;
+                            }
+
                             let chart = JSON.parse(JSON.stringify(self.chart));
 
                             let energyFloat = parseFloat(valueEnergy).toFixed(2);
@@ -231,6 +258,8 @@
                         this.connection.on("DeviceIsDisconnected", function() {
                             self.isOnline = false;
 
+                            self.ipDevice = "";
+
                             $("#btnDisableConnection").prop("disabled", true);
 
                             $("#btnEnableConnection").prop("disabled", false);
@@ -252,6 +281,20 @@
                             self.connection.invoke("GetCurrentState");
 
                             console.log("Online");
+                        });
+
+                        this.connection.on("ActionStopDevice", function() {
+                            self.isOnline = false;
+                            
+                            $("#btnEnableConnection").prop("disabled", false);
+
+                            $("#btnDisableConnection").prop("disabled", true);
+                        });
+
+                        this.connection.on("ActionContinueDevice", function() {
+                            $("#btnEnableConnection").prop("disabled", true);
+
+                            $("#btnDisableConnection").prop("disabled", false);
                         });
 
                         this.connection.on("ReceiveCurrentState", function(state) {
@@ -287,11 +330,7 @@
                         })
                     })
                     .catch((error) => {
-                        console.log(error);
-
-                        $("#statusConexaoWebSocket").prop("hidden", false);
-
-                        $("#statusConexaoWebSocket small").text(error);
+                        console.error(error);
                     })
                 }
             },
@@ -318,22 +357,34 @@
             this.connect();
         },
 
-        beforeDestroy() {
-            this.connection.stop();
+        async beforeUnmount() {
+            await this.connection.stop();
+               
+            console.log("Fechou o hub connection");
+
+            delete this.connection;
+
+            delete this.isOnline;
         },
 
         watch: {
             isOnline(isConnected) {
                 setInterval(() => {
                     if(isConnected) {
-                        console.log("Request...");
-
                         this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
                             .then((response) => {
                                 if(response.status == 200) {
-                                    console.log(response.data);
-
                                     this.deviceConsumption = response.data;
+
+                                    let sizeArray = this.deviceConsumption.consumptionDates.length;
+
+                                    var hours = Math.floor(sizeArray / 3600); // 1 hora = 3600 segundos
+
+                                    var minutes = Math.floor(sizeArray % 3600 / 60); // resto da divisão por 3600 e depois / 60
+
+                                    var seconds = Math.floor(sizeArray % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
+                                
+                                    this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
                                 }
                             })
                     }

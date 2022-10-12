@@ -25,12 +25,10 @@
 
 #include <ArduinoWebsockets.h>
 using namespace websockets;
-WebsocketsClient client;  // https://github.com/gilmaimon/ArduinoWebsockets
+WebsocketsClient client;          // https://github.com/gilmaimon/ArduinoWebsockets
 
 #include <EEPROM.h>        // Lib para gravação da EEPROM
 #include <Arduino_JSON.h>  // Lib dados JSON em Arduino
-
-const int relePin = 4;  // Pino que o Relé esta ligado, funciona como porta Digital (ESP8266)
 
 #include "index_html.h" pageLogin  // Imports das páginas HTML
 #include "page_authenticate.h" pageAuthenticate
@@ -51,7 +49,8 @@ String receiveSSID = "";
 String receivePASS = "";
 IPAddress apIP(192, 168, 4, 1);  // IP para acessar o dispositivo antes de estar autenticado em sua Rede WIFI, quando em modo AP
 
-String incomingString;           // Valor recebido através da serial pelo ESP, dado enviado pelo Arduino
+float incomingString;           // Valor recebido através da serial pelo ESP, dado enviado pelo Arduino
+int status = 1;                 // Esta String controla se o Aparelho esta desligado ou Ligado (Relé) - Dois valores apenas 0 DESLIGADO OU 1 LIGADO
 
 // ------------------------------------------------------------ SETUP (Configurações Iniciais) ----------------------------------------------------
 void setup() {
@@ -60,18 +59,16 @@ void setup() {
   delay(3000);
   Serial.println('\n');
 
-  pinMode(relePin, OUTPUT);    // Defindo o pino do Relé como Saída
-  digitalWrite(relePin, LOW);  // Este pino funciona com lógica invertida, por isso inicializamos ele como LOW mas estará ligado
-
   // Este metodo é reponsável por iniciar o ESP em modo STA caso já tenha os dados da rede wifi Salvos ou como AP caso nao encontre.
   selectModeInitialization();
 
   // Configurações dos EndPoint
-  server.on("/", HTTP_GET, handleRoot);              // EndPoint de Autenticação (Lista as redes Wifi encontradas)
+  server.on("/", HTTP_GET, handleRoot);              // EndPoint Inicial
   server.on("/senddata", postLogin);                 // EndPoint para autenticar na Rede WIFI
-  server.on("/autenticado", autenticado);            // após autenticar direciono para esta pagina
+  server.on("/autenticado", autenticado);            // após autenticar direcionamos para esta pagina
   server.on("/desconectasta", desconectaSTA);        // EndPoint para desconectar da Rede WIFI
   server.on("/ssids", HTTP_GET, getssid);            // lista os ssids
+  server.on("/mac", HTTP_GET, getmac);               // Obter o MacAddress
   server.on("/cleareeprom", HTTP_GET, clearEEprom);  // Limpar dados de autenticação da Rede WIFI
   server.onNotFound(handleNotFound);
 
@@ -101,6 +98,11 @@ void handleRoot() {
 void getssid() {
   buscarSSIDS();
   server.send(200, "text/html", ssids);
+}
+
+// ------------------------------------------------------------ Obter o MacAdrress ------------------------------------------------------------------------------------
+void getmac() {
+  server.send(200, "text/html", WiFi.macAddress());
 }
 
 // ------------------------------------------------------------ METODO GRAVAR DADOS NA EEPROM ------------------------------------------------------------------------------------
@@ -215,12 +217,20 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED) {
 
-    Serial.println("Socket");
     client.poll();  // Para continuar recebendo mensagens
 
-    // Enviando a mensagem para o servidor
-    client.send("server>energyvalue>" + String(random(0, 1024)));//getReadDataFromArduino()); // atraves da função recebemos o valor pela serial do arduino e enviamos ao endpoint
-    //client.send(WiFi.localIP().toString().c_str()); // Ip do ESP na rede do Cliente
+    // Caso tenhamos recebido a mensagem de Desligar o Equipamento atraves da variavel STATUS verificamos se continuamos ou não o envio de dados pois mesmo desligado
+    // o Socket continua aberto
+    if (status == 1) {
+       // Enviando a mensagem para o servidor
+       if (client.available()) {
+           //client.send("server>energyvalue>" + String(random(50, 60)));
+           client.send("server>energyvalue>" + String(getReadDataFromArduino(), 4)); // atraves da função recebemos o valor pela serial do arduino e enviamos ao endpoint
+           //client.send(WiFi.localIP().toString().c_str()); // Ip do ESP na rede do Cliente
+       } else
+           initializeWebSocket();
+    }
+
     delay(1000);
   }
 }
@@ -301,10 +311,10 @@ int readStringFromEEPROM(int addrOffset, String *strToRead) {
   return addrOffset + 1 + newStrLen;
 }
 
-String getReadDataFromArduino() {
+float getReadDataFromArduino() {
 
   if (Serial.available() > 0) {
-    incomingString = Serial.readString();
+    incomingString = Serial.readString().toFloat();
     return incomingString;
   }
 }
@@ -313,35 +323,48 @@ void initializeWebSocket() {
 
   // Setup Callback - Message
   client.onMessage(onMessageCallback);  // Aguardando as mensagens do servidor
-
   // Setup Callback - Event
   client.onEvent(onEventsCallback);
 
   // Conectando ao servidor
-  client.connect("wss://monitoring-iot-devices.herokuapp.com/consocket");
-  //client.connect("ws://192.168.15.70:9123");
+  client.connect("wss://servicehomeiotmonitoring.azurewebsites.net/consocket");
+  //client.connect("ws://192.168.15.12:3000");
+  // apos conectar envia antes de tudo o MAC 
+  client.send("server>addiddevice>" + WiFi.macAddress());
+  client.send("server>addipdevice>" + WiFi.localIP().toString());
 }
 
 void onMessageCallback(WebsocketsMessage message) {
 
-  Serial.print("Mensagem recebida Socket: ");
-  Serial.println(message.data());
-  if (message.data() == "OFF")
-    digitalWrite(relePin, HIGH);  // Caso receba atraves do Socket OFF desliga o Relé
-  if (message.data() == "ON")
-    digitalWrite(relePin, LOW);  // Caso receba atraves do Socket ON liga o Relé
+  if (message.data().equals("client>stopenergy")) {
+    status = 0;   // Este Status define que o RELE esta Desligado
+    Serial.flush();
+    Serial.write("stop");
+    client.send("server>confirmstop");
+  }
+    
+  if (message.data().equals("client>continueenergy")) {
+    status = 1;
+    Serial.flush();
+    Serial.write("continue");
+    client.send("server>confirmcontinue");
+  }
+
 }
 
 void onEventsCallback(WebsocketsEvent event, String data) {
   if (event == WebsocketsEvent::ConnectionOpened) {
-    Serial.println("Conexão Aberta");
+    Serial.println("Socket Aberto");
 
   } else if (event == WebsocketsEvent::ConnectionClosed) {
-    Serial.println("Conexão Fechada");
+    incomingString = 0;
+    Serial.println("Socket Fechado");
 
   } else if (event == WebsocketsEvent::GotPing) {
     Serial.println("Ping");
 
+  } else if (event == WebsocketsEvent::GotPong) {
+    Serial.println("Pong");
   } else if (event == WebsocketsEvent::GotPong) {
     Serial.println("Pong");
   }

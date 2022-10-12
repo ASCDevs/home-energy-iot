@@ -88,7 +88,7 @@
 
 <script>
     export default {
-        name: "RegisterUser",
+        name: "CreateAccount",
 
         data() {
             return {
@@ -96,11 +96,11 @@
 
                 user: {
                     id: 0,
-                    name: '',
-                    username: '',
-                    password: '',
-                    cpf: '',
-                    email: ''
+                    name: "",
+                    username: "",
+                    password: "",
+                    cpf: "",
+                    email: ""
                 }
             }
         },

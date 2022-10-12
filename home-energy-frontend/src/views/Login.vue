@@ -35,16 +35,10 @@
                                 </div>
                             </div>
 
-                            <div v-if="errorAuth != ''" class="container">
+                            <div v-show="errorAuth" class="container">
                                 <div class="alert alert-danger text-center" role="alert">
                                     <small> {{ errorAuth }} </small>
                                 </div>
-                            </div>
-                            
-                            <div class="form-inline justify-content-end"> 
-                                <router-link to="/forgot/password" class="btn btn-link btn-sm">
-                                    Esqueceu a senha?
-                                </router-link>
                             </div>
                             
                             <button type="submit" class="btn btn-primary btn-block mt-3">
@@ -100,6 +94,8 @@
         },
 
         beforeCreate() {
+            $("#overlay").css("display", "none");
+
             $(".modal-backdrop").remove();
         }
     }

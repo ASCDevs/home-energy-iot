@@ -203,9 +203,9 @@
                 house: {
                     id: 0,
                     idUser: this.$store.state.user.id,
-                    name: '',
-                    typeAddress: '',
-                    nameAddress: '',
+                    name: "",
+                    typeAddress: "",
+                    nameAddress: "",
                     numberAddress: 0,
                     periodDaysReport: 1,
                     valuePerKWH: 0.0
@@ -298,6 +298,8 @@
         },
 
         beforeCreate() {
+            $("#overlay").css("display", "none");
+
             $(".modal-backdrop").remove();
         },
 

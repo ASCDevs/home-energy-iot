@@ -16,18 +16,6 @@ const routes = [
     },
 
     {
-        path: "/forgot/password",
-
-        name: "forgotPassword",
-
-        meta: {
-            public: true
-        },
-
-        component: () => import(/* webpackChunkName: "forgotPassword" */ "../views/ForgotPassword.vue")
-    },
-    
-    {
         path: "/house/register",
 
         name: "registerHouse",
