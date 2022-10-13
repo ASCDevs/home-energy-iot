@@ -95,6 +95,10 @@
                 $("div[data-connid='" + idConnectionFrom + "'] .field-value").text(valueEnergy+"V")
             })
 
+            connection.on("updateQtdUsersOnline", function (qtdUsers) {
+                $("#qtd-users-on").text(qtdUsers)
+            });
+
             connection.on("receiveCurrentState", function (idConnectionFrom, currentState) {
                 let divCard = $("div[data-connid='" + idConnectionFrom + "']");
                 divCard.attr("data-current", currentState);
@@ -138,6 +142,8 @@
             connection.onreconnected(function (connId) {
                 $("#status-onoff").text("online");
                 ThisClass.IdConnection = connId;
+                $("#area-devices").html("")
+                connection.invoke("GetListClientsOn");
                 let logMsg = `<p>[reconnected] > Conexão reestabelecida (${connId}])</p>`;
                 document.getElementById("area-log").insertAdjacentHTML('afterbegin', logMsg);
             })
@@ -152,7 +158,7 @@
             let txtHtml = `<div data-connid="${dados.connectionid}" data-state="${dados.state}" class="rounded shadow-lg p-5 bg-indigo-500 hover:shadow-xl">`;
             txtHtml += `<p class="text-white">Conexão ID: ${dados.connectionid}</p>`;
             txtHtml += `<p class="text-white">Device ID: <span class="field-deviceid">${dados.deviceid}</span></p>`;
-            txtHtml += `<p class="text-white">Device IP: <span class="field-deviceip"></span></p>`;
+            txtHtml += `<p class="text-white">Device IP: <span class="field-deviceip">${dados.deviceip}</span></p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
             txtHtml += `<p class="text-white">Consumo em tempo real: <span class="field-value"></span></p>`;
             txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;

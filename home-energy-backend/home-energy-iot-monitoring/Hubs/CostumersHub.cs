@@ -21,6 +21,7 @@ namespace home_energy_iot_monitoring.Hubs
             try
             {
                 CostumersHandler._connectedCostumers.Add(new CostumerConnection(Context.ConnectionId));
+                _webSocket.NotifyPanelUsersOnline(CostumersHandler._connectedCostumers.Count());
                 _logger.LogInformation("[Info CostumerHub] > Hub interface de usuário conectou (" + DateTime.Now + "), id-conn: "+Context.ConnectionId);
                 await base.OnConnectedAsync();
             }
@@ -39,6 +40,7 @@ namespace home_energy_iot_monitoring.Hubs
                 CostumerConnection costumerConnection = CostumersHandler._connectedCostumers.First(x => x.conn_id == connectionId);
                 _logger.LogInformation("[Info CostumerHub] > Hub interface de usuário desconectou (" + DateTime.Now + "), device-id: " + costumerConnection.device_id);
                 CostumersHandler._connectedCostumers.Remove(costumerConnection);
+                _webSocket.NotifyPanelUsersOnline(CostumersHandler._connectedCostumers.Count());
                 await base.OnDisconnectedAsync(exception);
             }
             catch (Exception ex)

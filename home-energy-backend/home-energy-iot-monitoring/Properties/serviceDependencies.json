@@ -6,6 +6,10 @@
     "appInsights1": {
       "type": "appInsights",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "compute.appService1": {
+      "group": "connections",
+      "type": "compute.appService"
     }
   }
 }

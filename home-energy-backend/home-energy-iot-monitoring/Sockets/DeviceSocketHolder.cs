@@ -47,12 +47,10 @@ namespace home_energy_iot_monitoring.Sockets
             catch (Exception ex)
             {
                 var deviceClient = this.GetClientBySocket(webSocket);
-                await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
-                await this.OnDeviceDisconnect(deviceClient.Key);
-                clients.TryRemove(deviceClient);
-                await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
+                await this.OnDeviceDisconnect(deviceClient);
+                if(!clients.TryRemove(deviceClient)) _logger.LogError("[Erro Lista Client Devices] (AddAsync) > Erro ao remover device da lista (" + deviceClient.Value.device_id+") ("+DateTime.Now+"), Erro exception: "+ex.Message);
                 
-                _logger.LogError("[Erro] [socket device disconnected]> id-conn: "+deviceClient.Key+", device-id: "+deviceClient.Value.device_id+", device-ip: "+deviceClient.Value.device_ip+" ("+DateTime.Now+") Erro: "+ex.Message);
+                _logger.LogError("[Erro] [socket device disconnected] (AddAsync) > id-conn: " + deviceClient.Key+", device-id: "+deviceClient.Value.device_id+", device-ip: "+deviceClient.Value.device_ip+" ("+DateTime.Now+") Erro: "+ex.Message);
             }
         }
 
@@ -74,7 +72,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo ] > Erro em enviar ação ("+command+") para o dispositivo cliente ("+DateTime.Now+"), Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo (SendActionToClient)] > Erro em enviar ação (" + command+") para o dispositivo cliente ("+DateTime.Now+"), Erro: "+ex.Message);
             }
             
         }
@@ -102,7 +100,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo ] > Erro em executar método CostumerActionStopDevice para o dispositivo "+ DeviceID + " (" + DateTime.Now + "), Erro: " + ex.Message);
+                _logger.LogError("[Erro socket dispositivo (CostumerActionStopDevice) ] > Erro em executar método CostumerActionStopDevice para o dispositivo " + DeviceID + " (" + DateTime.Now + "), Erro: " + ex.Message);
             }
         }
 
@@ -124,7 +122,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch(Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo ] > Erro em executar método CostumerActionContinueDevice para o dispositivo " + DeviceID + " (" + DateTime.Now + "), Erro: " + ex.Message);
+                _logger.LogError("[Erro socket dispositivo (CostumerActionContinueDevice)] > Erro em executar método CostumerActionContinueDevice para o dispositivo " + DeviceID + " (" + DateTime.Now + "), Erro: " + ex.Message);
             }
             
         }
@@ -132,6 +130,11 @@ namespace home_energy_iot_monitoring.Sockets
         public int CountClients()
         {
             return clients.Count();
+        }
+
+        public void NotifyPanelUsersOnline(int qtdUsers)
+        {
+            _panelHubControl.PanelUINotidyUsersOnline(qtdUsers);
         }
 
         private async Task EchoAsycn(WebSocket webSocket)
@@ -149,13 +152,15 @@ namespace home_energy_iot_monitoring.Sockets
                     {
                         await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                         var deviceClient = clients.First(x => x.Value.web_socket == webSocket);
-                        await this.OnDeviceDisconnect(deviceClient.Key);
+                        
                         if (clients.TryRemove(clients.First(w => w.Value.web_socket == webSocket)))
                         {
                             _logger.LogInformation("[Info] [socket device disconnected]> id-conn: " + deviceClient.Key + ", device-id: " + deviceClient.Value.device_id + ", device-ip: " + deviceClient.Value.device_ip + " (" + DateTime.Now + ")");
-
-                            await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
-                            await _panelHubControl.PanelUIRemoveDeviceCard(deviceClient);
+                            await this.OnDeviceDisconnect(deviceClient);
+                        }
+                        else
+                        {
+                            _logger.LogError("[Erro socket device] (EchoAsycn) > Erro ao remover da lista de dispositivos clientes ("+DateTime.Now+"), device-id"+deviceClient.Value.device_id);
                         }
 
                         webSocket.Dispose();
@@ -166,20 +171,20 @@ namespace home_energy_iot_monitoring.Sockets
                     string idConnection = clients.First(x => x.Value.web_socket == webSocket).Key;
                     if (msgReceive.Contains("server>") || msgReceive.Contains("client>")) await HandleAction(msgReceive, idConnection);
 
-                    //Enviar para todos os clients
-                    if (!msgReceive.Contains("server>") && !msgReceive.Contains("client>"))
-                    {
-                        foreach (var c in clients)
-                        {
-                            await c.Value.web_socket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
-                        }
-                    }
                 }
 
             }
             catch (Exception ex)
             {
-                _logger.LogCritical("[Erro Critico socket dispositivo] > Erro no método EchoAsycn ("+DateTime.Now+"), Erro: "+ex.Message);
+                var device = clients.First(w => w.Value.web_socket == webSocket);
+                if (clients.TryRemove(device))
+                {
+                    await this.OnDeviceDisconnect(device);
+                }
+                else
+                {
+                    _logger.LogCritical("[Erro Critico socket dispositivo] > device-id: "+device.Value.device_id+", conn-id: "+device.Value.conn_id+" (" + DateTime.Now + "), Erro: " + ex.Message);
+                }
             }
         }
 
@@ -312,7 +317,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em enviar o valor para interface do usuário ("+DateTime.Now+"), id-conn: "+IdConnectionFrom+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo (SendEnergyValueToCostumer)] > Erro em enviar o valor para interface do usuário (" + DateTime.Now+"), id-conn: "+IdConnectionFrom+", Erro: "+ex.Message);
             }
         }
 
@@ -336,7 +341,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em enviar confirmação de ação para interface do usuário ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (SendCostumerConfirmationAction) > Erro em enviar confirmação de ação para interface do usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
             }
         }
 
@@ -360,7 +365,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em notificar conexão de dispositivo para interface de usuário ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (NotifyCostumerConnection) > Erro em notificar conexão de dispositivo para interface de usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
             }
             
         }
@@ -385,7 +390,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > erro em notificar desconexão de dispostivo para interface de usuário ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (NotifyCostumerDisconnection) > erro em notificar desconexão de dispostivo para interface de usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
             }
         }
 
@@ -407,7 +412,7 @@ namespace home_energy_iot_monitoring.Sockets
                 }
             }catch(Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em notificar IP do dispositivo para interface do usuário ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (NotifyCostumerDeviceIP) > Erro em notificar IP do dispositivo para interface do usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
             }
             
         }
@@ -432,30 +437,31 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em remover IP de dispositivo da interface do usuário ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (CostumerRemoveDeviceIP) > Erro em remover IP de dispositivo da interface do usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
             }
         }
 
-        private async Task OnDeviceDisconnect(string idConnection)
+        private async Task OnDeviceDisconnect(KeyValuePair<string, ClientDeviceConnection> DeviceClient)
         {
             try
             {
-                if (idConnection == null) throw new Exception("Não foi possível realizar a desconexão do dispostivo pois o idConnection é nulo");
-                
-                await this.NotifyCostumerDisconnection(idConnection);
-                await this.CostumerRemoveDeviceIP(idConnection);
-                await _panelHubControl.PanelUIReceiveEnergyValue(idConnection, "0");
-                await SendEnergyValueToCostumer(idConnection, "0");
+                if (DeviceClient.Key == null) throw new Exception("Não foi possível realizar a desconexão do dispostivo pois o idConnection é nulo");
+                await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
+                await _panelHubControl.PanelUIRemoveDeviceCard(DeviceClient);
+                await this.NotifyCostumerDisconnection(DeviceClient.Key);
+                await this.CostumerRemoveDeviceIP(DeviceClient.Key);
+                await _panelHubControl.PanelUIReceiveEnergyValue(DeviceClient.Key, "0");
+                await SendEnergyValueToCostumer(DeviceClient.Key, "0");
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] > Erro em realizar a desconexão do dispositivo ("+DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (OnDeviceDisconnect) > Erro em realizar a desconexão do dispositivo (" + DateTime.Now+"), id-conn: "+ DeviceClient.Key+ ", Erro: "+ex.Message);
             }
         }
 
         private List<ItemDeviceClient> GetDevicesClientList()
         {
-            return clients.Select(c => new ItemDeviceClient { deviceid = c.Value.device_id, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
+            return clients.Select(c => new ItemDeviceClient { deviceid = c.Value.device_id, deviceip = c.Value.device_ip, connectionid = c.Value.conn_id, dateconn = c.Value.dateconn, state = c.Value.current_sate }).ToList();
         }
 
         private KeyValuePair<string, ClientDeviceConnection> GetClientByIdConn(string IdConn)
