@@ -14,7 +14,7 @@
                     <img src="../assets/image/banner.jpg" class="img-fluid mb-3 d-none d-lg-block">
                 </div>
 
-                <div class="col-lg-6 col-md-12 ml-auto">
+                <div class="col-lg-6 col-md-12">
                     <form @submit.prevent="register" class="row">
                         <div class="col-lg-6 col-md-6 mb-4">
                             <input v-model="user.name" id="name" type="text" name="name" placeholder="Seu nome" class="form-control" required>
@@ -72,7 +72,7 @@
 
                         <div class="text-center w-100">
                             <p class="text-muted">
-                                Já está registrado?
+                                Já está cadastrado?
                                 
                                 <router-link to="/" class="text-primary ml-2">
                                     Login
@@ -126,10 +126,6 @@
 </script>
 
 <style scoped>
-    a:hover {
-        text-decoration: none
-    }
-
     #register {
         padding-top: 500;
     }
