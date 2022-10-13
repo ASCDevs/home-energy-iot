@@ -157,5 +157,10 @@ namespace home_energy_iot_monitoring.Domains
             }
             
         }
+
+        public async Task PanelUINotidyUsersOnline(int qtdUsers)
+        {
+            await _panelsHub.Clients.All.SendAsync("updateQtdUsersOnline", qtdUsers);
+        }
     }
 }

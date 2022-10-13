@@ -11,5 +11,7 @@ namespace home_energy_iot_monitoring.Interfaces
         ClientDeviceConnection GetDeviceOnlineInfo(string DeviceID);
         Task CostumerActionStopDevice(string DevideID);
         Task CostumerActionContinueDevice(string DevideID);
+        void NotifyPanelUsersOnline(int qtdUsers);
+
     }
 }

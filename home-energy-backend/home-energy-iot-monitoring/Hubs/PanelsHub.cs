@@ -21,6 +21,7 @@ namespace home_energy_iot_monitoring.Hubs
                 PanelsHandler._connectedPanels.Add(Context.ConnectionId);
                 Console.WriteLine("[Panel on] Painel " + Context.ConnectionId + " conectou (" + DateTime.Now + ")");
                 await Clients.All.SendAsync("updatePanelsOn", PanelsHandler._connectedPanels.Count());
+                await Clients.All.SendAsync("updateQtdUsersOnline", CostumersHandler._connectedCostumers.Count());
                 await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
                 await GetListClientsOn();
                 await Clients.AllExcept(Context.ConnectionId).SendAsync("sendPanelLog", "Um painel conectou (" + DateTime.Now + ")");
@@ -72,6 +73,7 @@ namespace home_energy_iot_monitoring.Hubs
         public async Task GetListClientsOn()
         {
             await _webSocket.SendListClientsOn(Context.ConnectionId);
+            await Clients.All.SendAsync("updateClientsOn", _webSocket.CountClients());
         }
 
         public async Task SendActionToClient(string connId, string txtCommand)
