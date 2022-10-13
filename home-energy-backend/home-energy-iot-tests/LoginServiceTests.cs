@@ -152,7 +152,7 @@ namespace home_energy_iot_tests
             var loginModel = new LoginModel
             {
                 Username = "admin",
-                Password = "SenhaErrada"
+                Password = "SenhaCerta"
             };
 
             var user = new User
