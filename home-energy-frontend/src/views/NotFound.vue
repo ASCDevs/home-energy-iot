@@ -29,10 +29,6 @@
 </template>
 
 <script>
-    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
-    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
-    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
-
     import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
 

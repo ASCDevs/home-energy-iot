@@ -35,8 +35,8 @@
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
                                                         <div class="row no-gutters align-items-center">
-                                                            <div class="col-auto">
-                                                                <i class="fas fa-microchip  text-gray-300"></i>
+                                                            <div class="d-none d-sm-block col-auto">
+                                                                <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
                                                             <div class="col ml-3 mr-2">
@@ -50,11 +50,15 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-4" title="Visualizar em tempo real o consumo deste dispositivo">
+                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-3" title="Visualizar em tempo real o consumo deste dispositivo">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 
-                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-4" title="Excluir dispositivo">
+                                                                <router-link :to="{path: `/report/device/${device.identificationCode}`}" class="text-success ml-3" title="Relatório do dispositivo">
+                                                                    <i class="fas fa-chart-area"></i>
+                                                                </router-link>
+
+                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Excluir dispositivo">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </a>
                                                             </div>
@@ -159,10 +163,6 @@
 
 <script>
     import { useRoute } from "vue-router";
-
-    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
-    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
-    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
 
     import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";

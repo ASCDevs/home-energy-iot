@@ -116,7 +116,7 @@
                                             <i class="fas fa-cog"></i> {{ this.ipDevice }}
                                         </a>
 
-                                        <div class="row mt-3">
+                                        <div class="row mt-3" id="div-chart">
                                             <div class="col-xl-12">
                                                 <Line 
                                                     :chart-data="chart"
@@ -133,11 +133,7 @@
                                                     <i class="fas fa-play"></i> Ligar dispositivo
                                                 </button>
                                             </div>
-
-                                            <button @click="this.isOnline = false"> TTTTTT </button>
-
-                                            <button @click="this.isOnline = true"> HAAAAAAA </button>
-
+                                            
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-4">
                                                 <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm" title="Desligar o aparelho">
                                                     <i class="fas fa-stop"></i> Desligar dispositivo
@@ -156,8 +152,6 @@
 </template>
 
 <script>
-    let signalR = require("@microsoft/signalr");
-
     import { useRoute } from "vue-router";
 
     import { Line } from "vue-chartjs";
@@ -168,6 +162,8 @@
 
     Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement)
 
+    let signalR = require("@microsoft/signalr");
+    
     export default {
         name: "ConsumptionDevice",
 
@@ -313,7 +309,9 @@
                             $("#btnDisableConnection").prop("disabled", false);
                         });
 
-                        this.connection.on("ReceiveCurrentState", function(state) {                            
+                        this.connection.on("ReceiveCurrentState", function(state) {
+                            console.log(state);
+
                             if(state == "ligado") {
                                 self.isOnline = true;
 
@@ -325,6 +323,8 @@
                             if(state == "interrompido") {
                                 self.isOnline = false;
 
+                                self.watts = 0.00;
+
                                 $("#btnEnableConnection").prop("disabled", false);
 
                                 $("#btnDisableConnection").prop("disabled", true);
@@ -333,8 +333,13 @@
 
                         this.connection.onclose(function() {
                             self.isOnline = false;
+
                             console.log("Close");
                         });
+
+                        this.connection.onreconnecting(function(error) {
+                            console.log(error);
+                        }) 
 
                         this.connection.onreconnected(function(connId) {
                             console.log(connId);
@@ -348,6 +353,7 @@
 
             stopConnection() {
                 this.connection.invoke("ActionStopDevice"); // parar a conexao
+                this.watts = 0.00;
             },
 
             continueConnection() {
@@ -398,4 +404,6 @@
     }
 </script>
 
-<style scoped></style>
+<style scoped>
+    
+</style>
