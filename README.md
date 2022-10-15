@@ -14,12 +14,14 @@ O projeto visa permitir o monitoramento e controle de energia, possibilitado atr
 <details>
 <summary><strong>Integrantes do trabalho</strong></summary>
 <br>
-- ALEXANDRE SANTOS CAVALCANTE
-- AUGUSTO CALISTO DE AQUINO
-- HELOISA FERREIRA DA SILVA
-- LUIZ GUSTAVO DE OLIVEIRA DINIZ
-- RAFAELA DOS SANTOS SILVA
-- OSCAR LUIZ RODRIGUES DE OLIVEIRA
+<ul>
+<li>ALEXANDRE SANTOS CAVALCANTE</li>
+<li>AUGUSTO CALISTO DE AQUINO</li>
+<li>HELOISA FERREIRA DA SILVA</li>
+<li>LUIZ GUSTAVO DE OLIVEIRA DINIZ</li>
+<li>RAFAELA DOS SANTOS SILVA</li>
+<li>OSCAR LUIZ RODRIGUES DE OLIVEIRA</li>
+</ul>
 </details>
 
 
