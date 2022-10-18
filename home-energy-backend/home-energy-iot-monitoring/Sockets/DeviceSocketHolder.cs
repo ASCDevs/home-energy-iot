@@ -347,11 +347,11 @@ namespace home_energy_iot_monitoring.Sockets
             
         }
 
-        private async Task SendEnergyValueToCostumer(string IdConnectionFrom, string valueEnergy)
+        private async Task SendEnergyValueToCostumer(string IdConnectionFrom, string valueEnergy, ClientDeviceConnection deviceTemp = null)
         {
             try
             {
-                ClientDeviceConnection device = this.GetClientByIdConn(IdConnectionFrom).Value;
+                ClientDeviceConnection device = deviceTemp ?? this.GetClientByIdConn(IdConnectionFrom).Value;
                 if (device != null)
                 {
                     List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
@@ -501,7 +501,7 @@ namespace home_energy_iot_monitoring.Sockets
                 await this.NotifyCostumerDisconnection(DeviceClient.Key);
                 await this.CostumerRemoveDeviceIP(DeviceClient.Key);
                 await _panelHubControl.PanelUIReceiveEnergyValue(DeviceClient.Key, "0");
-                await SendEnergyValueToCostumer(DeviceClient.Key, "0");
+                await SendEnergyValueToCostumer(DeviceClient.Key, "0", DeviceClient.Value);
                 DeviceClient.Value.web_socket.Dispose();
             }
             catch (Exception ex)
