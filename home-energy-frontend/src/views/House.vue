@@ -88,7 +88,7 @@
                         <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
-                                    Cadastrar casa
+                                    {{ this.house.id == 0 ? "Cadastrar casa" : "Alteração casa" }}
                                 </h5>
                                 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -170,7 +170,7 @@
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary btn-sm"> 
-                                    Cadastrar 
+                                    {{ this.house.id == 0 ? "Cadastrar" : "Alterar" }}
                                 </button>
 
                                 <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
@@ -272,7 +272,7 @@
             },
 
             deleteHouse(house) {
-                if(confirm(`Deseja excluir a casa com nome '${house.name}'?`)) {                    
+                if(confirm(`Deseja excluir a casa com o endereço '${house.nameAddress},${house.numberAddress}'?`)) {                    
                     this.$http.delete(`/api/house/delete/${house.id}`)
                         .then((response) => {
                             if(response.status == 200) {

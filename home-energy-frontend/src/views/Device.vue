@@ -18,7 +18,7 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal">
+                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal" title="Adicionar novo dispositivo">
                                                     <i class="d-sm-block d-md-none fas fa-plus"></i>
 
                                                     <span class="d-none d-md-block">
@@ -86,7 +86,7 @@
                         <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
-                                    Cadastrar dispositivo
+                                    {{ this.device.id == 0 ? "Cadastrar dispositivo" : "Alteração dispositivo" }}
                                 </h5>
                                 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -146,7 +146,7 @@
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary btn-sm"> 
-                                    Cadastrar 
+                                    {{ this.device.id == 0 ? "Cadastrar" : "Alterar"}} 
                                 </button>
 
                                 <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">

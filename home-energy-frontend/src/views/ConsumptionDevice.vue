@@ -106,8 +106,12 @@
                                             Consumo em tempo real
                                         </h6>
 
-                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm"> 
-                                            Relatório
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm rounded-sm-circle" title="Visualizar relatório deste dispositivo"> 
+                                            <i class="d-sm-block d-md-none fas fa-chart-bar"></i>
+
+                                            <span class="d-none d-md-block">
+                                                Relatório
+                                            </span>
                                         </router-link>
                                     </div>
 
@@ -233,6 +237,8 @@
             connect() {
                 var self = this;
 
+                console.log(this.connection.state);
+
                 if(this.connection.state == "Disconnected") {
                     this.connection.start().then(() => {
                         this.connection.invoke("CompleteInfo", `${this.macAddress}`, `${this.idUser}`);
@@ -338,12 +344,14 @@
                         });
 
                         this.connection.onreconnecting(function(error) {
-                            console.log(error);
-                        }) 
+                            console.error(error);
+                        });
 
                         this.connection.onreconnected(function(connId) {
                             console.log(connId);
-                        })
+
+                            self.connect();
+                        });
                     })
                     .catch((error) => {
                         console.error(error);
