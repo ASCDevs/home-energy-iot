@@ -183,7 +183,7 @@
                     labels: ["", "", "", "", "", ""],
                     datasets: [{
                         label: "Watts em tempo-real",
-                        data: [0, 10, 20, 30, 40, 50],
+                        data: [0, 0, 0, 0, 0, 0],
                         backgroundColor: [
                             "rgba(255, 99, 132, 0.2)"
                         ],

@@ -31,15 +31,15 @@
 
                                     <div class="card-body">
                                         <div v-if="houses.length > 0" class="row">
-                                            <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 mb-4">
+                                            <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 col-sm-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
-                                                        <div class="row align-items-center">
-                                                            <div class="d-none d-sm-block col-auto">
+                                                        <div class="row">
+                                                            <div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block mt-2">
                                                                 <i class="fas fa-house-user fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col ml-3 mr-2">
+                                                            <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 ml-3 mr-2 text-md-left text-center">
                                                                 <div class="text-xs font-weight-bold text-dark mb-1">
                                                                     {{ house.name }}
                                                                 </div>
@@ -51,7 +51,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-auto">
+                                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-3 text-md-right text-center">
                                                                 <a type="button" @click="editHouse(house.id)" title="Editar alguma informação da casa">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>

@@ -31,21 +31,21 @@
 
                                     <div class="card-body">
                                         <div v-if="devices.length > 0" class="row">
-                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-4 col-md-12 mb-4">
+                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
-                                                        <div class="row no-gutters align-items-center">
-                                                            <div class="d-none d-sm-block col-auto">
+                                                        <div class="row">
+                                                            <div class="col-xl-1 col-lg-1 col-md-1 d-none d-lg-block">
                                                                 <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col ml-3 mr-2">
-                                                                <div class=" mb-0 font-weight-bold text-gray-800">
+                                                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 ml-3 text-md-left text-center">
+                                                                <div class="font-weight-bold text-gray-800">
                                                                     {{ device.name }}
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-auto">
+                                                            <div class="col-xl-6 col-lg-5 col-md-5 col-sm-12 text-md-right text-center mt-sm-0 mt-3">
                                                                 <a @click="editDevice(device.id)" type="button" to="/" title="Editar alguma informação do dispositivo">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
