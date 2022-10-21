@@ -44,10 +44,8 @@
                                                                     {{ house.name }}
                                                                 </div>
 
-                                                                <div class="mb-0">
-                                                                    <h5 class="font-weight-bold text-gray-800">
-                                                                        {{ house.nameAddress }}, {{house.numberAddress}}
-                                                                    </h5>
+                                                                <div class="font-weight-bold text-truncate text-gray-800 mb-0">
+                                                                    {{ house.nameAddress }}, {{house.numberAddress}}
                                                                 </div>
                                                             </div>
 

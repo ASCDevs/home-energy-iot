@@ -156,14 +156,6 @@
 </template>
 
 <script>
-    $(document).ready(function() {
-        if($(window).width() <= 540) {
-            //\d \w
-
-            console.log($("#time-use-device").text());
-        }
-    })
-
     import { useRoute } from "vue-router";
 
     import { Line } from "vue-chartjs";
@@ -221,7 +213,7 @@
 
                 macAddress: useRoute().params.id,
 
-                timeUse: "00H:00M:00S",
+                timeUse: "00H: 00M: 00S",
 
                 deviceConsumption: {
                     consumptionInReal: 0.00,
@@ -244,8 +236,6 @@
 
             connect() {
                 var self = this;
-
-                console.log(this.connection.state);
 
                 if(this.connection.state == "Disconnected") {
                     this.connection.start().then(() => {
@@ -378,8 +368,6 @@
 
             getDeviceConsumption() {
                 this.interval = setInterval(() => {
-                    console.log(`Is connected: ${this.isOnline}`);
-
                     if(this.isOnline) {
                         this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
                             .then((response) => {
@@ -395,7 +383,7 @@
                                     var seconds = Math.floor(sizeArray % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
                                 
                                     if(this.isScreenSmall()) {
-                                        this.timeUse = `${hours}H, ${minutes}M, ${seconds}S`;
+                                        this.timeUse = `${hours}H: ${minutes}M: ${seconds}S`;
                                     } else {
                                         this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
                                     }

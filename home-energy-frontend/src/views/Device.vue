@@ -41,7 +41,7 @@
 
                                                             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 text-lg-left text-center">
                                                                 <!-- Tela small -->
-                                                                <div class="d-lg-none font-weight-bold text-dark mt-lg-0 mt-0">
+                                                                <div class="d-lg-none font-weight-bold text-truncate text-dark mt-lg-0 mt-0">
                                                                     {{ device.name }}
                                                                 </div>
                                                                 
