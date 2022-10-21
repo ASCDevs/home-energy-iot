@@ -25,7 +25,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="value-watts">
                                                                 {{ this.watts }}W 
                                                             </h5>
                                                         </div>
@@ -53,7 +53,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="real-value-watts">
                                                                 R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(4) }}
                                                             </h5>
                                                         </div>
@@ -81,7 +81,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="time-use-device">
                                                                 {{ this.timeUse }}
                                                             </h5>
                                                         </div>
@@ -106,7 +106,7 @@
                                             Consumo em tempo real
                                         </h6>
 
-                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm rounded-sm-circle" title="Visualizar relatório deste dispositivo"> 
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm rounded-sm-circle" title="Visualizar relatório deste dispositivo" id="btn-report-device"> 
                                             <i class="d-sm-block d-md-none fas fa-chart-bar"></i>
 
                                             <span class="d-none d-md-block">
@@ -156,6 +156,14 @@
 </template>
 
 <script>
+    $(document).ready(function() {
+        if($(window).width() <= 540) {
+            //\d \w
+
+            console.log($("#time-use-device").text());
+        }
+    })
+
     import { useRoute } from "vue-router";
 
     import { Line } from "vue-chartjs";
@@ -213,7 +221,7 @@
 
                 macAddress: useRoute().params.id,
 
-                timeUse: "00 hora(s), 00 minuto(s), 00 segundo(s)",
+                timeUse: "00H:00M:00S",
 
                 deviceConsumption: {
                     consumptionInReal: 0.00,
@@ -386,11 +394,19 @@
 
                                     var seconds = Math.floor(sizeArray % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
                                 
-                                    this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
+                                    if(this.isScreenSmall()) {
+                                        this.timeUse = `${hours}H, ${minutes}M, ${seconds}S`;
+                                    } else {
+                                        this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
+                                    }
                                 }
                             })
                     }
                 }, 5000)
+            },
+
+            isScreenSmall() {
+                return window.innerWidth <= 540;
             }
         },
 
@@ -413,5 +429,9 @@
 </script>
 
 <style scoped>
-    
+    @media screen and (max-width: 330px) {
+        #btn-report-device {
+            display: none;
+        }
+    }
 </style>

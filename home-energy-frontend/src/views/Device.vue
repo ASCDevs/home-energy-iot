@@ -35,17 +35,22 @@
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-xl-1 col-lg-1 col-md-1 d-none d-lg-block">
+                                                            <div class="col-xl-1 col-lg-1 d-none d-lg-block">
                                                                 <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 ml-3 text-md-left text-center">
-                                                                <div class="font-weight-bold text-gray-800">
+                                                            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 text-lg-left text-center">
+                                                                <!-- Tela small -->
+                                                                <div class="d-lg-none font-weight-bold text-dark mt-lg-0 mt-0">
+                                                                    {{ device.name }}
+                                                                </div>
+                                                                
+                                                                <div class="d-none d-lg-block font-weight-bold text-gray-800 ml-2">
                                                                     {{ device.name }}
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xl-6 col-lg-5 col-md-5 col-sm-12 text-md-right text-center mt-sm-0 mt-3">
+                                                            <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 text-lg-right text-center mt-md-0 ml-md-0 mt-4 ml-3">
                                                                 <a @click="editDevice(device.id)" type="button" to="/" title="Editar alguma informação do dispositivo">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
@@ -127,7 +132,7 @@
                                     </div>
 
                                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-0">
-                                        <small class="text-muted">
+                                        <small class="text-xs text-muted">
                                             Quantidade de Watts(W) que o produto conectado a tomada inteligente consome
                                         </small>
                                     </div>
