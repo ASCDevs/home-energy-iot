@@ -31,7 +31,7 @@
 
                                     <div class="card-body">
                                         <div v-if="devices.length > 0" class="row">
-                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
+                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
                                                         <div class="row">
@@ -39,9 +39,9 @@
                                                                 <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 text-lg-left text-center">
+                                                            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 text-lg-left text-center mt-1">
                                                                 <!-- Tela small -->
-                                                                <div class="d-lg-none font-weight-bold text-truncate text-dark mt-lg-0 mt-0">
+                                                                <div class="d-lg-none font-weight-bold text-truncate text-dark ">
                                                                     {{ device.name }}
                                                                 </div>
                                                                 
@@ -50,20 +50,20 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 text-lg-right text-center mt-md-0 ml-md-0 mt-4 ml-3">
+                                                            <div class="col-xl-6 col-lg-5 col-md-12 col-sm-12 text-lg-right text-center mt-2">
                                                                 <a @click="editDevice(device.id)" type="button" to="/" title="Editar alguma informação do dispositivo">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
-                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-3" title="Visualizar em tempo real o consumo deste dispositivo">
+                                                                <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-4" title="Visualizar em tempo real o consumo deste dispositivo">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </router-link>
 
-                                                                <router-link :to="{path: `/report/device/${device.identificationCode}`}" class="text-success ml-3" title="Relatório do dispositivo">
+                                                                <router-link :to="{path: `/report/device/${device.identificationCode}`}" class="text-success ml-4" title="Relatório do dispositivo">
                                                                     <i class="fas fa-chart-area"></i>
                                                                 </router-link>
 
-                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-3" title="Excluir dispositivo">
+                                                                <a type="button" @click="deleteDevice(device)" class="text-danger ml-4" title="Excluir dispositivo">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </a>
                                                             </div>
