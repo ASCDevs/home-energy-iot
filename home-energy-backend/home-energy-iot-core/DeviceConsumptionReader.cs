@@ -19,6 +19,7 @@ namespace home_energy_iot_core
             _houseManagerRepository = houseManagerRepository;
         }
 
+        //select identificationCode as device, min(reportDate) as minDate, max(reportDate) as maxDate, avg(wattsUsage) as mediaWatts, count(1) as quantidadeRegistros from deviceReport where identificationCode = 'ABC123' group by identificationCode
         public DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
         {
             try
