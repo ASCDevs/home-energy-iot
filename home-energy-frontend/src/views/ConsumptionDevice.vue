@@ -213,12 +213,12 @@
 
                 macAddress: useRoute().params.id,
 
-                timeUse: "00H: 00M: 00S",
+                timeUse: "00h: 00m: 00s",
 
                 deviceConsumption: {
                     consumptionInReal: 0.00,
                     consumptionInWatts: 0.00,
-                    consumptionDates: []
+                    consumptionDates: 0
                 },
 
                 interval: null
@@ -374,16 +374,16 @@
                                 if(response.status == 200) {
                                     this.deviceConsumption = response.data;
 
-                                    let sizeArray = this.deviceConsumption.consumptionDates.length;
+                                    let secondsTotal = this.deviceConsumption.consumptionDates;
 
-                                    var hours = Math.floor(sizeArray / 3600); // 1 hora = 3600 segundos
+                                    var hours = Math.floor(secondsTotal / 3600); // 1 hora = 3600 segundos
 
-                                    var minutes = Math.floor(sizeArray % 3600 / 60); // resto da divisão por 3600 e depois / 60
+                                    var minutes = Math.floor(secondsTotal % 3600 / 60); // resto da divisão por 3600 e depois / 60
 
-                                    var seconds = Math.floor(sizeArray % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
+                                    var seconds = Math.floor(secondsTotal % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
                                 
                                     if(this.isScreenSmall()) {
-                                        this.timeUse = `${hours}H: ${minutes}M: ${seconds}S`;
+                                        this.timeUse = `${hours}h: ${minutes}m: ${seconds}s`;
                                     } else {
                                         this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
                                     }
