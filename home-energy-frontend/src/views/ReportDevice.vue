@@ -9,44 +9,52 @@
                     
                     <div class="container-fluid">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 text-lg-left text-center">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        Relatório de Dispositivos
-                                    </h6>
-                                </div>
-
-                                <div class="card-body">
-                                    <form @submit.prevent="getReportConsumptionBetweenDates">
-                                        <div class="form-row align-items-center">
-                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12">
-                                                <label for="initialDate" class="font-weight-bold">
-                                                    Data inicial:
-                                                </label>
-
-                                                <input v-model="report.initialDate" class="form-control form-control-sm" type="datetime-local" id="initialDate" required />
-                                            </div>
-
-                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-md-0 mt-3">
-                                                <label for="finalDate" class="font-weight-bold">
-                                                    Data final:
-                                                </label>
-                                                
-                                                <input v-model="report.finalDate" class="form-control form-control-sm" type="datetime-local" id="finalDate" required />
-                                            </div>
-                                        
-                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-4 text-lg-left text-center">
-                                                <button type="submit" class="btn btn-primary btn-sm"> 
-                                                    Gerar Relatorio 
+                            <div class="card-body">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header bg-light" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-block text-primary text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Relatório de Dispositivos
                                                 </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <form @submit.prevent="getReportConsumptionBetweenDates">
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12">
+                                                            <label for="initialDate" class="font-weight-bold">
+                                                                Data inicial:
+                                                            </label>
+
+                                                            <input v-model="query.initialDate" class="form-control form-control-sm" type="datetime-local" id="initialDate" required />
+                                                        </div>
+
+                                                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-md-0 mt-3">
+                                                            <label for="finalDate" class="font-weight-bold">
+                                                                Data final:
+                                                            </label>
+                                                            
+                                                            <input v-model="query.finalDate" class="form-control form-control-sm" type="datetime-local" id="finalDate" required />
+                                                        </div>
+                                                    
+                                                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-4 text-lg-left text-center">
+                                                            <button type="submit" class="btn btn-primary btn-sm"> 
+                                                                Gerar Relatorio 
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div v-if="status == 200" class="row">
                             <div class="col-xl-8 col-lg-8">
                                 <div class="card shadow mb-4">
                                     <div class="card-body">
@@ -66,11 +74,29 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-body">
                                         <div class="chart-pie">
-                                            <h4> Tempo de consumo </h4>
+                                            <div>
+                                                <h4 class="text-success"> 
+                                                    Real 
+                                                </h4>
 
-                                            <i class=""></i>
+                                                <span class="text-success"> R$ 4444444 </span>
+                                            </div>
 
-                                            {{ this.timeUse }}
+                                            <div class="mt-4">
+                                                <h4 class="text-primary"> 
+                                                    Tempo de consumo 
+                                                </h4>
+
+                                                <span class="text-primary"> {{ this.timeUse }} </span>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <h4 class="text-info"> 
+                                                    Watts 
+                                                </h4>
+
+                                                <span class="text-info"> 52.48W </span>
+                                            </div>
                                         </div>
 
                                         <div class="mt-4 text-center small">
@@ -141,10 +167,16 @@
                     }
                 },
 
-                report: {
+                query: {
                     deviceIdentificationCode: useRoute().params.id,
                     initialDate: "2022-10-10T12:00",
                     finalDate: "2022-10-11T12:00"
+                },
+
+                report: {
+                    consumptionDates: [],
+                    consumptionInReal: 0.00,
+                    consumptionInWatts: 0.00
                 },
 
                 status: 0
@@ -153,10 +185,12 @@
 
         methods: {
             getReportConsumptionBetweenDates() {
-                this.$http.post("/api/DeviceConsumption/GetConsumptionValueBetweenDates", this.report)
+                this.$http.post("/api/DeviceConsumption/GetConsumptionValueBetweenDates", this.query)
                     .then((response) => {
                         if(response.status == 200) {
                             console.log(response.data);
+
+                            this.report = response.data;
 
                             let sizeArray = response.data.consumptionDates.length;
 
@@ -168,7 +202,7 @@
 
                             this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
 
-                            //this.status = 200;
+                            this.status = 200;
                         }
                     })
                     .catch((error) => {

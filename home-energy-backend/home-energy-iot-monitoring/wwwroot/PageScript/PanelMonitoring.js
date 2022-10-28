@@ -92,7 +92,7 @@
                 
             })
             connection.on("receiveEnergyValue", function (idConnectionFrom, valueEnergy) {
-                $("div[data-connid='" + idConnectionFrom + "'] .field-value").text(valueEnergy+"V")
+                $("div[data-connid='" + idConnectionFrom + "'] .field-value").text(valueEnergy+"wtts")
             })
 
             connection.on("updateQtdUsersOnline", function (qtdUsers) {

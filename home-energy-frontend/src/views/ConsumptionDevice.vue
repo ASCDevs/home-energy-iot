@@ -25,7 +25,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="value-watts">
                                                                 {{ this.watts }}W 
                                                             </h5>
                                                         </div>
@@ -53,7 +53,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="real-value-watts">
                                                                 R${{ parseFloat(this.deviceConsumption.consumptionInReal).toFixed(4) }}
                                                             </h5>
                                                         </div>
@@ -81,7 +81,7 @@
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <div class="mb-0 mr-3">
-                                                            <h5 class="font-weight-bold text-gray-800">
+                                                            <h5 class="font-weight-bold text-gray-800" id="time-use-device">
                                                                 {{ this.timeUse }}
                                                             </h5>
                                                         </div>
@@ -106,8 +106,12 @@
                                             Consumo em tempo real
                                         </h6>
 
-                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm"> 
-                                            Relatório
+                                        <router-link :to="{path: `/report/device/${this.macAddress}`}" class="btn btn-secondary btn-sm rounded-sm-circle" title="Visualizar relatório deste dispositivo" id="btn-report-device"> 
+                                            <i class="d-sm-block d-md-none fas fa-chart-bar"></i>
+
+                                            <span class="d-none d-md-block">
+                                                Relatório
+                                            </span>
                                         </router-link>
                                     </div>
 
@@ -116,7 +120,7 @@
                                             <i class="fas fa-cog"></i> {{ this.ipDevice }}
                                         </a>
 
-                                        <div class="row mt-3">
+                                        <div class="row mt-3" id="div-chart">
                                             <div class="col-xl-12">
                                                 <Line 
                                                     :chart-data="chart"
@@ -133,11 +137,7 @@
                                                     <i class="fas fa-play"></i> Ligar dispositivo
                                                 </button>
                                             </div>
-
-                                            <button @click="this.isOnline = false"> TTTTTT </button>
-
-                                            <button @click="this.isOnline = true"> HAAAAAAA </button>
-
+                                            
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-4">
                                                 <button @click="stopConnection" id="btnDisableConnection" class="btn btn-danger btn-sm" title="Desligar o aparelho">
                                                     <i class="fas fa-stop"></i> Desligar dispositivo
@@ -156,8 +156,6 @@
 </template>
 
 <script>
-    let signalR = require("@microsoft/signalr");
-
     import { useRoute } from "vue-router";
 
     import { Line } from "vue-chartjs";
@@ -168,6 +166,8 @@
 
     Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement)
 
+    let signalR = require("@microsoft/signalr");
+    
     export default {
         name: "ConsumptionDevice",
 
@@ -183,7 +183,7 @@
                     labels: ["", "", "", "", "", ""],
                     datasets: [{
                         label: "Watts em tempo-real",
-                        data: [0, 10, 20, 30, 40, 50],
+                        data: [0, 0, 0, 0, 0, 0],
                         backgroundColor: [
                             "rgba(255, 99, 132, 0.2)"
                         ],
@@ -213,7 +213,7 @@
 
                 macAddress: useRoute().params.id,
 
-                timeUse: "00 hora(s), 00 minuto(s), 00 segundo(s)",
+                timeUse: "00H: 00M: 00S",
 
                 deviceConsumption: {
                     consumptionInReal: 0.00,
@@ -313,7 +313,9 @@
                             $("#btnDisableConnection").prop("disabled", false);
                         });
 
-                        this.connection.on("ReceiveCurrentState", function(state) {                            
+                        this.connection.on("ReceiveCurrentState", function(state) {
+                            console.log(state);
+
                             if(state == "ligado") {
                                 self.isOnline = true;
 
@@ -325,6 +327,8 @@
                             if(state == "interrompido") {
                                 self.isOnline = false;
 
+                                self.watts = 0.00;
+
                                 $("#btnEnableConnection").prop("disabled", false);
 
                                 $("#btnDisableConnection").prop("disabled", true);
@@ -333,12 +337,19 @@
 
                         this.connection.onclose(function() {
                             self.isOnline = false;
+
                             console.log("Close");
+                        });
+
+                        this.connection.onreconnecting(function(error) {
+                            console.error(error);
                         });
 
                         this.connection.onreconnected(function(connId) {
                             console.log(connId);
-                        })
+
+                            self.connect();
+                        });
                     })
                     .catch((error) => {
                         console.error(error);
@@ -348,6 +359,7 @@
 
             stopConnection() {
                 this.connection.invoke("ActionStopDevice"); // parar a conexao
+                this.watts = 0.00;
             },
 
             continueConnection() {
@@ -356,8 +368,6 @@
 
             getDeviceConsumption() {
                 this.interval = setInterval(() => {
-                    console.log(`Is connected: ${this.isOnline}`);
-
                     if(this.isOnline) {
                         this.$http.get(`/api/deviceConsumption/getDeviceConsumptionTotalValue/${this.macAddress}`)
                             .then((response) => {
@@ -372,11 +382,19 @@
 
                                     var seconds = Math.floor(sizeArray % 3600 % 60); // resto da divisão por 3600 e resto da divisão / 60
                                 
-                                    this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
+                                    if(this.isScreenSmall()) {
+                                        this.timeUse = `${hours}H: ${minutes}M: ${seconds}S`;
+                                    } else {
+                                        this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
+                                    }
                                 }
                             })
                     }
                 }, 5000)
+            },
+
+            isScreenSmall() {
+                return window.innerWidth <= 540;
             }
         },
 
@@ -398,4 +416,10 @@
     }
 </script>
 
-<style scoped></style>
+<style scoped>
+    @media screen and (max-width: 330px) {
+        #btn-report-device {
+            display: none;
+        }
+    }
+</style>

@@ -225,12 +225,16 @@ void loop() {
        // Enviando a mensagem para o servidor
        if (client.available()) {
            //client.send("server>energyvalue>" + String(random(50, 60)));
+           client.send("server>ok");
            client.send("server>energyvalue>" + String(getReadDataFromArduino(), 4)); // atraves da função recebemos o valor pela serial do arduino e enviamos ao endpoint
            //client.send(WiFi.localIP().toString().c_str()); // Ip do ESP na rede do Cliente
        } else
            initializeWebSocket();
     }
 
+    //Mantem a confirmação para o socket ficar ativo no serviço de monitoramento
+    client.send("server>ok");
+    
     delay(1000);
   }
 }
@@ -337,17 +341,22 @@ void initializeWebSocket() {
 void onMessageCallback(WebsocketsMessage message) {
 
   if (message.data().equals("client>stopenergy")) {
+    client.send("server>ok");
     status = 0;   // Este Status define que o RELE esta Desligado
     Serial.flush();
     Serial.write("stop");
+    client.send("server>energyvalue>0");
     client.send("server>confirmstop");
+    client.send("server>ok");
   }
     
   if (message.data().equals("client>continueenergy")) {
+    client.send("server>ok");
     status = 1;
     Serial.flush();
     Serial.write("continue");
     client.send("server>confirmcontinue");
+    client.send("server>ok");
   }
 
 }

@@ -18,7 +18,7 @@
 
                                         <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 text-right">
-                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal">
+                                                <button @click="clearFormDevice" type="button" class="btn btn-primary btn-sm rounded-sm-circle" data-toggle="modal" data-target="#exampleModal" title="Adicionar novo dispositivo">
                                                     <i class="d-sm-block d-md-none fas fa-plus"></i>
 
                                                     <span class="d-none d-md-block">
@@ -31,27 +31,36 @@
 
                                     <div class="card-body">
                                         <div v-if="devices.length > 0" class="row">
-                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-4 col-md-12 mb-4">
+                                            <div v-for="(device, index) in devices" :key="index" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
-                                                        <div class="row no-gutters align-items-center">
-                                                            <div class="col-auto">
-                                                                <i class="fas fa-microchip  text-gray-300"></i>
+                                                        <div class="row">
+                                                            <div class="col-xl-1 col-lg-1 d-none d-lg-block">
+                                                                <i class="fas fa-microchip fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col ml-3 mr-2">
-                                                                <div class=" mb-0 font-weight-bold text-gray-800">
+                                                            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 text-lg-left text-center mt-1">
+                                                                <!-- Tela small -->
+                                                                <div class="d-lg-none font-weight-bold text-truncate text-dark ">
+                                                                    {{ device.name }}
+                                                                </div>
+                                                                
+                                                                <div class="d-none d-lg-block font-weight-bold text-gray-800 ml-2">
                                                                     {{ device.name }}
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-auto">
+                                                            <div class="col-xl-6 col-lg-5 col-md-12 col-sm-12 text-lg-right text-center mt-2">
                                                                 <a @click="editDevice(device.id)" type="button" to="/" title="Editar alguma informação do dispositivo">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
 
                                                                 <router-link :to="{path: `/device/${device.identificationCode}/consumption`}" class="ml-4" title="Visualizar em tempo real o consumo deste dispositivo">
                                                                     <i class="fas fa-angle-right"></i>
+                                                                </router-link>
+
+                                                                <router-link :to="{path: `/report/device/${device.identificationCode}`}" class="text-success ml-4" title="Relatório do dispositivo">
+                                                                    <i class="fas fa-chart-area"></i>
                                                                 </router-link>
 
                                                                 <a type="button" @click="deleteDevice(device)" class="text-danger ml-4" title="Excluir dispositivo">
@@ -82,7 +91,7 @@
                         <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
-                                    Cadastrar dispositivo
+                                    {{ this.device.id == 0 ? "Cadastrar dispositivo" : "Alteração dispositivo" }}
                                 </h5>
                                 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -123,7 +132,7 @@
                                     </div>
 
                                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-0">
-                                        <small class="text-muted">
+                                        <small class="text-xs text-muted">
                                             Quantidade de Watts(W) que o produto conectado a tomada inteligente consome
                                         </small>
                                     </div>
@@ -142,7 +151,7 @@
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary btn-sm"> 
-                                    Cadastrar 
+                                    {{ this.device.id == 0 ? "Cadastrar" : "Alterar"}} 
                                 </button>
 
                                 <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
@@ -159,10 +168,6 @@
 
 <script>
     import { useRoute } from "vue-router";
-
-    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
-    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
-    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
 
     import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";

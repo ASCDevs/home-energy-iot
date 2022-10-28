@@ -31,27 +31,25 @@
 
                                     <div class="card-body">
                                         <div v-if="houses.length > 0" class="row">
-                                            <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 mb-4">
+                                            <div v-for="(house, index) in houses" :key="index" class="col-xl-6 col-md-12 col-sm-12 mb-4">
                                                 <div class="card border-left-primary shadow h-100 py-2">
                                                     <div class="card-body">
-                                                        <div class="row align-items-center">
-                                                            <div class="d-none d-sm-block col-auto">
+                                                        <div class="row">
+                                                            <div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block mt-2">
                                                                 <i class="fas fa-house-user fa-2x text-gray-300"></i>
                                                             </div>
 
-                                                            <div class="col ml-3 mr-2">
+                                                            <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 ml-3 mr-2 text-md-left text-center">
                                                                 <div class="text-xs font-weight-bold text-dark mb-1">
                                                                     {{ house.name }}
                                                                 </div>
 
-                                                                <div class="mb-0">
-                                                                    <h5 class="font-weight-bold text-gray-800">
-                                                                        {{ house.nameAddress }}, {{house.numberAddress}}
-                                                                    </h5>
+                                                                <div class="font-weight-bold text-truncate text-gray-800 mb-0">
+                                                                    {{ house.nameAddress }}, {{house.numberAddress}}
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-auto">
+                                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mt-3 text-md-right text-center">
                                                                 <a type="button" @click="editHouse(house.id)" title="Editar alguma informação da casa">
                                                                     <i class="fas fa-pen"></i>
                                                                 </a>
@@ -88,7 +86,7 @@
                         <form @submit.prevent="register" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
-                                    Cadastrar casa
+                                    {{ this.house.id == 0 ? "Cadastrar casa" : "Alteração casa" }}
                                 </h5>
                                 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -170,7 +168,7 @@
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary btn-sm"> 
-                                    Cadastrar 
+                                    {{ this.house.id == 0 ? "Cadastrar" : "Alterar" }}
                                 </button>
 
                                 <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
@@ -186,10 +184,6 @@
 </template>
 
 <script>
-    import "../assets/vendor/bootstrap/js/bootstrap.bundle.min.js";
-    import "../assets/vendor/jquery-easing/jquery.easing.min.js";
-    import "../assets/vendor/sb-admin/js/sb-admin-2.min.js";
-
     import Sidebar from "@/shared/Sidebar.vue";
     import NavBarUser from "../shared/NavBarUser.vue";
 
@@ -276,7 +270,7 @@
             },
 
             deleteHouse(house) {
-                if(confirm(`Deseja excluir a casa com nome '${house.name}'?`)) {                    
+                if(confirm(`Deseja excluir a casa com o endereço '${house.nameAddress},${house.numberAddress}'?`)) {                    
                     this.$http.delete(`/api/house/delete/${house.id}`)
                         .then((response) => {
                             if(response.status == 200) {

@@ -98,6 +98,12 @@ class DeviceInterface {
             },800)
         }
 
+        this.initOkConfirmation = function () {
+            Self.intervalConfirmations = setInterval(function () {
+                Self.socketConnection.send("server>ok");
+            },1000)
+        }
+
         this.stopEnergyValues = function () {
             $("#value-volts").text("0")
             clearInterval(Self.intervalEnergyValues)
@@ -142,6 +148,7 @@ class DeviceInterface {
         var txtDeviceID = $("#txt-device-id").val();
 
         socket.onopen = function (e) {
+            Self.initOkConfirmation()
             Self.socketConnection = socket;
             Self.idConnection = socket.idConnection;
             let log = "<p>[open] Connection established</p>";
