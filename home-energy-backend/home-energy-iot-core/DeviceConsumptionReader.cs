@@ -19,6 +19,7 @@ namespace home_energy_iot_core
             _houseManagerRepository = houseManagerRepository;
         }
 
+        //select identificationCode as device, min(reportDate) as minDate, max(reportDate) as maxDate, avg(wattsUsage) as mediaWatts, count(1) as quantidadeRegistros from deviceReport where identificationCode = 'ABC123' group by identificationCode
         public DeviceConsumption GetDeviceConsumptionTotalValue(string deviceIdentificationCode)
         {
             try
@@ -47,7 +48,7 @@ namespace home_energy_iot_core
                         IdentificationCode = deviceIdentificationCode,
                         ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
-                        ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                        ConsumptionDates = reports.Select(x => x.ReportDate).Count(),
                         InitialDate = initialDate,
                         FinalDate = finalDate
                     };
@@ -96,7 +97,7 @@ namespace home_energy_iot_core
                         IdentificationCode = deviceIdentificationCode,
                         ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
-                        ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                        ConsumptionDates = reports.Select(x => x.ReportDate).Count(),
                         InitialDate = initialDate,
                         FinalDate = finalDate
                     };
