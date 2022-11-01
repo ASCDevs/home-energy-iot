@@ -12,9 +12,9 @@ namespace home_energy_iot_api.Controllers
     public class DeviceController : ControllerBase
     {
         private IDeviceManager _deviceManager;
-        private ILogger _logger;
+        private ILogger<DeviceController> _logger;
 
-        public DeviceController(IDeviceManager deviceManager, ILogger logger)
+        public DeviceController(IDeviceManager deviceManager, ILogger<DeviceController> logger)
         {
             _deviceManager = deviceManager;
             _logger = logger;

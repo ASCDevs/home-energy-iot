@@ -56,7 +56,7 @@ namespace home_energy_iot_core
 
                 var user = _userManagerRepository.Get(id);
 
-                if (user?.Id > 0)
+                if (user is not null)
                 {
                     _logger.LogInformation($"Usuário Id [{id}] encontrado. Retornando resultado.");
                     return user;
@@ -82,7 +82,7 @@ namespace home_energy_iot_core
 
                 var user = _userManagerRepository.GetByUsername(username);
 
-                if (user?.Id > 0)
+                if (user is not null)
                     return user;
 
                 throw new EntityNotFoundException($"Usuário com Username [{username}] não encontrado.");

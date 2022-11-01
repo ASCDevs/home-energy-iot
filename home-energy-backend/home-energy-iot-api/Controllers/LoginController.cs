@@ -10,9 +10,9 @@ namespace home_energy_api.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginService _loginService;
-        private ILogger _logger;
+        private ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService, ILogger logger)
+        public LoginController(ILoginService loginService, ILogger<LoginController> logger)
         {
             _loginService = loginService;
             _logger = logger;

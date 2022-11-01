@@ -93,7 +93,7 @@ namespace home_energy_iot_core
 
                 var device = _deviceManagerRepository.Get(id);
 
-                if (device?.Id > 0)
+                if (device is not null)
                 {
                     _logger.LogInformation($"Dispositivo Id [{id}] encontrado. Retornando resultado.");
                     return device;

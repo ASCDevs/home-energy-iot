@@ -88,7 +88,7 @@ namespace home_energy_iot_core
 
                 var house = _houseManagerRepository.Get(id);
 
-                if (house?.Id > 0)
+                if (house is not null)
                 {
                     _logger.LogInformation($"Casa Id [{id}] encontrada. Retornando resultado.");
                     return house;

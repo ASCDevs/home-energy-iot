@@ -300,7 +300,7 @@ namespace home_energy_iot_tests
         {
             var id = 2;
 
-            var user = new User();
+            User user = null;
 
             _userManagerReporitoryMock.Setup(x => x.Get(id))
                 .Returns(user).Verifiable();
@@ -369,10 +369,7 @@ namespace home_energy_iot_tests
         {
             string username = "user";
 
-            var user = new User
-            {
-                Id = 0
-            };
+            User user = null;
 
             _userManagerReporitoryMock.Setup(x => x.GetByUsername(username))
                 .Returns(user).Verifiable();

@@ -11,9 +11,9 @@ namespace home_energy_iot_api.Controllers
     public class DeviceConsumptionController : ControllerBase
     {
         private IDeviceConsumptionReader _deviceReportReader;
-        private ILogger _logger;
+        private ILogger<DeviceConsumptionController> _logger;
 
-        public DeviceConsumptionController(IDeviceConsumptionReader deviceReportReader, ILogger logger)
+        public DeviceConsumptionController(IDeviceConsumptionReader deviceReportReader, ILogger<DeviceConsumptionController> logger)
         {
             _deviceReportReader = deviceReportReader;
             _logger = logger;

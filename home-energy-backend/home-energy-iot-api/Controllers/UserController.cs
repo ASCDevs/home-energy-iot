@@ -10,12 +10,13 @@ namespace home_energy_iot_api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserManager _userManager;
-        private readonly ILogger _logger;
+        private IUserManager _userManager;
+        private ILogger<UserController> _logger;
 
-        public UserController(IUserManager userManager)
+        public UserController(IUserManager userManager, ILogger<UserController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpPost]
