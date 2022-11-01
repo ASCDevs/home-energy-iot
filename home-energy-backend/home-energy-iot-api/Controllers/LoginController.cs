@@ -29,7 +29,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao autenticar o usuário: " + ex.Message);
+                return Problem("Erro ao autenticar o usuário: " + ex.Message);
             }
         }
     }

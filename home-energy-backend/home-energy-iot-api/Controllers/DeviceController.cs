@@ -31,7 +31,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao criar o dispositivo: " + ex.Message);
+                return Problem("Erro ao criar o dispositivo: " + ex.Message);
             }
         }
 
@@ -48,7 +48,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao atualizar o dispositivo: " + ex.Message);
+                return Problem("Erro ao atualizar o dispositivo: " + ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao deletar o dispositivo: " + ex.Message);
+                return Problem("Erro ao deletar o dispositivo: " + ex.Message);
             }
         }
 
@@ -82,7 +82,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar o dispositivo: " + ex.Message);
+                return Problem("Erro ao buscar o dispositivo: " + ex.Message);
             }
         }
 
@@ -99,7 +99,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar os dispositivos: " + ex.Message);
+                return Problem("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
 
@@ -116,7 +116,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar os dispositivos: " + ex.Message);
+                return Problem("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
 
@@ -132,7 +132,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao checar dispositivo: " + ex.Message);
+                return Problem("Erro ao checar dispositivo: " + ex.Message);
             }
         }
     }

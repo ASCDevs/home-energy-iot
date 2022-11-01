@@ -30,7 +30,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao criar o usuário: " + ex.Message);
+                return Problem("Erro ao criar o usuário: " + ex.Message);
             }
         }
 
@@ -49,7 +49,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar o usuário: " + ex.Message);
+                return Problem("Erro ao buscar o usuário: " + ex.Message);
             }
         }
 

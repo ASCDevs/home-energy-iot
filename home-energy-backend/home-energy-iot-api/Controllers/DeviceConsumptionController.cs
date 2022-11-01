@@ -30,7 +30,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
+                return Problem("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
 
@@ -47,7 +47,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
+                return Problem("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
     }

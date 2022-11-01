@@ -29,7 +29,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao criar a casa: " + ex.Message);
+                return Problem("Erro ao criar a casa: " + ex.Message);
             }
         }
 
@@ -46,7 +46,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao atualizar a casa: " + ex.Message);
+                return Problem("Erro ao atualizar a casa: " + ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao deletar a casa: " + ex.Message);
+                return Problem("Erro ao deletar a casa: " + ex.Message);
             }
         }
 
@@ -80,7 +80,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar a casa: " + ex.Message);
+                return Problem("Erro ao buscar a casa: " + ex.Message);
             }
         }
 
@@ -97,7 +97,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar as casas: " + ex.Message);
+                return Problem("Erro ao buscar as casas: " + ex.Message);
             }
         }
 
@@ -114,7 +114,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar as casas: " + ex.Message);
+                return Problem("Erro ao buscar as casas: " + ex.Message);
             }
         }
     }
