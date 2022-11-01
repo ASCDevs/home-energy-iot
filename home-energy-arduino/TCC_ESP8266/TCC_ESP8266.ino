@@ -72,6 +72,7 @@ void setup() {
   server.on("/cleareeprom", HTTP_GET, clearEEprom);  // Limpar dados de autenticação da Rede WIFI
   server.onNotFound(handleNotFound);
 
+
   server.enableCORS(true);
   server.begin();  // Iniciando o servidor
 }
@@ -126,19 +127,17 @@ void postLogin() {
   contadorTempoConexao = 0;
 
   if (server.method() != HTTP_POST) {
+
     server.send(405, "text/plain", "Metodo não permitido");
+
   } else {
 
-    JSONVar myObject = JSON.parse(server.arg("plain"));
+    String ssid = server.arg("Ssid"); 
+    String pass = server.arg("Pass"); 
+    Serial.println(ssid);
+    Serial.println(pass);
 
-    if (myObject.hasOwnProperty("Ssid")) {
-      receiveSSID = (const char *)myObject["Ssid"];
-    }
-    if (myObject.hasOwnProperty("Pass")) {
-      receivePASS = (const char *)myObject["Pass"];
-    }
-
-    WiFi.begin(receiveSSID.c_str(), receivePASS.c_str());
+    WiFi.begin(ssid, pass);
     // Serial.setDebugOutput(true);
     Serial.println("--------------------------------");
     WiFi.printDiag(Serial);
@@ -151,10 +150,10 @@ void postLogin() {
       contadorTempoConexao++;
       Serial.println("Tentando Conectar");
       delay(500);
-      if (contadorTempoConexao >= 10) {  // cada 500 milissegundos incremento 1 no contador, então apos 30x500(ms) = 15 Segundos tentando
+      if (contadorTempoConexao >= 15) {  // cada 500 milissegundos incremento 1 no contador, então apos 20x500(ms) = 7.5 Segundos tentando
         //Avisa sobre Erro de Conexão
+        server.send(404, "text/plain", "Timeout, erro ao tentar conectar no Roteador");
         Serial.write("Erro ao tentar conectar na rede WiFi");
-        server.send(404, "text/plain", "Erro");
         WiFi.disconnect();
         return;
       }
@@ -163,7 +162,6 @@ void postLogin() {
     if (WiFi.status() == WL_CONNECTED) {
 
       server.send(200, "text/plain", WiFi.localIP().toString().c_str());
-
       int eepromOffset = 0;
       EEPROM.begin(512);  //Initialize EEPROM
       // Gravando
@@ -264,8 +262,8 @@ void selectModeInitialization() {
       delay(500);
       if (contadorTempoConexao >= 30) {  // cada 500 milissegundos incremento 1 no contador, então apos 30x500(ms) = 15 Segundos tentando
         //Avisa sobre Erro de Conexão
-        Serial.write("Erro ao tentar conectar na rede WiFi");
         server.send(404, "text/plain", "Erro");
+        Serial.write("Erro ao tentar conectar na rede WiFi");
         clearEEprom();
         WiFi.disconnect();
         iniciarModoAP();  // apos os 15 segundos se não conectar entra em MMODO AP
@@ -283,6 +281,7 @@ void selectModeInitialization() {
 }
 
 void iniciarModoAP() {
+
   WiFi.disconnect();
 
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));  // (local_IP, gateway, subnet)

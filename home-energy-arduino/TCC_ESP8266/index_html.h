@@ -138,7 +138,7 @@ const char *pageLogin = R"raw(<!DOCTYPE html>
       #informacao {
         position: relative;
         height: 30px;
-        color: red;
+        color: white;
         text-align: center;
         top: 30px;
       }
@@ -174,7 +174,6 @@ const char *pageLogin = R"raw(<!DOCTYPE html>
 
     <script>
       let mensagemDinamica = document.getElementById("informacao");
-      let frm = document.getElementById("login");
       let btn = document.getElementById("post-btn");
 
       btn.addEventListener("click", (e) => {
@@ -183,19 +182,19 @@ const char *pageLogin = R"raw(<!DOCTYPE html>
       });
 
       async function enviandoDados() {
-        const formDataJsonString = JSON.stringify(
-          Object.fromEntries(new FormData(frm).entries())
-        );
 
         mensagemDinamica.hidden = true;
         hidePage();
 
         const response = fetch("http://192.168.4.1/senddata", {
           headers: {
-            "Content-Type": "text/plain",
+            "Content-Type": "application/x-www-form-urlencoded"
           },
           method: "POST",
-          body: formDataJsonString,
+          body: new URLSearchParams({
+             'Ssid': document.getElementById('selectSSIDS').value,
+             'Pass': document.getElementById('Pass').value
+          })
         })
           .then((response) => {
             
