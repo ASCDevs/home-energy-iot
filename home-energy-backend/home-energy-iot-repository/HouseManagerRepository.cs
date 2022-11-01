@@ -40,7 +40,7 @@ namespace home_energy_iot_repository
         {
             var house = _dataBaseContext.Houses.Find(id);
 
-            return house ?? new House();
+            return house;
         }
 
         public List<House> GetAll()

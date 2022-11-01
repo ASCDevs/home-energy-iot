@@ -56,20 +56,17 @@ namespace home_energy_iot_core
 
                 var user = _userManagerRepository.Get(id);
 
-                if (user.Id > 0)
+                if (user?.Id > 0)
                 {
                     _logger.LogInformation($"Usuário Id [{id}] encontrado. Retornando resultado.");
                     return user;
                 }
 
-                var errorMessage = $"Usuário com Id [{id}] não encontrado.";
-
-                _logger.LogInformation(errorMessage);
-                throw new EntityNotFoundException(errorMessage);
+                throw new EntityNotFoundException($"Usuário com Id [{id}] não encontrado.");
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, $"Erro ao consultar o usuário com Id [{id}].");
+                _logger.LogError(ex, $"Erro ao consultar o usuário com Id [{id}].");
                 throw;
             }
         }
@@ -85,17 +82,14 @@ namespace home_energy_iot_core
 
                 var user = _userManagerRepository.GetByUsername(username);
 
-                if (user.Id > 0)
+                if (user?.Id > 0)
                     return user;
 
-                var errorMessage = $"Usuário com Username [{username}] não encontrado.";
-
-                _logger.LogInformation(errorMessage);
-                throw new EntityNotFoundException(errorMessage);
+                throw new EntityNotFoundException($"Usuário com Username [{username}] não encontrado.");
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex, $"Erro ao logar o usuário [{username}].");
+                _logger.LogError(ex, $"Erro ao consultar o usuário [{username}].");
                 throw;
             }
         }

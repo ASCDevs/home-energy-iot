@@ -94,10 +94,7 @@ namespace home_energy_iot_core
                     return house;
                 }
 
-                var errorMessage = $"Casa com Id [{id}] não encontrada.";
-
-                _logger.LogInformation(errorMessage);
-                throw new EntityNotFoundException(errorMessage);
+                throw new EntityNotFoundException($"Casa com Id [{id}] não encontrada.");
             }
             catch (Exception ex)
             {
@@ -120,10 +117,7 @@ namespace home_energy_iot_core
                     return houses;
                 }
 
-                var message = "Nenhuma Casa encontrada.";
-
-                _logger.LogInformation(message);
-                throw new EntityNotFoundException(message);
+                throw new EntityNotFoundException("Nenhuma Casa encontrada.");
             }
             catch (Exception ex)
             {
@@ -149,10 +143,7 @@ namespace home_energy_iot_core
                     return houses;
                 }
 
-                var message = $"Nenhuma Casa encontrada para o usuário Id [{id}].";
-
-                _logger.LogInformation(message);
-                throw new EntityNotFoundException(message);
+                throw new EntityNotFoundException($"Nenhuma Casa encontrada para o usuário Id [{id}].");
             }
             catch (Exception ex)
             {

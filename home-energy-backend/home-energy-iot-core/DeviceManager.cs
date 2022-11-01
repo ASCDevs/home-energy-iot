@@ -93,16 +93,13 @@ namespace home_energy_iot_core
 
                 var device = _deviceManagerRepository.Get(id);
 
-                if (device.Id > 0)
+                if (device?.Id > 0)
                 {
                     _logger.LogInformation($"Dispositivo Id [{id}] encontrado. Retornando resultado.");
                     return device;
                 }
 
-                var notFoundMessage = $"Dispositivo Id [{id}] não encontrado.";
-                 
-                _logger.LogInformation(notFoundMessage);
-                throw new EntityNotFoundException(notFoundMessage);
+                throw new EntityNotFoundException($"Dispositivo Id [{id}] não encontrado.");
             }
             catch (Exception ex)
             {
@@ -125,10 +122,7 @@ namespace home_energy_iot_core
                     return devices;
                 }
 
-                var notFoundMessage = "Nenhum Dispositivo encontrado.";
-
-                _logger.LogInformation(notFoundMessage);
-                throw new EntityNotFoundException(notFoundMessage);
+                throw new EntityNotFoundException("Nenhum Dispositivo encontrado.");
             }
             catch (Exception ex)
             {
@@ -147,16 +141,13 @@ namespace home_energy_iot_core
 
                 var devices = _deviceManagerRepository.GetByHouseId(id);
 
-                if (devices.Count > 0)
+                if (devices?.Count > 0)
                 {
                     _logger.LogInformation($"Retornando os dispositivos encontrados para a Casa Id [{id}].");
                     return devices;
                 }
 
-                var notFoundMessage = $"Nenhum Dispositivo encontrado para a Casa Id [{id}].";
-
-                _logger.LogInformation(notFoundMessage);
-                throw new EntityNotFoundException(notFoundMessage);
+                throw new EntityNotFoundException($"Nenhum Dispositivo encontrado para a Casa Id [{id}].");
             }
             catch (Exception ex)
             {

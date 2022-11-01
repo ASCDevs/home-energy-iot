@@ -40,7 +40,7 @@ namespace home_energy_iot_repository
         {
              var result = _dataBaseContext.Devices.Find(id);
 
-             return result ?? new Device();
+             return result;
         }
 
         public List<Device> GetAll()
