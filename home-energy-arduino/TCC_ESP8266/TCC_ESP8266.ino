@@ -164,9 +164,7 @@ void postLogin() {
       server.send(200, "text/plain", WiFi.localIP().toString().c_str());
       int eepromOffset = 0;
       EEPROM.begin(512);  //Initialize EEPROM
-      // Gravando
-      String ssid = receiveSSID;
-      String pass = receivePASS;
+      
       int str1AddrOffset = writeStringToEEPROM(eepromOffset, ssid);  // Grava na posição 0
       writeStringToEEPROM(str1AddrOffset, pass);                     // Obtem a posição do primeiro texto pra iniciar a gravação do 2
       EEPROM.commit();                                               //Store data to EEPROM
