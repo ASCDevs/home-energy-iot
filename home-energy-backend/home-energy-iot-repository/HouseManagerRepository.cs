@@ -38,9 +38,7 @@ namespace home_energy_iot_repository
 
         public House Get(int id)
         {
-            var house = _dataBaseContext.Houses.Find(id);
-
-            return house ?? new House();
+            return _dataBaseContext.Houses.Find(id);
         }
 
         public List<House> GetAll()

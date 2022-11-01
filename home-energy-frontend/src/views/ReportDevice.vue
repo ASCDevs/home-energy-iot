@@ -54,23 +54,8 @@
                             </div>
                         </div>
 
-                        <div v-if="status == 200" class="row">
+                        <div v-if="status == 200" class="row justify-content-center">
                             <div class="col-xl-8 col-lg-8">
-                                <div class="card shadow mb-4">
-                                    <div class="card-body">
-                                        <div class="mt-5">
-                                            <Line 
-                                                :chart-data="chart"
-                                                :chartOptions="chartOptions"
-                                                :width="300"
-                                                :height="400"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-4 col-lg-4">
                                 <div class="card shadow mb-4">
                                     <div class="card-body">
                                         <div class="chart-pie">
@@ -79,7 +64,9 @@
                                                     Real 
                                                 </h4>
 
-                                                <span class="text-success"> R$ 4444444 </span>
+                                                <span class="text-success"> 
+                                                    R$ {{ parseFloat(this.report.consumptionInReal).toFixed(3)}} 
+                                                </span>
                                             </div>
 
                                             <div class="mt-4">
@@ -87,7 +74,9 @@
                                                     Tempo de consumo 
                                                 </h4>
 
-                                                <span class="text-primary"> {{ this.timeUse }} </span>
+                                                <span class="text-primary"> 
+                                                    {{ this.timeUse }} 
+                                                </span>
                                             </div>
 
                                             <div class="mt-4">
@@ -95,22 +84,10 @@
                                                     Watts 
                                                 </h4>
 
-                                                <span class="text-info"> 52.48W </span>
+                                                <span class="text-info"> 
+                                                    {{ parseFloat(this.report.consumptionInWatts).toFixed(2) }}W 
+                                                </span>
                                             </div>
-                                        </div>
-
-                                        <div class="mt-4 text-center small">
-                                            <span class="mr-2">
-                                                <i class="fas fa-circle text-primary"></i> Direct
-                                            </span>
-
-                                            <span class="mr-2">
-                                                <i class="fas fa-circle text-success"></i> Social
-                                            </span>
-
-                                            <span class="mr-2">
-                                                <i class="fas fa-circle text-info"></i> Referral
-                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -169,12 +146,12 @@
 
                 query: {
                     deviceIdentificationCode: useRoute().params.id,
-                    initialDate: "2022-10-10T12:00",
-                    finalDate: "2022-10-11T12:00"
+                    initialDate: "",
+                    finalDate: ""
                 },
 
                 report: {
-                    consumptionDates: [],
+                    consumptionDates: 0,
                     consumptionInReal: 0.00,
                     consumptionInWatts: 0.00
                 },
@@ -192,13 +169,13 @@
 
                             this.report = response.data;
 
-                            let sizeArray = response.data.consumptionDates.length;
+                            let secondsTotal = response.data.consumptionDates;
 
-                            var hours = Math.floor(sizeArray / 3600);
+                            var hours = Math.floor(secondsTotal / 3600);
 
-                            var minutes = Math.floor(sizeArray % 3600 / 60);
+                            var minutes = Math.floor(secondsTotal % 3600 / 60);
 
-                            var seconds = Math.floor(sizeArray % 3600 % 60);
+                            var seconds = Math.floor(secondsTotal % 3600 % 60);
 
                             this.timeUse = `${hours} hora(s), ${minutes} minuto(s), ${seconds} segundo(s)`;
 

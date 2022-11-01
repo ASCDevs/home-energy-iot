@@ -121,7 +121,7 @@ namespace home_energy_iot_tests
                 IdentificationCode = deviceIdentificationCode,
                 ConsumptionInReal = CalculateUsage(khwHour, wattsTotal, reports.Count),
                 ConsumptionInWatts = wattsTotal,
-                ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                ConsumptionDates = reports.Select(x => x.ReportDate).Count(),
                 InitialDate = initialDate,
                 FinalDate = finalDate
             };
@@ -258,7 +258,7 @@ namespace home_energy_iot_tests
                 IdentificationCode = deviceIdentificationCode,
                 ConsumptionInReal = CalculateUsage(khwPrice, wattsTotal, reports.Count),
                 ConsumptionInWatts = wattsTotal,
-                ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                ConsumptionDates = reports.Select(x => x.ReportDate).Count(),
                 InitialDate = initialDate,
                 FinalDate = finalDate
             };

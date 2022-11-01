@@ -10,10 +10,12 @@ namespace home_energy_api.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginService _loginService;
+        private ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILoginService loginService, ILogger<LoginController> logger)
         {
             _loginService = loginService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -29,7 +31,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao autenticar o usuário: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao autenticar o usuário: " + ex.Message);
             }
         }
     }

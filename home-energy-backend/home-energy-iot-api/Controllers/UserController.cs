@@ -10,12 +10,13 @@ namespace home_energy_iot_api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ILogger _logger;
-        private readonly IUserManager _userManager;
+        private IUserManager _userManager;
+        private ILogger<UserController> _logger;
 
-        public UserController(IUserManager userManager)
+        public UserController(IUserManager userManager, ILogger<UserController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -30,7 +31,8 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao criar o usuário: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao criar o usuário: " + ex.Message);
             }
         }
 
@@ -49,7 +51,8 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar o usuário: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao buscar o usuário: " + ex.Message);
             }
         }
 

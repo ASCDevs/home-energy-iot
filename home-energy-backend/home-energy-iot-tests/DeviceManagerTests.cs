@@ -696,11 +696,11 @@ namespace home_energy_iot_tests
         }
 
         [Fact]
-        public void GetDeviceReturnCountZeroTest()
+        public void GetDeviceNotFoundTest()
         {
             int id = 1;
 
-            var device = new Device();
+            Device device = null;
 
             _deviceManagerRepository.Setup(x => x.Get(id)).Returns(device);
 

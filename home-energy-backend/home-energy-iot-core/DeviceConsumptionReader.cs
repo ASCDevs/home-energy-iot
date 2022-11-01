@@ -47,7 +47,7 @@ namespace home_energy_iot_core
                         IdentificationCode = deviceIdentificationCode,
                         ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
-                        ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                        ConsumptionDates = reports.Count,
                         InitialDate = initialDate,
                         FinalDate = finalDate
                     };
@@ -55,10 +55,7 @@ namespace home_energy_iot_core
                     return consumption;
                 }
 
-                var notFoundMessage = $"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].";
-
-                _logger.LogInformation(notFoundMessage);
-                throw new EntityNotFoundException(notFoundMessage);
+                throw new EntityNotFoundException($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
             }
             catch (Exception ex)
             {
@@ -83,7 +80,7 @@ namespace home_energy_iot_core
 
                 var reports = _deviceReportReaderRepository.GetDeviceConsumptionValueBetweenDates(deviceIdentificationCode, initialDate, finalDate);
                 
-                if (reports.Count > 0)
+                if (reports?.Count > 0)
                 {
                     _logger.LogInformation($"Total de reports encontrados para o Dispositivo [{deviceIdentificationCode}]: {reports.Count}.");
 
@@ -96,7 +93,7 @@ namespace home_energy_iot_core
                         IdentificationCode = deviceIdentificationCode,
                         ConsumptionInReal = CalculateWattsToReal(kwhPrice, wattsTotal, initialDate, finalDate, reports.Count),
                         ConsumptionInWatts = wattsTotal,
-                        ConsumptionDates = reports.Select(x => x.ReportDate).ToList(),
+                        ConsumptionDates = reports.Count,
                         InitialDate = initialDate,
                         FinalDate = finalDate
                     };
@@ -104,10 +101,7 @@ namespace home_energy_iot_core
                     return consumption;
                 }
 
-                var notFoundMessage = $"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].";
-
-                _logger.LogInformation(notFoundMessage);
-                throw new EntityNotFoundException(notFoundMessage);
+                throw new EntityNotFoundException($"Nenhum report encontrado para o Dispositivo [{deviceIdentificationCode}].");
             }
             catch (Exception ex)
             {

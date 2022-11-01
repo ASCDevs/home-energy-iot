@@ -24,14 +24,14 @@ namespace home_energy_iot_repository
         {
             var user = _dataBaseContext.Users.Find(id);
 
-            return user ?? new User();
+            return user;
         }
 
         public User GetByUsername(string username)
         {
             var user = _dataBaseContext.Users.FirstOrDefault(u => u.Username == username);
 
-            return user ?? new User();
+            return user;
         }
     }
 }

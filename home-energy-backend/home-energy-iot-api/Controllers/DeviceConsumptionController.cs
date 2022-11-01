@@ -11,10 +11,12 @@ namespace home_energy_iot_api.Controllers
     public class DeviceConsumptionController : ControllerBase
     {
         private IDeviceConsumptionReader _deviceReportReader;
+        private ILogger<DeviceConsumptionController> _logger;
 
-        public DeviceConsumptionController(IDeviceConsumptionReader deviceReportReader)
+        public DeviceConsumptionController(IDeviceConsumptionReader deviceReportReader, ILogger<DeviceConsumptionController> logger)
         {
             _deviceReportReader = deviceReportReader;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -30,7 +32,8 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
 
@@ -47,7 +50,8 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro buscar os reports do dispositivo: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro buscar os reports do dispositivo: " + ex.Message);
             }
         }
     }

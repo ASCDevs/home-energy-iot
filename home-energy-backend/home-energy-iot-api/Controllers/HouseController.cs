@@ -10,10 +10,12 @@ namespace home_energy_api.Controllers
     public class HouseController : ControllerBase
     {
         private IHouseManager _houseManager;
+        private ILogger<HouseController> _logger;
 
-        public HouseController(IHouseManager houseManager)
+        public HouseController(IHouseManager houseManager, ILogger<HouseController> logger)
         {
             _houseManager = houseManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -29,7 +31,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao criar a casa: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao criar a casa: " + ex.Message);
             }
         }
 
@@ -46,7 +49,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao atualizar a casa: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao atualizar a casa: " + ex.Message);
             }
         }
 
@@ -63,7 +67,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao deletar a casa: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao deletar a casa: " + ex.Message);
             }
         }
 
@@ -80,7 +85,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar a casa: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao buscar a casa: " + ex.Message);
             }
         }
 
@@ -97,7 +103,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar as casas: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao buscar as casas: " + ex.Message);
             }
         }
 
@@ -114,7 +121,8 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Erro ao buscar as casas: " + ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return Problem("Erro ao buscar as casas: " + ex.Message);
             }
         }
     }
