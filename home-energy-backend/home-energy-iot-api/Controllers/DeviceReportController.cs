@@ -34,6 +34,7 @@ namespace home_energy_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro reportar o dispositivo: " + ex.Message);
             }
         }

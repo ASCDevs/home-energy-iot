@@ -12,10 +12,12 @@ namespace home_energy_iot_api.Controllers
     public class DeviceController : ControllerBase
     {
         private IDeviceManager _deviceManager;
+        private ILogger _logger;
 
-        public DeviceController(IDeviceManager deviceManager)
+        public DeviceController(IDeviceManager deviceManager, ILogger logger)
         {
             _deviceManager = deviceManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -31,6 +33,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao criar o dispositivo: " + ex.Message);
             }
         }
@@ -48,6 +51,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao atualizar o dispositivo: " + ex.Message);
             }
         }
@@ -65,6 +69,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao deletar o dispositivo: " + ex.Message);
             }
         }
@@ -82,6 +87,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao buscar o dispositivo: " + ex.Message);
             }
         }
@@ -99,6 +105,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
@@ -116,6 +123,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao buscar os dispositivos: " + ex.Message);
             }
         }
@@ -132,6 +140,7 @@ namespace home_energy_iot_api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return Problem("Erro ao checar dispositivo: " + ex.Message);
             }
         }
