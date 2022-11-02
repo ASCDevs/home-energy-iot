@@ -267,6 +267,10 @@
                             $("#statusConexaoWebSocket").prop("hidden", true);
                         });
 
+                        this.connection.on("RemoveDeviceIP", function() {
+                            self.ipDevice = "";
+                        });
+
                         this.connection.on("DeviceIsDisconnected", function() {
                             self.isOnline = false;
 
@@ -274,11 +278,15 @@
 
                             self.watts = 0.00;
 
+                            self.timeUse = "00h: 00m: 00s";
+
+                            self.deviceConsumption.consumptionInReal = 0.00;
+
                             $("#btnDisableConnection").prop("disabled", true);
 
-                            $("#btnEnableConnection").prop("disabled", false);
+                            $("#btnEnableConnection").prop("disabled", true);
 
-                            $("#statusConexaoWebSocket small").text("Aparelho está Offline");
+                            $("#statusConexaoWebSocket small").text("O Aparelho está Offline");
 
                             $("#statusConexaoWebSocket").prop("hidden", false);
 
