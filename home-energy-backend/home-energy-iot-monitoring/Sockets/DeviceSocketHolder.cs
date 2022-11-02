@@ -420,14 +420,13 @@ namespace home_energy_iot_monitoring.Sockets
             
         }
 
-        private async Task NotifyCostumerDisconnection(string idConnection)
+        private async Task NotifyCostumerDisconnection(string DeviceId)
         {
             try
             {
-                ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
-                if (device != null)
+                if (DeviceId != null)
                 {
-                    List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+                    List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(DeviceId);
 
                     if (costumersConn.Count > 0)
                     {
@@ -440,7 +439,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] (NotifyCostumerDisconnection) > erro em notificar desconexão de dispostivo para interface de usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (NotifyCostumerDisconnection) > erro em notificar desconexão de dispostivo para interface de usuário (" + DateTime.Now+"), device-id: "+ DeviceId + ", Erro: "+ex.Message);
             }
         }
 
@@ -498,7 +497,7 @@ namespace home_energy_iot_monitoring.Sockets
                 if (DeviceClient.Key == null) throw new Exception("Não foi possível realizar a desconexão do dispostivo pois o idConnection é nulo");
                 await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                 await _panelHubControl.PanelUIRemoveDeviceCard(DeviceClient);
-                await this.NotifyCostumerDisconnection(DeviceClient.Key);
+                await this.NotifyCostumerDisconnection(DeviceClient.Value.device_id);
                 await this.CostumerRemoveDeviceIP(DeviceClient.Key);
                 await _panelHubControl.PanelUIReceiveEnergyValue(DeviceClient.Key, "0");
                 await SendEnergyValueToCostumer(DeviceClient.Key, "0", DeviceClient.Value);
