@@ -14,6 +14,7 @@
         @{
             string headerMessage = ViewBag.HeaderMessageAlert;
             bool flSaveValue = ViewBag.FlSaveValue;
+            string flBtnActions = ViewBag.FlBtnActions ? "true" : "false";
         }
         @if (!string.IsNullOrWhiteSpace(headerMessage))
         {
@@ -62,7 +63,7 @@
         var painel;
         
         $(document).ready(() => {
-            painel = new PanelMonitoring();
+            painel = new PanelMonitoring(@flBtnActions);
         })
     </script>
 

@@ -7,12 +7,14 @@ namespace home_energy_iot_monitoring.Controllers
         private string _urlSocketDevice { get; set; }
         private string _urlCheckDevice { get; set; }
         private bool _flApiSaveValue { get; set; }
+        private bool _flBtnActions { get; set; }
         private string headerMessageAlert { get; set; }
         public HomeController(IConfiguration configuration)
         {
             _urlSocketDevice = configuration["Environment"] == "prod"? configuration["SocketDeviceProd"] : configuration["SocketDeviceDev"];
             _urlCheckDevice = configuration["Environment"] == "prod" ? configuration["CheckDeviceProd"] : configuration["CheckDeviceDev"];
             _flApiSaveValue = Convert.ToBoolean(configuration["flAPISaveValue"]);
+            _flBtnActions = Convert.ToBoolean(configuration["flBtnActions"]);
             headerMessageAlert = configuration["MessageHeader"];
         }
 
@@ -20,6 +22,7 @@ namespace home_energy_iot_monitoring.Controllers
         {
             ViewBag.HeaderMessageAlert = headerMessageAlert;
             ViewBag.FlSaveValue = _flApiSaveValue;
+            ViewBag.FlBtnActions = _flBtnActions;
             return View();
         }
 
