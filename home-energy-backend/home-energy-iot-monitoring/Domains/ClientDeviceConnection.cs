@@ -40,7 +40,7 @@ namespace home_energy_iot_monitoring.Domains
 
         public bool IsInactive()
         {
-            int secTimeOut = 3;
+            int secTimeOut = 5;
             DateTime dtNow = DateTime.Now;
             int secondsDiff = (int)(dtNow - this.last_ok_confirmation).TotalSeconds;
             if (secondsDiff > secTimeOut) return true;

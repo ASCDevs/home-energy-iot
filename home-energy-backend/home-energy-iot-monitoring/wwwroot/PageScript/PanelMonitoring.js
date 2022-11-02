@@ -1,6 +1,7 @@
 ﻿class PanelMonitoring {
 
-    constructor() {
+    constructor(flBtnActions) {
+        this.flBtnAct = flBtnActions;
         this.setFunctions();
         this.setEvents();
         this.makeConnection();
@@ -161,11 +162,12 @@
             txtHtml += `<p class="text-white">Device IP: <span class="field-deviceip">${dados.deviceip}</span></p>`;
             txtHtml += `<p class="text-white">Data e hora de conexão: ${dados.dateconn}</p>`;
             txtHtml += `<p class="text-white">Consumo em tempo real: <span class="field-value"></span></p>`;
-            txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;
-            txtHtml += `<button type="button" href="#" class="btn-continuar-device rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400 disabled:bg-zinc-300">Continuar</button>`;
-            txtHtml += `<button type="button" href="#" class="btn-parar-device rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disable:hover:bg-zinc-400 disabled:bg-zinc-300">Parar</button>`;
-            //txtHtml += `<button type="button" href="#" class="btn-suspender-device rounded bg-orange-500 p-2 text-sm font-bold text-white hover:bg-orange-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400">Suspender 10s</button>`;
-            txtHtml += `</div>`;
+            if (Self.flBtnAct) {
+                txtHtml += `<div class="flex justify-center flex-col p-2 gap-y-1.5">`;
+                txtHtml += `<button type="button" href="#" class="btn-continuar-device rounded bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-zinc-400 disabled:bg-zinc-300">Continuar</button>`;
+                txtHtml += `<button type="button" href="#" class="btn-parar-device rounded bg-red-500 p-2 text-sm font-bold text-white hover:bg-red-400 disabled:cursor-not-allowed disable:hover:bg-zinc-400 disabled:bg-zinc-300">Parar</button>`;
+                txtHtml += `</div>`;
+            }
             txtHtml += '</div>';
 
             return txtHtml;
