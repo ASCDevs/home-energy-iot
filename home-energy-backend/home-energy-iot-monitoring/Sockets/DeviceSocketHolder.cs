@@ -466,14 +466,13 @@ namespace home_energy_iot_monitoring.Sockets
             
         }
 
-        private async Task CostumerRemoveDeviceIP(string idConnection)
+        private async Task CostumerRemoveDeviceIP(string DeviceId)
         {
             try
             {
-                ClientDeviceConnection device = this.GetClientByIdConn(idConnection).Value;
-                if (device != null)
+                if (DeviceId != null)
                 {
-                    List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(device.device_id);
+                    List<CostumerConnection> costumersConn = CostumersHandler.GetCostumerByDevice(DeviceId);
 
                     if (costumersConn.Count > 0)
                     {
@@ -486,7 +485,7 @@ namespace home_energy_iot_monitoring.Sockets
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Erro socket dispositivo] (CostumerRemoveDeviceIP) > Erro em remover IP de dispositivo da interface do usuário (" + DateTime.Now+"), id-conn: "+idConnection+", Erro: "+ex.Message);
+                _logger.LogError("[Erro socket dispositivo] (CostumerRemoveDeviceIP) > Erro em remover IP de dispositivo da interface do usuário (" + DateTime.Now+"), device-id: "+ DeviceId + ", Erro: "+ex.Message);
             }
         }
 
@@ -498,7 +497,7 @@ namespace home_energy_iot_monitoring.Sockets
                 await _panelHubControl.PanelUINotifyDeviceClientsCount(clients.Count());
                 await _panelHubControl.PanelUIRemoveDeviceCard(DeviceClient);
                 await this.NotifyCostumerDisconnection(DeviceClient.Value.device_id);
-                await this.CostumerRemoveDeviceIP(DeviceClient.Key);
+                await this.CostumerRemoveDeviceIP(DeviceClient.Value.device_id);
                 await _panelHubControl.PanelUIReceiveEnergyValue(DeviceClient.Key, "0");
                 await SendEnergyValueToCostumer(DeviceClient.Key, "0", DeviceClient.Value);
                 DeviceClient.Value.web_socket.Dispose();
